@@ -57,4 +57,13 @@ return array (
       '@yii/faker' => $vendorDir . '/yiisoft/yii2-faker',
     ),
   ),
+  'mervick/yii2-material-design-icons' => 
+  array (
+    'name' => 'mervick/yii2-material-design-icons',
+    'version' => '1.0.0.0',
+    'alias' => 
+    array (
+      '@yii/materialicons' => $vendorDir . '/mervick/yii2-material-design-icons',
+    ),
+  ),
 );

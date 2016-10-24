@@ -14,6 +14,7 @@ class AppAsset extends AssetBundle
     public $css = [
         'css/site.css',
         'css/style.min.css',
+        'css/roboto_font.css',
         //'css/dropzone.min.css',
        // 'css/jquery-jvectormap.css',
        // 'css/nouislider.min.css',
@@ -47,5 +48,6 @@ class AppAsset extends AssetBundle
     public $depends = [
 //        'yii\web\YiiAsset',
 //        'yii\bootstrap\BootstrapAsset',
+          'yii\materialicons\AssetBundle'
     ];
 }
