@@ -16,6 +16,9 @@ return array(
     'yii\\bootstrap\\' => array($vendorDir . '/yiisoft/yii2-bootstrap'),
     'yii\\' => array($vendorDir . '/yiisoft/yii2'),
     'rmrevin\\yii\\fontawesome\\' => array($vendorDir . '/rmrevin/yii2-fontawesome'),
+    'kartik\\select2\\' => array($vendorDir . '/kartik-v/yii2-widget-select2'),
+    'kartik\\growl\\' => array($vendorDir . '/kartik-v/yii2-widget-growl'),
+    'kartik\\base\\' => array($vendorDir . '/kartik-v/yii2-krajee-base'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
     'Faker\\' => array($vendorDir . '/fzaninotto/faker/src/Faker'),
 );

@@ -120,3 +120,7 @@ ALTER TABLE `menu_language` ADD FOREIGN KEY (`language_id`) REFERENCES `school_s
   ON DELETE RESTRICT
   ON UPDATE RESTRICT;
 
+ALTER TABLE `categories` CHANGE `parent_id` `parent_id` INT(11) NULL;
+
+ALTER TABLE `items` CHANGE `category_id` `category_id` INT(11) NULL;
+

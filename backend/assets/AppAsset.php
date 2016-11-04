@@ -19,7 +19,6 @@ class AppAsset extends AssetBundle
         'css/pe-icon-7-stroke.css',
     ];
     public $js = [
-        'js/jquery-1.10.2.js',
         'js/bootstrap.min.js',
         'js/bootstrap-checkbox-radio-switch.js',
         'js/chartist.min.js',
@@ -27,6 +26,8 @@ class AppAsset extends AssetBundle
         'js/light-bootstrap-dashboard.js',
     ];
     public $depends = [
+        'yii\web\YiiAsset',
+        'yii\bootstrap\BootstrapAsset',
         'rmrevin\yii\fontawesome\AssetBundle'
     ];
 }

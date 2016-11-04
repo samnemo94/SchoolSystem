@@ -11,6 +11,42 @@ use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
 
 AppAsset::register($this);
+
+foreach (Yii::$app->session->getAllFlashes() as $key => $message)
+{
+    if ($key == 'error' || $key == 'success' || $key == 'warning')
+    {
+        $params = [];
+        $params['body'] = (!empty($message['message'])) ? Html::encode($message['message']) : 'Message Not Set!';
+        $params['showSeparator'] = true;
+        $params['pluginOptions'] = [
+            'delay' => 500000, //This delay is how long the message shows for
+            'placement' => [
+                'from' => 'top',
+                'align' => 'right',
+            ]
+        ];
+        $params['delay'] = 1;
+        $params['type'] = $key;
+        if ($key == 'success')
+        {
+            $params['icon'] = 'fa fa-thumbs-o-up';
+            $params['title'] = 'Completed Successfully';
+        }
+        if ($key == 'error')
+        {
+            $params['icon'] = 'fa fa-times';
+            $params['title'] = 'Operation Failed';
+        }
+        if ($key == 'warning')
+        {
+            $params['icon'] = 'fa fa-warning';
+            $params['title'] = 'Pay Attention!';
+        }
+        echo \kartik\growl\Growl::widget($params);
+    }
+}
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -34,44 +70,17 @@ AppAsset::register($this);
         <?= $this->render('header.php'); ?>
 
         <div class="content">
-            <?= Breadcrumbs::widget([
-                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-            ]) ?>
-            <?= Alert::widget() ?>
-            <?= $content ?>
+            <div align="right">
+                <?= Breadcrumbs::widget([
+                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                ]) ?>
+            </div>
+            <div style="padding-left: 15px">
+                <?= $content ?>
+            </div>
         </div>
 
-        <footer class="footer">
-            <div class="container-fluid">
-                <nav class="pull-left">
-                    <ul>
-                        <li>
-                            <a href="#">
-                                Home
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                Company
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                Portfolio
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                Blog
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-                <p class="copyright pull-right">
-                    &copy; 2016 <a href="http://www.creative-tim.com">Creative Tim</a>, made with love for a better web
-                </p>
-            </div>
-        </footer>
+        <?= $this->render('footer.php'); ?>
     </div>
     <!--    --><?php
     //    NavBar::begin([
