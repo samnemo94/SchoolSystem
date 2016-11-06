@@ -44,6 +44,24 @@ use Yii\helpers\Url;
                     <p>Items</p>
                 </a>
             </li>
+            <li>
+                <a href="<?= Url::to(['/permissions']) ?>">
+                    <i class="pe-7s-plugin"></i>
+                    <p>Permissions</p>
+                </a>
+            </li>
+            <li>
+                <a href="<?= Url::to(['/role']) ?>">
+                    <i class="pe-7s-plugin"></i>
+                    <p>Roles</p>
+                </a>
+            </li>
+            <li>
+                <a href="<?= Url::to(['/role-perm']) ?>">
+                    <i class="pe-7s-plugin"></i>
+                    <p>Role-Permissions</p>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

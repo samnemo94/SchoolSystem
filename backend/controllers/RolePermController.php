@@ -3,16 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\languages;
-use backend\models\languagesSearch;
+use backend\models\RolePerm;
+use backend\models\RolePermSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * LanguagesController implements the CRUD actions for languages model.
+ * RolePermController implements the CRUD actions for RolePerm model.
  */
-class LanguagesController extends MyController
+class RolePermController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,12 +30,12 @@ class LanguagesController extends MyController
     }
 
     /**
-     * Lists all languages models.
+     * Lists all RolePerm models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new languagesSearch();
+        $searchModel = new RolePermSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,16 +45,28 @@ class LanguagesController extends MyController
     }
 
     /**
-     * Creates a new languages model.
+     * Displays a single RolePerm model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionView($id)
+    {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    /**
+     * Creates a new RolePerm model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new languages();
+        $model = new RolePerm();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['view', 'id' => $model->role_perm_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -63,7 +75,7 @@ class LanguagesController extends MyController
     }
 
     /**
-     * Updates an existing languages model.
+     * Updates an existing RolePerm model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -73,7 +85,7 @@ class LanguagesController extends MyController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['view', 'id' => $model->role_perm_id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -82,7 +94,7 @@ class LanguagesController extends MyController
     }
 
     /**
-     * Deletes an existing languages model.
+     * Deletes an existing RolePerm model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -95,15 +107,15 @@ class LanguagesController extends MyController
     }
 
     /**
-     * Finds the languages model based on its primary key value.
+     * Finds the RolePerm model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return languages the loaded model
+     * @return RolePerm the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = languages::findOne($id)) !== null) {
+        if (($model = RolePerm::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

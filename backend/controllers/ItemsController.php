@@ -13,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * ItemsController implements the CRUD actions for items model.
  */
-class ItemsController extends Controller
+class ItemsController extends MyController
 {
     /**
      * @inheritdoc

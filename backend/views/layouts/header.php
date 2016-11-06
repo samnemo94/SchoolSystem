@@ -60,9 +60,13 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="#">
-                        Log out
-                    </a>
+                   <?= \yii\helpers\Html::a(
+                       'Log Out',
+                       ['/site/logout'],
+                       ['data-method' =>'post']
+
+                   )
+                        ?>
                 </li>
             </ul>
         </div>
