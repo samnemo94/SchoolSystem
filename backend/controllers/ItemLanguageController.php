@@ -8,6 +8,7 @@ use backend\models\ItemLanguageSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * ItemLanguageController implements the CRUD actions for ItemLanguage model.
@@ -55,6 +56,11 @@ class ItemLanguageController extends MyController
             $item = $model->item;
             if (!$item->getItemLanguages()->where(['language_id' => $model->language_id])->all())
             {
+                $model->item_image = UploadedFile::getInstance($model, 'item_image');
+                $extension = $model->item_image->extension;
+                $name = 'items_photos/' . $model->item_language_id . strtotime("now") . '.' . $extension;
+                $model->item_image->saveAs($name);
+                $model->item_image = $name;
                 $model->save();
                 return $this->redirect(['/items/view', 'id' => $item_id]);
             }
@@ -80,8 +86,26 @@ class ItemLanguageController extends MyController
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save())
+        $old_photo = $model->item_image;
+        if ($model->load(Yii::$app->request->post()))
         {
+            $name = '';
+            $upload_image = UploadedFile::getInstance($model, 'item_image');
+            if (!empty($upload_image))
+            {
+                if (file_exists($old_photo))
+                {
+                    unlink($old_photo);
+                }
+                $extension = $upload_image->extension;
+                $name = 'items_photos/' . $model->item_language_id . strtotime("now") . '.' . $extension;
+                $model->item_image = $name;
+            }
+
+            if ($model->save())
+            {
+                $upload_image->saveAs($name);
+            };
             return $this->redirect(['view', 'id' => $model->item_language_id]);
         }
         else

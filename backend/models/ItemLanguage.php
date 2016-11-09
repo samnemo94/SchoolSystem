@@ -34,10 +34,11 @@ class ItemLanguage extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['item_image'], 'file', 'extensions' => 'png, jpg', 'skipOnEmpty' => true],
             [['item_id', 'language_id', 'item_title'], 'required'],
             [['item_id', 'language_id'], 'integer'],
             [['item_description', 'item_short_description'], 'string'],
-            [['item_title', 'item_image'], 'string', 'max' => 255],
+            [['item_title'], 'string', 'max' => 255],
             [['item_id'], 'exist', 'skipOnError' => true, 'targetClass' => Items::className(), 'targetAttribute' => ['item_id' => 'item_id']],
             [['language_id'], 'exist', 'skipOnError' => true, 'targetClass' => Languages::className(), 'targetAttribute' => ['language_id' => 'language_id']],
         ];

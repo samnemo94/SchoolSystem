@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model backend\models\ItemLanguage */
 
-$this->title = $model->item_language_id;
+$this->title = $model->item->item_title;
 $this->params['breadcrumbs'][] = ['label' => 'Item Languages', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -28,11 +28,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'item_language_id',
-            'item_id',
-            'language_id',
+            [
+                'label' => 'Item',
+                'value' => $model->item?$model->item->item_title:'',
+            ],
+            [
+                'label' => 'Language',
+                'value' => $model->language?$model->language->language_name:'',
+            ],
             'item_title',
-            'item_description:ntext',
+            'item_description:html',
             'item_short_description:ntext',
             'item_image',
         ],
