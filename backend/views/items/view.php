@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model backend\models\items */
 
-$this->title = $model->item_id;
+$this->title = $model->item_title;
 $this->params['breadcrumbs'][] = ['label' => 'Items', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -28,14 +28,25 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'item_id',
             'item_title',
-            'category_id',
-            'created_by',
+            [
+                'label' => 'Category',
+                'value' => $model->category?$model->category->category_title:'',
+            ],
+            [
+                'label' => 'Created By',
+                'value' => $model->createdBy?$model->createdBy->username:'',
+            ],
             'created_at',
-            'updated_by',
+            [
+                'label' => 'Updated By',
+                'value' => $model->updatedBy?$model->updatedBy->username:'',
+            ],
             'updated_at',
-            'deleted_by',
+            [
+                'label' => 'Deleted By',
+                'value' => $model->deletedBy?$model->deletedBy->username:'',
+            ],
             'deleted_at',
         ],
     ]) ?>
@@ -62,6 +73,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'item_title',
+            'item_short_description',
+            'item_image',
 
             [
                 'class' => 'yii\grid\ActionColumn',

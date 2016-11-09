@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model backend\models\menus */
 /* @var $languages_provider \yii\data\ActiveDataProvider */
 
-$this->title = $model->menu_id;
+$this->title = $model->menu_title;
 $this->params['breadcrumbs'][] = ['label' => 'Menuses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -29,12 +29,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'menu_id',
-            'parent_id',
-            'category_id',
-            'menu_position',
-            'item_id',
             'menu_title',
+            [
+                'label' => 'Parent Menu',
+                'value' => $model->parent?$model->parent->menu_title:'',
+            ],
+            [
+                'label' => 'Category',
+                'value' => $model->category?$model->category->category_title:'',
+            ],
+            'menu_position',
+            [
+                'label' => 'Item',
+                'value' => $model->item?$model->item->item_title:'',
+            ],
         ],
     ]) ?>
 
@@ -62,15 +70,8 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'contentOptions' => ['style' => 'width:60px;'],
-                'template' => '{view}{update}{delete}',
+                'template' => '{update}{delete}',
                 'buttons' => [
-                    'view' => function ($url, $model, $key)
-                    {
-                        return Html::a('<span class="pe-7s-look"></span>',
-                            ['menu-language/view', 'id' => $model->menu_language_id], [
-                                'title' => Yii::t('yii', 'View'),
-                            ]);
-                    },
                     'update' => function ($url, $model, $key)
                     {
                         return Html::a('<span class="pe-7s-pen"></span>',

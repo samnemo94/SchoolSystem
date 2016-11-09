@@ -30,21 +30,6 @@ class ItemLanguageController extends MyController
     }
 
     /**
-     * Lists all ItemLanguage models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new ItemLanguageSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
      * Displays a single ItemLanguage model.
      * @param integer $id
      * @return mixed
@@ -65,13 +50,24 @@ class ItemLanguageController extends MyController
     {
         $model = new ItemLanguage();
         $model->item_id = $item_id;
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->item_language_id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        if ($model->load(Yii::$app->request->post()))
+        {
+            $item = $model->item;
+            if (!$item->getItemLanguages()->where(['language_id' => $model->language_id])->all())
+            {
+                $model->save();
+                return $this->redirect(['/items/view', 'id' => $item_id]);
+            }
+            else
+            {
+                Yii::$app->getSession()->setFlash('error', [
+                    'message' => 'Translation to this language already exist',
+                ]);
+            }
         }
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -84,9 +80,12 @@ class ItemLanguageController extends MyController
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save())
+        {
             return $this->redirect(['view', 'id' => $model->item_language_id]);
-        } else {
+        }
+        else
+        {
             return $this->render('update', [
                 'model' => $model,
             ]);
@@ -101,9 +100,11 @@ class ItemLanguageController extends MyController
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $item = $model->item;
+        $model->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['/items/view', 'id' => $item->item_id]);
     }
 
     /**
@@ -115,9 +116,12 @@ class ItemLanguageController extends MyController
      */
     protected function findModel($id)
     {
-        if (($model = ItemLanguage::findOne($id)) !== null) {
+        if (($model = ItemLanguage::findOne($id)) !== null)
+        {
             return $model;
-        } else {
+        }
+        else
+        {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }

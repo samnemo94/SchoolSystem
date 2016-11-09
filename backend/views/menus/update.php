@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="card">
     <div class="header">
-        <h4 class="title"><?= Html::encode($this->title) ?></h4>
+        <h3 class="title"><?= Html::encode($this->title) ?></h3>
     </div>
     <div class="content">
         <?= $this->render('_form', [

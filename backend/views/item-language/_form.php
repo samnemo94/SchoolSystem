@@ -12,15 +12,20 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'item_id')->textInput() ?>
-
-    <?= $form->field($model, 'language_id')->textInput() ?>
+    <?= $form->field($model, 'language_id')->widget(\kartik\select2\Select2::classname(), [
+        'data' => \yii\helpers\ArrayHelper::map(\backend\models\Languages::find()->all(),'language_id','language_name'),
+        'language' => 'en',
+        'options' => ['placeholder' => 'Select a language...'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]); ?>
 
     <?= $form->field($model, 'item_title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'item_description')->textarea(['rows' => 6]) ?>
-
     <?= $form->field($model, 'item_short_description')->textarea(['rows' => 6]) ?>
+
+    <?= $form->field($model, 'item_description')->textarea(['rows' => 6]) ?>
 
     <?= $form->field($model, 'item_image')->textInput(['maxlength' => true]) ?>
 

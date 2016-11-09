@@ -10,12 +10,13 @@ $this->title = 'Create Role Perm';
 $this->params['breadcrumbs'][] = ['label' => 'Role Perms', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="role-perm-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
-
+<div class="card">
+    <div class="header">
+        <h3 class="title"><?= Html::encode($this->title) ?></h3>
+    </div>
+    <div class="content">
+        <?= $this->render('_form', [
+            'model' => $model,
+        ]) ?>
+    </div>
 </div>

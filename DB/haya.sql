@@ -9,7 +9,7 @@ CREATE TABLE `permissions` (
   `created_by` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_by` int(11) NOT NULL,
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '1975-01-01 00:00:00',
   `deleted_by` int(11) DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -26,9 +26,6 @@ ALTER TABLE `permissions`
 --
 ALTER TABLE `permissions`
   MODIFY `permission_id` int(11) NOT NULL AUTO_INCREMENT;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
 
 -- ******** role table ******** --
@@ -39,7 +36,7 @@ CREATE TABLE `role` (
   `created_by` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_by` int(11) NOT NULL,
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '1975-01-01 00:00:00',
   `deleted_by` int(11) DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -67,7 +64,7 @@ CREATE TABLE `role_perm` (
   `created_by` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_by` int(11) NOT NULL,
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '1975-01-01 00:00:00',
   `deleted_by` int(11) DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -103,35 +100,35 @@ ALTER TABLE `role_perm` ADD FOREIGN KEY (`role_id`) REFERENCES `school_system`.`
 ALTER TABLE `role_perm` ADD FOREIGN KEY (`permission_id`) REFERENCES `school_system`.`permissions`(`permission_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
---add role(admin and admin1)
+-- add role(admin and admin1)
 INSERT INTO `role` (`role_id`, `role_name`, `created_by`, `created_at`, `updated_by`, `updated_at`, `deleted_by`, `deleted_at`) VALUES
-(1, 'admin', 0, '2016-11-05 14:23:07', 0, '0000-00-00 00:00:00', NULL, NULL),
-(2, 'admin1', 1, '2016-11-06 17:11:03', 1, '0000-00-00 00:00:00', NULL, NULL);
+(1, 'admin', 0, '2016-11-05 14:23:07', 0, '1975-01-01 00:00:00', NULL, NULL),
+(2, 'admin1', 1, '2016-11-06 17:11:03', 1, '1975-01-01 00:00:00', NULL, NULL);
 
 
---add permissions
+-- add permissions
 INSERT INTO `permissions` (`permission_id`, `permission_page`, `permission_action`, `permission_description`, `created_by`, `created_at`, `updated_by`, `updated_at`, `deleted_by`, `deleted_at`) VALUES
-(1, 'menus', 'create', 'create menu', 0, '2016-11-06 15:32:13', 0, '0000-00-00 00:00:00', NULL, NULL),
-(2, 'categories', 'create', 'create categories', 0, '2016-11-05 14:29:52', 0, '0000-00-00 00:00:00', NULL, NULL),
-(5, 'items', 'create', 'create item ', 1, '2016-11-05 18:14:19', 1, '0000-00-00 00:00:00', NULL, NULL),
-(6, 'menus', 'index', 'can show all permissions', 1, '2016-11-06 15:32:22', 1, '0000-00-00 00:00:00', NULL, NULL),
-(10, 'menus', 'update', 'update a menu', 1, '2016-11-06 16:01:38', 1, '0000-00-00 00:00:00', NULL, NULL),
-(11, 'categories', 'index', 'show all categoies', 1, '2016-11-06 16:02:45', 1, '0000-00-00 00:00:00', NULL, NULL),
-(12, 'items', 'index', 'show all items', 1, '2016-11-06 16:03:30', 1, '0000-00-00 00:00:00', NULL, NULL);
+(1, 'menus', 'create', 'create menu', 0, '2016-11-06 15:32:13', 0, '1975-01-01 00:00:00', NULL, NULL),
+(2, 'categories', 'create', 'create categories', 0, '2016-11-05 14:29:52', 0, '1975-01-01 00:00:00', NULL, NULL),
+(5, 'items', 'create', 'create item ', 1, '2016-11-05 18:14:19', 1, '1975-01-01 00:00:00', NULL, NULL),
+(6, 'menus', 'index', 'can show all permissions', 1, '2016-11-06 15:32:22', 1, '1975-01-01 00:00:00', NULL, NULL),
+(10, 'menus', 'update', 'update a menu', 1, '2016-11-06 16:01:38', 1, '1975-01-01 00:00:00', NULL, NULL),
+(11, 'categories', 'index', 'show all categoies', 1, '2016-11-06 16:02:45', 1, '1975-01-01 00:00:00', NULL, NULL),
+(12, 'items', 'index', 'show all items', 1, '2016-11-06 16:03:30', 1, '1975-01-01 00:00:00', NULL, NULL);
 
 
 -- add role-perm
 INSERT INTO `role_perm` (`role_perm_id`, `role_id`, `permission_id`, `created_by`, `created_at`, `updated_by`, `updated_at`, `deleted_by`, `deleted_at`) VALUES
-(11, 1, 1, 1, '2016-11-06 16:05:01', 1, '0000-00-00 00:00:00', NULL, NULL),
-(12, 1, 2, 1, '2016-11-06 16:05:01', 1, '0000-00-00 00:00:00', NULL, NULL),
-(13, 1, 5, 1, '2016-11-06 16:05:01', 1, '0000-00-00 00:00:00', NULL, NULL),
-(14, 1, 6, 1, '2016-11-06 16:05:01', 1, '0000-00-00 00:00:00', NULL, NULL),
-(15, 1, 10, 1, '2016-11-06 16:05:01', 1, '0000-00-00 00:00:00', NULL, NULL),
-(16, 1, 11, 1, '2016-11-06 16:05:01', 1, '0000-00-00 00:00:00', NULL, NULL),
-(17, 1, 12, 1, '2016-11-06 16:05:01', 1, '0000-00-00 00:00:00', NULL, NULL),
-(18, 2, 5, 1, '2016-11-06 16:05:24', 1, '0000-00-00 00:00:00', NULL, NULL),
-(19, 2, 12, 1, '2016-11-06 16:05:24', 1, '0000-00-00 00:00:00', NULL, NULL),
-(21, 2, 11, 1, '2016-11-06 18:21:07', 1, '0000-00-00 00:00:00', NULL, NULL);
+(11, 1, 1, 1, '2016-11-06 16:05:01', 1, '1975-01-01 00:00:00', NULL, NULL),
+(12, 1, 2, 1, '2016-11-06 16:05:01', 1, '1975-01-01 00:00:00', NULL, NULL),
+(13, 1, 5, 1, '2016-11-06 16:05:01', 1, '1975-01-01 00:00:00', NULL, NULL),
+(14, 1, 6, 1, '2016-11-06 16:05:01', 1, '1975-01-01 00:00:00', NULL, NULL),
+(15, 1, 10, 1, '2016-11-06 16:05:01', 1, '1975-01-01 00:00:00', NULL, NULL),
+(16, 1, 11, 1, '2016-11-06 16:05:01', 1, '1975-01-01 00:00:00', NULL, NULL),
+(17, 1, 12, 1, '2016-11-06 16:05:01', 1, '1975-01-01 00:00:00', NULL, NULL),
+(18, 2, 5, 1, '2016-11-06 16:05:24', 1, '1975-01-01 00:00:00', NULL, NULL),
+(19, 2, 12, 1, '2016-11-06 16:05:24', 1, '1975-01-01 00:00:00', NULL, NULL),
+(21, 2, 11, 1, '2016-11-06 18:21:07', 1, '1975-01-01 00:00:00', NULL, NULL);
 
 
 ALTER TABLE `user` ADD `role_id` INT(11) NOT NULL AFTER `id`, ADD INDEX (`role_id`);
