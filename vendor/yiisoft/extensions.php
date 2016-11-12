@@ -120,4 +120,13 @@ return array (
       '@kartik/file' => $vendorDir . '/kartik-v/yii2-widget-fileinput',
     ),
   ),
+  'lajax/yii2-language-picker' => 
+  array (
+    'name' => 'lajax/yii2-language-picker',
+    'version' => '1.2.0.0',
+    'alias' => 
+    array (
+      '@lajax/languagepicker' => $vendorDir . '/lajax/yii2-language-picker',
+    ),
+  ),
 );

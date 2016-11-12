@@ -69,7 +69,12 @@
 
     <!-- Menu -->
     <ul class="nav navbar-nav pull-xs-right">
-
+        <?=
+        \lajax\languagepicker\widgets\LanguagePicker::widget([
+            'skin' => \lajax\languagepicker\widgets\LanguagePicker::SKIN_DROPDOWN,
+            'size' => \lajax\languagepicker\widgets\LanguagePicker::SIZE_LARGE
+        ]);
+        ?>
         <!-- User dropdown -->
         <li class="nav-item dropdown">
             <a class="nav-link active dropdown-toggle p-a-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false">

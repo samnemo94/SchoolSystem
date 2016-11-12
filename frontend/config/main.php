@@ -9,9 +9,23 @@ $params = array_merge(
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'language' => 'en-US',
+    'bootstrap' => ['log','languagepicker'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
+        'languagepicker' => [
+            'class' => 'lajax\languagepicker\Component',
+            'languages' => ['en-US', 'de-DE', 'fr-FR','ar-AR'],         // List of available languages (icons only)
+            'cookieName' => 'languageXXXXXX',                         // Name of the cookie.
+            'expireDays' => 64,                                 // The expiration time of the cookie is 64 days.
+            'callback' => function() {
+                if (!\Yii::$app->user->isGuest) {
+                    //$user = \Yii::$app->user->identity;
+                    //$user->language = \Yii::$app->language;
+                    //$user->save();
+                }
+            }
+        ],
         'assetManager' => [
             'bundles' => [
                 'yii\web\JqueryAsset' => [
@@ -51,6 +65,14 @@ return [
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
+        ],
+        'urlManager' => [
+          //  'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'rules' => [
+                // your rules go here
+            ],
+            // ...
         ],
         /*
         'urlManager' => [
