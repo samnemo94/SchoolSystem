@@ -27,10 +27,44 @@
 
     <ul class="nav navbar-nav hidden-sm-down">
 
-        <!-- Menu -->
-        <li class="nav-item">
-            <a class="nav-link" href="get-help.html">Get Help</a>
-        </li>
+        <?php
+        foreach ($main_menu_top as $menu)
+        {
+            if (!$menu->haveChilds())
+            {
+                ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= \yii\helpers\Url::to(['/site/menu','id' => $menu->menu_id]) ?>">
+                        <?= $menu->menu_title ?>
+                    </a>
+                </li>
+                <?php
+            }
+            else
+            {
+                ?>
+                <li class="nav-item dropdown">
+                    <a class="nav-link active dropdown-toggle p-a-0" data-toggle="dropdown" href="#" role="button" aria-haspopup="false">
+                        <?= $menu->menu_title ?>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-list" aria-labelledby="Preview">
+                        <?php
+                            foreach ($menu->getMenuses()->all() as $subMenu)
+                            {
+                                ?>
+                                <a class="dropdown-item" href="<?= \yii\helpers\Url::to(['/site/menu','id' => $subMenu->menu_id]) ?>"><?= $subMenu->menu_title ?></a>
+                                <?php
+                            }
+                        ?>
+                    </div>
+                </li>
+                <?php
+            }
+            ?>
+
+        <?php
+        }
+        ?>
     </ul>
 
     <!-- Menu -->

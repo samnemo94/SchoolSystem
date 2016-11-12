@@ -13,55 +13,61 @@ use Yii\helpers\Url;
             </a>
         </div>
 
-        <ul class="nav">
-            <li>
-                <a href="<?= Url::to(['/site']) ?>">
-                    <i class="pe-7s-graph"></i>
-                    <p>Dashboard</p>
-                </a>
-            </li>
-            <li>
-                <a href="<?= Url::to(['/languages']) ?>">
-                    <i class="pe-7s-global"></i>
-                    <p>Languages</p>
-                </a>
-            </li>
-            <li>
-                <a href="<?= Url::to(['/categories']) ?>">
-                    <i class="pe-7s-network"></i>
-                    <p>Categories</p>
-                </a>
-            </li>
-            <li>
-                <a href="<?= Url::to(['/menus']) ?>">
-                    <i class="pe-7s-browser"></i>
-                    <p>Menus</p>
-                </a>
-            </li>
-            <li>
-                <a href="<?= Url::to(['/items']) ?>">
-                    <i class="pe-7s-plugin"></i>
-                    <p>Items</p>
-                </a>
-            </li>
-            <li>
-                <a href="<?= Url::to(['/permissions']) ?>">
-                    <i class="pe-7s-plugin"></i>
-                    <p>Permissions</p>
-                </a>
-            </li>
-            <li>
-                <a href="<?= Url::to(['/role']) ?>">
-                    <i class="pe-7s-plugin"></i>
-                    <p>Roles</p>
-                </a>
-            </li>
-            <li>
-                <a href="<?= Url::to(['/role-perm']) ?>">
-                    <i class="pe-7s-plugin"></i>
-                    <p>Role-Permissions</p>
-                </a>
-            </li>
-        </ul>
+        <?php if (!Yii::$app->user->isGuest)
+        {
+            ?>
+            <ul class="nav">
+                <li>
+                    <a href="<?= Url::to(['/site']) ?>">
+                        <i class="pe-7s-graph"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= Url::to(['/languages']) ?>">
+                        <i class="pe-7s-global"></i>
+                        <p>Languages</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= Url::to(['/categories']) ?>">
+                        <i class="pe-7s-network"></i>
+                        <p>Categories</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= Url::to(['/menus']) ?>">
+                        <i class="pe-7s-browser"></i>
+                        <p>Menus</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= Url::to(['/items']) ?>">
+                        <i class="pe-7s-plugin"></i>
+                        <p>Items</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= Url::to(['/permissions']) ?>">
+                        <i class="pe-7s-plugin"></i>
+                        <p>Permissions</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= Url::to(['/role']) ?>">
+                        <i class="pe-7s-plugin"></i>
+                        <p>Roles</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?= Url::to(['/role-perm']) ?>">
+                        <i class="pe-7s-plugin"></i>
+                        <p>Role-Permissions</p>
+                    </a>
+                </li>
+            </ul>
+            <?php
+        }
+        ?>
     </div>
 </div>

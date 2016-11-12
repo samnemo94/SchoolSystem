@@ -85,6 +85,11 @@ class Menus extends \yii\db\ActiveRecord
         return $this->hasMany(Menus::className(), ['parent_id' => 'menu_id']);
     }
 
+    public function haveChilds()
+    {
+        return sizeof($this->getMenuses()->all())>0;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

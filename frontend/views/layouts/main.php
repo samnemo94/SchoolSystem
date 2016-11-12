@@ -2,6 +2,7 @@
 
 /* @var $this \yii\web\View */
 /* @var $content string */
+/* @var $main_menu_top \yii\db\ActiveRecord[] */
 
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
@@ -27,7 +28,9 @@ AppAsset::register($this);
 <body class="layout-container ls-top-navbar si-l3-md-up">
 <?php $this->beginBody() ?>
 
-    <?= $this->render('header.php'); ?>
+    <?= $this->render('header.php',[
+        'main_menu_top' => $GLOBALS['main_menu_top'],
+    ]); ?>
 
     <?= $this->render('left.php'); ?>
 

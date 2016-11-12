@@ -1,6 +1,9 @@
 <?php
 namespace frontend\controllers;
 
+use backend\models\Categories;
+use backend\models\Items;
+use backend\models\Menus;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
@@ -16,7 +19,7 @@ use frontend\models\ContactForm;
 /**
  * Site controller
  */
-class SiteController extends Controller
+class SiteController extends MyController
 {
     /**
      * @inheritdoc
@@ -73,6 +76,30 @@ class SiteController extends Controller
     public function actionIndex()
     {
         return $this->render('index');
+    }
+
+    public function actionMenu($id)
+    {
+        $menu = Menus::findOne(['menu_id' => $id]);
+        if ($menu->menu_title == 'Home')
+            $this->redirect(['index']);
+        $page_category = Categories::findOne(['category_title' => 'page']);
+
+        if ($menu->category_id = $page_category->category_id)
+        {
+            if ($menu->item)
+            {
+                $this->redirect(['page','id' => $menu->item->item_id]);
+            }
+        }
+    }
+
+    public function actionPage($id)
+    {
+        $item = Items::findOne(['item_id' => $id]);
+        return $this->render('page', [
+            'item' => $item,
+        ]);
     }
 
     /**
