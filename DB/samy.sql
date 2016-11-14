@@ -124,3 +124,7 @@ ALTER TABLE `categories` CHANGE `parent_id` `parent_id` INT(11) NULL;
 
 ALTER TABLE `items` CHANGE `category_id` `category_id` INT(11) NULL;
 
+-- 2016-11-13
+
+ALTER TABLE `languages` ADD `language_code` VARCHAR(2) NOT NULL AFTER `language_name`;
+

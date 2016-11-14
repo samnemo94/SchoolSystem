@@ -58,8 +58,20 @@ class RoleController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $dataProvider = Permissions::find()->all();
+        $res = [];
+        foreach ($dataProvider as $data)
+        {
+            $res[$data['permission_page']][] = $data;
+        }
+        $checked = RolePerm::find()->where(['role_id'=>$model->role_id])->all();
+        $checked = ArrayHelper::map($checked,'permission_id','permission_id');
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'checked' =>$checked,
+            'dataProvider' => $res,
         ]);
     }
 
@@ -70,19 +82,21 @@ class RoleController extends Controller
      */
     public function actionCreate()
     {
-        $query = "SELECT * FROM permissions ";
-        $dbCommand = Yii::$app->db->createCommand($query);
-        $queryResult = $dbCommand->queryAll();
-        $dataProvider = $queryResult;
+        $dataProvider = Permissions::find()->all();
+        $res = [];
+        foreach ($dataProvider as $data)
+        {
+            $res[$data['permission_page']][] = $data;
+        }
 
         $model = new Role();
-        $model->created_by = 1;
-        $model->updated_by = 1;
+        $model->created_by = Yii::$app->user->id;
+        $model->updated_by = Yii::$app->user->id;
         if ($model->load(Yii::$app->request->post()) && $model->save() ) {
             foreach ($_POST['check_list'] as $row_id ) {
                 $assign = new RolePerm();
-                $assign->created_by = 1;
-                $assign->updated_by = 1;
+                $assign->created_by = Yii::$app->user->id;
+                $assign->updated_by = Yii::$app->user->id;
                 $assign->role_id = $model->role_id;
                 $assign->permission_id = $row_id;
                 $assign->save();}
@@ -94,7 +108,7 @@ class RoleController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'checked' =>$checked,
-                'dataProvider' => $dataProvider,
+                'dataProvider' => $res,
             ]);
         }
     }
@@ -108,10 +122,12 @@ class RoleController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $query = "SELECT * FROM permissions ";
-        $dbCommand = Yii::$app->db->createCommand($query);
-        $queryResult = $dbCommand->queryAll();
-        $dataProvider = $queryResult;
+        $dataProvider = Permissions::find()->all();
+        $res = [];
+        foreach ($dataProvider as $data)
+        {
+            $res[$data['permission_page']][] = $data;
+        }
         $checked = RolePerm::find()->where(['role_id'=>$model->role_id])->all();
         $checked = ArrayHelper::map($checked,'permission_id','permission_id');
 
@@ -139,7 +155,7 @@ class RoleController extends Controller
             return $this->render('update', [
                 'model' => $model,
                 'checked' =>$checked,
-                'dataProvider' => $dataProvider,
+                'dataProvider' => $res,
             ]);
         }
     }

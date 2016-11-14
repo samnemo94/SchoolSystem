@@ -129,4 +129,13 @@ return array (
       '@lajax/languagepicker' => $vendorDir . '/lajax/yii2-language-picker',
     ),
   ),
+  'airani/yii2-bootstrap-rtl' => 
+  array (
+    'name' => 'airani/yii2-bootstrap-rtl',
+    'version' => '1.2.0.0',
+    'alias' => 
+    array (
+      '@airani/bootstrap' => $vendorDir . '/airani/yii2-bootstrap-rtl',
+    ),
+  ),
 );

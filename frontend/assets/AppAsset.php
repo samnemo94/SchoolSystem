@@ -11,14 +11,7 @@ class AppAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
-    public $css = [
-        'css/site.css',
-        'css/style.min.css',
-        'css/roboto_font.css',
-        //'css/dropzone.min.css',
-       // 'css/jquery-jvectormap.css',
-       // 'css/nouislider.min.css',
-    ];
+    public $css;
     public $js = [
         'js/jquery.min.js',
 //        'js/colors.js',
@@ -45,9 +38,45 @@ class AppAsset extends AssetBundle
         'js/adminplus.js',
         'js/main.min.js',
     ];
-    public $depends = [
+
+    public $depends;
+
+    public function init ( )
+    {
+        if (\Yii::$app->language == "ar")
+        {
+            $this->depends = [
+                //        'yii\web\YiiAsset',
+                //        'yii\bootstrap\BootstrapAsset',
+                'yii\materialicons\AssetBundle',
+                'airani\bootstrap\BootstrapRtlAsset',
+            ];
+            $this->css = [
+                'css/site.css',
+                'css/style.min.rtl.css',
+                'css/page.style.rtl.css',
+                'css/roboto_font.css',
+                //'css/dropzone.min.css',
+                // 'css/jquery-jvectormap.css',
+                // 'css/nouislider.min.css',
+            ];
+        }
+        else
+        {
+            $this->depends = [
 //        'yii\web\YiiAsset',
 //        'yii\bootstrap\BootstrapAsset',
-          'yii\materialicons\AssetBundle'
-    ];
+                'yii\materialicons\AssetBundle',
+            ];
+            $this->css = [
+                'css/site.css',
+                'css/style.min.css',
+                'css/page.style.css',
+                'css/roboto_font.css',
+                //'css/dropzone.min.css',
+                // 'css/jquery-jvectormap.css',
+                // 'css/nouislider.min.css',
+            ];
+        }
+    }
 }

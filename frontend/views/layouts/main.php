@@ -23,16 +23,38 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body>
 
-<body class="layout-container ls-top-navbar si-l3-md-up">
+
+<?php
+if (Yii::$app->language == "ar")
+{
+    echo "<body class=\"layout-container ls-top-navbar si-l3-md-up\">";
+}
+else
+{
+    echo "<body class=\"layout-container ls-top-navbar si-l3-md-up\">";
+}
+?>
+
+
 <?php $this->beginBody() ?>
 
-    <?= $this->render('header.php',[
-        'main_menu_top' => $GLOBALS['main_menu_top'],
-    ]); ?>
-
-    <?= $this->render('left.php'); ?>
+<?php
+    if (Yii::$app->language == "ar")
+    {
+        echo $this->render('header_RTL.php',[
+            'main_menu_top' => $GLOBALS['main_menu_top'],
+        ]);
+        echo $this->render('left_RTL.php');
+    }
+    else
+    {
+        echo $this->render('header.php',[
+            'main_menu_top' => $GLOBALS['main_menu_top'],
+        ]);
+        echo $this->render('left.php');
+    }
+?>
 
     <div class="layout-content" data-scrollable>
         <?= Breadcrumbs::widget([

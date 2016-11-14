@@ -25,18 +25,58 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+
             'role_name',
-            //'created_by',
+            [
+                'label' => 'created_by',
+                'value' => function ($model)
+                {
+                    $obj = \backend\models\Admin::findOne(['id'=>$model->created_by]);
+                    return $obj?$obj->username:'';
+                }
+            ],
             'created_at',
            // 'updated_by',
              'updated_at',
             // 'deleted_by',
             // 'deleted_at',
 
-            ['class' => 'yii\grid\ActionColumn',
-            'template'=>'{view}{update}{delete}',
-            'buttons'=>[
-            ]],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'contentOptions' => ['style' => 'width:60px;'],
+                'template'=>'{view}{update}{delete}',
+                'buttons' => [
+                    'view' => function ($url, $model, $key)
+                    {
+                        return Html::a('<span class="pe-7s-look"></span>',
+                            ['role/view', 'id' => $model->role_id], [
+                                'title' => Yii::t('yii', 'View'),
+                            ]);
+                    },
+                    'update' => function ($url, $model, $key)
+                    {
+                        if ($model->deleted_by)
+                            return null;
+                        return Html::a('<span class="pe-7s-pen"></span>',
+                            ['role/update', 'id' => $model->role_id], [
+                                'title' => Yii::t('yii', 'Update'),
+                            ]);
+                    },
+                    'delete' => function ($url, $model, $key)
+                    {
+                        if ($model->deleted_by)
+                            return null;
+                        return Html::a('<span class="pe-7s-trash"></span>',
+                            ['role/delete', 'id' => $model->role_id], [
+                                'title' => Yii::t('yii', 'Delete'),
+                                'data' => [
+                                    'confirm' => 'Are you sure you want to delete this item?',
+                                    'method' => 'post',
+                                ],
+                            ]);
+                    },
+                ]
+            ],
         ],
     ]); ?>
     <?php Pjax::end();?>

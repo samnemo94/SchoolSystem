@@ -15,7 +15,11 @@ return [
     'components' => [
         'languagepicker' => [
             'class' => 'lajax\languagepicker\Component',
-            'languages' => ['en-US', 'de-DE', 'fr-FR','ar-AR'],         // List of available languages (icons only)
+            'languages' => function () {
+                $langs = \backend\models\Languages::find()->select('language_code')->all();
+                $res = \yii\helpers\ArrayHelper::map($langs,'language_code','language_code');
+                return $res;
+            },         // List of available languages (icons only)
             'cookieName' => 'languageXXXXXX',                         // Name of the cookie.
             'expireDays' => 64,                                 // The expiration time of the cookie is 64 days.
             'callback' => function() {

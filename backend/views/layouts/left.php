@@ -59,12 +59,6 @@ use Yii\helpers\Url;
                         <p>Roles</p>
                     </a>
                 </li>
-                <li>
-                    <a href="<?= Url::to(['/role-perm']) ?>">
-                        <i class="pe-7s-plugin"></i>
-                        <p>Role-Permissions</p>
-                    </a>
-                </li>
             </ul>
             <?php
         }

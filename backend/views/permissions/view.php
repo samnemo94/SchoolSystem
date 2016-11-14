@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Permissions */
 
-$this->title = $model->permission_id;
+$this->title = "Permission: ".$model->permission_page." ".$model->permission_action;
 $this->params['breadcrumbs'][] = ['label' => 'Permissions', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -28,15 +28,23 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'permission_id',
             'permission_page',
             'permission_action',
             'permission_description:ntext',
-            'created_by',
+            [
+                'label' => 'Created By',
+                'value' => $model->getCreatedBy()->one()?$model->getCreatedBy()->one()->username:'',
+            ],
             'created_at',
-            'updated_by',
+            [
+                'label' => 'Updated By',
+                'value' => $model->getUpdatedBy()->one()?$model->getCreatedBy()->one()->username:'',
+            ],
             'updated_at',
-            'deleted_by',
+            [
+                'label' => 'Deleted By',
+                'value' => $model->getDeletedBy()->one()?$model->getCreatedBy()->one()->username:'',
+            ],
             'deleted_at',
         ],
     ]) ?>

@@ -65,4 +65,29 @@ class Role extends \yii\db\ActiveRecord
     {
         return $this->hasMany(RolePerm::className(), ['role_id' => 'role_id']);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreatedBy()
+    {
+        return $this->hasOne(Admin::className(), ['id' => 'created_by']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUpdatedBy()
+    {
+        return $this->hasOne(Admin::className(), ['id' => 'updated_by']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDeletedBy()
+    {
+        return $this->hasOne(Admin::className(), ['id' => 'deleted_by']);
+    }
+
 }

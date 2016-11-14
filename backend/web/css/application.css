@@ -1,0 +1,76 @@
+.permissions-group{
+    width:48%;
+    float: left;
+    margin: 13px;
+    padding: 13px;
+    border: 1px solid #000;
+}
+.permissions-group h3{
+    text-align: center;
+    width: 78%;
+    margin: -24px auto 0;
+    background: rgb(255, 255, 255) none repeat scroll 0 0;
+    font-size: 1.4em;
+}
+.permissions-group .permission-btn{
+    width:75%;
+    font-size: 0.9em;
+    position: relative;
+    float: left;
+    margin-top: 1.33%;
+    height: 40px;
+    border: 1px solid #ddd;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.permissions-group .permission-btn-group{
+    float: left;
+    width:50%;
+}
+
+.before-permission-btn{
+    width: 40px;
+    height:40px;
+    display: block;
+    float:left;
+    position: relative;
+    margin-top: 1.33%;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    background-color: #f4f4f4;
+    color: #444;
+    border: 1px solid #ddd;
+    border-right-style: none;
+    cursor: pointer;
+}
+.before-permission-btn:hover{
+    background-color: #e7e7e7;
+}
+.before-permission-btn .bar1,.before-permission-btn .bar2{
+    height:4px;
+    width:80%;
+    position: absolute;
+    top:50%;
+    left:50%;
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    background: #060 ;
+    border-radius: 2px;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.before-permission-btn.plus .bar2{
+
+    -webkit-transform: translate(-50%,-50%)rotate(90deg);
+    -moz-transform: translate(-50%,-50%)rotate(90deg);
+    transform: translate(-50%,-50%)rotate(90deg);
+
+}
+.before-permission-btn.minus .bar2,.before-permission-btn.minus .bar1{
+    -webkit-transform: translate(-50%,-50%)rotate(00deg);
+    -moz-transform: translate(-50%,-50%)rotate(0deg);
+    transform: translate(-50%,-50%)rotate(0deg);
+    background: #AA0000;
+}

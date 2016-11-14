@@ -24,12 +24,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'permission_id',
             'permission_page',
             'permission_action',
             'permission_description:ntext',
-            'created_by',
-            // 'created_at',
+            [
+                'label' => 'created_by',
+                'value' => function ($model)
+                {
+                    $obj = \backend\models\Admin::findOne(['id'=>$model->created_by]);
+                    return $obj?$obj->username:'';
+                }
+            ],
+            'created_at',
             // 'updated_by',
             // 'updated_at',
             // 'deleted_by',

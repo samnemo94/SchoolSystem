@@ -24,5 +24,6 @@ return array(
     'kartik\\base\\' => array($vendorDir . '/kartik-v/yii2-krajee-base'),
     'dosamigos\\ckeditor\\' => array($vendorDir . '/2amigos/yii2-ckeditor-widget/src'),
     'cebe\\markdown\\' => array($vendorDir . '/cebe/markdown'),
+    'airani\\bootstrap\\' => array($vendorDir . '/airani/yii2-bootstrap-rtl'),
     'Faker\\' => array($vendorDir . '/fzaninotto/faker/src/Faker'),
 );

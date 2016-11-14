@@ -17,6 +17,7 @@ class AppAsset extends AssetBundle
         'css/light-bootstrap-dashboard.css',
         'css/roboto_font.css',
         'css/pe-icon-7-stroke.css',
+        'css/application.css'
     ];
     public $js = [
         'js/bootstrap.min.js',
