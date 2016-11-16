@@ -8,6 +8,56 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
+<?php
+$num_of_groups = (int)(sizeof($dataProvider) / 2);
+if (sizeof($dataProvider) % 2)
+    $num_of_groups++;
+$num_of_buttons = 0;
+$i = 0;
+$max = 0;
+foreach ($dataProvider as $value)
+{
+    $i++;
+    if ($i > 2)
+    {
+        $num_of_buttons += (int)($max / 2);
+        if ($max % 2)
+            $num_of_buttons++;
+        $i = 1;
+        $max = 0;
+    }
+    if (sizeof($value) > $max)
+    {
+        $max = sizeof($value);
+    }
+}
+$num_of_buttons += (int)($max / 2);
+if ($max % 2)
+    $num_of_buttons++;
+$big_screen = (30 + 10) + $num_of_groups * (13 + 1 + 13 + 13 + 1 + 13) + $num_of_buttons * (45);
+
+$num_of_buttons = 0;
+foreach ($dataProvider as $value)
+{
+    $num_of_buttons += (int)(sizeof($value) / 2);
+    if (sizeof($value) % 2)
+        $num_of_buttons++;
+}
+$small_screen = (30 + 10) + sizeof($dataProvider) * (13 + 1 + 13 + 13 + 1 + 13) + $num_of_buttons * (45);
+?>
+
+<style>
+    .div-background-fill {
+        min-height: <?= $small_screen ?>px;
+    }
+
+    @media only screen and (min-width: 1620px) {
+        .div-background-fill {
+            min-height: <?= $big_screen ?>px;
+        }
+    }
+</style>
+
 <div class="role-form">
 
     <?php $form = ActiveForm::begin(); ?>
@@ -42,7 +92,7 @@ use yii\widgets\ActiveForm;
             $num_of_buttons++;
     ?>
 
-    <div style="min-height: <?= (30+10)+$num_of_groups*(13+1+13+13+1+13)+$num_of_buttons*(45) ?>px" >
+    <div class="div-background-fill">
     <h3>Permissions</h3>
 
     <?php

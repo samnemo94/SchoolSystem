@@ -6,10 +6,61 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Role */
 
-$this->title = "Role: ".$model->role_name;
+$this->title = "Role: " . $model->role_name;
 $this->params['breadcrumbs'][] = ['label' => 'Roles', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<?php
+$num_of_groups = (int)(sizeof($dataProvider) / 2);
+if (sizeof($dataProvider) % 2)
+    $num_of_groups++;
+$num_of_buttons = 0;
+$i = 0;
+$max = 0;
+foreach ($dataProvider as $value)
+{
+    $i++;
+    if ($i > 2)
+    {
+        $num_of_buttons += (int)($max / 2);
+        if ($max % 2)
+            $num_of_buttons++;
+        $i = 1;
+        $max = 0;
+    }
+    if (sizeof($value) > $max)
+    {
+        $max = sizeof($value);
+    }
+}
+$num_of_buttons += (int)($max / 2);
+if ($max % 2)
+    $num_of_buttons++;
+$big_screen = (30 + 10) + $num_of_groups * (13 + 1 + 13 + 13 + 1 + 13) + $num_of_buttons * (45);
+
+$num_of_buttons = 0;
+foreach ($dataProvider as $value)
+{
+    $num_of_buttons += (int)(sizeof($value) / 2);
+    if (sizeof($value) % 2)
+        $num_of_buttons++;
+}
+$small_screen = (30 + 10) + sizeof($dataProvider) * (13 + 1 + 13 + 13 + 1 + 13) + $num_of_buttons * (45);
+?>
+
+<style>
+    .div-background-fill {
+        min-height: <?= $small_screen ?>px;
+    }
+
+    @media only screen and (min-width: 1620px) {
+        .div-background-fill {
+            min-height: <?= $big_screen ?>px;
+        }
+    }
+</style>
+
 <div class="role-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -31,52 +82,24 @@ $this->params['breadcrumbs'][] = $this->title;
             'role_name',
             [
                 'label' => 'Created By',
-                'value' => $model->getCreatedBy()->one()?$model->getCreatedBy()->one()->username:'',
+                'value' => $model->getCreatedBy()->one() ? $model->getCreatedBy()->one()->username : '',
             ],
             'created_at',
             [
                 'label' => 'Updated By',
-                'value' => $model->getUpdatedBy()->one()?$model->getCreatedBy()->one()->username:'',
+                'value' => $model->getUpdatedBy()->one() ? $model->getCreatedBy()->one()->username : '',
             ],
             'updated_at',
             [
                 'label' => 'Deleted By',
-                'value' => $model->getDeletedBy()->one()?$model->getCreatedBy()->one()->username:'',
+                'value' => $model->getDeletedBy()->one() ? $model->getCreatedBy()->one()->username : '',
             ],
             'deleted_at',
         ],
     ]) ?>
 
 
-    <?php
-    $num_of_groups = (int)(sizeof($dataProvider)/2);
-    if (sizeof($dataProvider)%2)
-        $num_of_groups++;
-    $num_of_buttons = 0;
-    $i = 0;
-    $max = 0;
-    foreach ($dataProvider as $value)
-    {
-        $i++;
-        if ($i > 2)
-        {
-            $num_of_buttons += (int)($max/2);
-            if ($max%2)
-                $num_of_buttons++;
-            $i = 1;
-            $max = 0;
-        }
-        if (sizeof($value) > $max)
-        {
-            $max = sizeof($value);
-        }
-    }
-    $num_of_buttons += (int)($max/2);
-    if ($max%2)
-        $num_of_buttons++;
-    ?>
-
-    <div style="min-height: <?= (30+10)+$num_of_groups*(13+1+13+13+1+13)+$num_of_buttons*(45) ?>px" >
+    <div class="div-background-fill">
         <h3>Permissions</h3>
 
         <?php
@@ -91,7 +114,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 {
                     ?>
                     <div class="permission-btn-group">
-                        <span class="before-permission-btn <?= array_key_exists($val['permission_id'], $checked) ? 'plus' : 'minus' ?>">
+                        <span
+                            class="before-permission-btn <?= array_key_exists($val['permission_id'], $checked) ? 'plus' : 'minus' ?>">
                             <span class="bar1"></span>
                             <span class="bar2"></span>
                         </span>
