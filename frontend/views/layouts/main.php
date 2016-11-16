@@ -39,30 +39,19 @@ else
 
 <?php $this->beginBody() ?>
 
-<?php
-    if (Yii::$app->language == "ar")
-    {
-        echo $this->render('header_RTL.php',[
-            'main_menu_top' => $GLOBALS['main_menu_top'],
-        ]);
-        echo $this->render('left_RTL.php');
-    }
-    else
-    {
-        echo $this->render('header.php',[
-            'main_menu_top' => $GLOBALS['main_menu_top'],
-        ]);
-        echo $this->render('left.php');
-    }
-?>
+<?= $this->render('header.php', [
+    'main_menu_top' => $GLOBALS['main_menu_top'],
+]); ?>
 
-    <div class="layout-content" data-scrollable>
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
-        <?= Alert::widget() ?>
-        <?= $content ?>
-    </div>
+<?= $this->render('left.php'); ?>
+
+<div class="layout-content" data-scrollable>
+    <?= Breadcrumbs::widget([
+        'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+    ]) ?>
+    <?= Alert::widget() ?>
+    <?= $content ?>
+</div>
 
 <?php $this->endBody() ?>
 </body>

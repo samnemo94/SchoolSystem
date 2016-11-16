@@ -2564,7 +2564,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
     clear: both;
     font-weight: 400;
     color: #373a3c;
-    text-align: inherit;
+    text-align: right;
     background: 0 0;
     border: 0
 }
@@ -3185,7 +3185,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
 }
 
 .navbar-brand {
-    margin-right: 1rem
+    margin-left: 1rem
 }
 
 .navbar-brand:focus, .navbar-brand:hover {
@@ -6836,7 +6836,7 @@ html.bootstrap-layout .ls-top.layout-content, html.bootstrap-layout .ls-top > .l
 
 .sidebar-menu-label {
     position: absolute;
-    right: 18.75px;
+    left: 18.75px;
     margin-top: 13px;
     padding: .2rem .3rem;
     font-size: .75rem
@@ -7591,7 +7591,7 @@ html.bootstrap-layout .ls-top.layout-content, html.bootstrap-layout .ls-top > .l
 }
 
 .navbar-nav {
-    margin-right: 1.25rem
+    margin-left: 1.25rem
 }
 
 .navbar-nav .dropdown-menu i.material-icons {
@@ -8415,7 +8415,7 @@ blockquote {
 }
 
 .navbar .form-inline {
-    margin-right: 1rem
+    margin-left: 1rem
 }
 
 .navbar .form-inline i.material-icons {
