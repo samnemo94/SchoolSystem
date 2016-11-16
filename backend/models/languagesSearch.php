@@ -5,7 +5,7 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\languages;
+use backend\models\Languages;
 
 /**
  * languagesSearch represents the model behind the search form about `backend\models\languages`.
@@ -41,7 +41,7 @@ class languagesSearch extends languages
      */
     public function search($params)
     {
-        $query = languages::find();
+        $query = Languages::find();
 
         // add conditions that should always apply here
 

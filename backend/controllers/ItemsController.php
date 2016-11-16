@@ -3,8 +3,8 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\items;
-use backend\models\itemsSearch;
+use backend\models\Items;
+use backend\models\ItemsSearch;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -36,7 +36,7 @@ class ItemsController extends MyController
      */
     public function actionIndex()
     {
-        $searchModel = new itemsSearch();
+        $searchModel = new ItemsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -71,7 +71,7 @@ class ItemsController extends MyController
      */
     public function actionCreate()
     {
-        $model = new items();
+        $model = new Items();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->item_id]);
@@ -133,7 +133,7 @@ class ItemsController extends MyController
      */
     protected function findModel($id)
     {
-        if (($model = items::findOne($id)) !== null) {
+        if (($model = Items::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

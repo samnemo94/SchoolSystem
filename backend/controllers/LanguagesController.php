@@ -3,8 +3,8 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\languages;
-use backend\models\languagesSearch;
+use backend\models\Languages;
+use backend\models\LanguagesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -35,7 +35,7 @@ class LanguagesController extends MyController
      */
     public function actionIndex()
     {
-        $searchModel = new languagesSearch();
+        $searchModel = new LanguagesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -51,7 +51,7 @@ class LanguagesController extends MyController
      */
     public function actionCreate()
     {
-        $model = new languages();
+        $model = new Languages();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
@@ -103,7 +103,7 @@ class LanguagesController extends MyController
      */
     protected function findModel($id)
     {
-        if (($model = languages::findOne($id)) !== null) {
+        if (($model = Languages::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

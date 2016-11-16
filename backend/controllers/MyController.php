@@ -24,7 +24,7 @@ class MyController extends Controller {
         {
             $this->redirect(['site/login']);
         }
-        //return true;
+        return true;
         $id = Yii::$app->user->id;
         if ($id != null ) {
             $role = Admin::find()->where(['id' => $id])->one();

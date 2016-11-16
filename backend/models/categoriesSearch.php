@@ -5,7 +5,7 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\categories;
+use backend\models\Categories;
 
 /**
  * categoriesSearch represents the model behind the search form about `backend\models\categories`.
@@ -41,7 +41,7 @@ class categoriesSearch extends categories
      */
     public function search($params)
     {
-        $query = categories::find();
+        $query = Categories::find();
 
         // add conditions that should always apply here
 

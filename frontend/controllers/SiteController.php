@@ -15,6 +15,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\web\NotFoundHttpException;
 
 /**
  * Site controller
@@ -97,9 +98,18 @@ class SiteController extends MyController
     public function actionPage($id)
     {
         $item = Items::findOne(['item_id' => $id]);
-        return $this->render('page', [
-            'item' => $item,
-        ]);
+        if ($item)
+        {
+            $lang = \backend\models\Languages::findOne(['language_code' => Yii::$app->language])->language_id;
+            $item_lang = $item->getItemLanguages()->where(['language_id' => $lang])->one();
+            if ($item_lang)
+            {
+                return $this->render('page', [
+                    'item' => $item_lang,
+                ]);
+            }
+        }
+        throw new NotFoundHttpException;
     }
 
     /**

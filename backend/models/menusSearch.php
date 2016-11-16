@@ -5,7 +5,7 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\menus;
+use backend\models\Menus;
 
 /**
  * menusSearch represents the model behind the search form about `backend\models\menus`.
@@ -41,7 +41,7 @@ class menusSearch extends menus
      */
     public function search($params)
     {
-        $query = menus::find();
+        $query = Menus::find();
 
         // add conditions that should always apply here
 

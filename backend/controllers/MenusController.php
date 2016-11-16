@@ -3,8 +3,8 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\menus;
-use backend\models\menusSearch;
+use backend\models\Menus;
+use backend\models\MenusSearch;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -36,7 +36,7 @@ class MenusController extends MyController
      */
     public function actionIndex()
     {
-        $searchModel = new menusSearch();
+        $searchModel = new MenusSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -69,7 +69,7 @@ class MenusController extends MyController
      */
     public function actionCreate()
     {
-        $model = new menus();
+        $model = new Menus();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->menu_id]);
@@ -121,7 +121,7 @@ class MenusController extends MyController
      */
     protected function findModel($id)
     {
-        if (($model = menus::findOne($id)) !== null) {
+        if (($model = Menus::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

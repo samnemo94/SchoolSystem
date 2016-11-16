@@ -5,7 +5,7 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\items;
+use backend\models\Items;
 
 /**
  * itemsSearch represents the model behind the search form about `backend\models\items`.
@@ -41,7 +41,7 @@ class itemsSearch extends items
      */
     public function search($params)
     {
-        $query = items::find();
+        $query = Items::find();
 
         // add conditions that should always apply here
 

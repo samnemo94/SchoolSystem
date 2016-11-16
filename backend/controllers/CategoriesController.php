@@ -3,8 +3,8 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\categories;
-use backend\models\categoriesSearch;
+use backend\models\Categories;
+use backend\models\CategoriesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -35,7 +35,7 @@ class CategoriesController extends MyController
      */
     public function actionIndex()
     {
-        $searchModel = new categoriesSearch();
+        $searchModel = new CategoriesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -51,7 +51,7 @@ class CategoriesController extends MyController
      */
     public function actionCreate()
     {
-        $model = new categories();
+        $model = new Categories();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
@@ -103,7 +103,7 @@ class CategoriesController extends MyController
      */
     protected function findModel($id)
     {
-        if (($model = categories::findOne($id)) !== null) {
+        if (($model = Categories::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
