@@ -75,6 +75,11 @@ class Categories extends \yii\db\ActiveRecord
         return $this->hasMany(Items::className(), ['category_id' => 'category_id']);
     }
 
+    public function getFields()
+    {
+        return $this->hasMany(Fields::className(), ['category_id' => 'category_id']);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

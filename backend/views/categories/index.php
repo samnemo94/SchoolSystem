@@ -21,13 +21,26 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'rowOptions'=> function($model){
+                        if ($model->deleted== 1){
+                            return ['class'=>'danger'];
+                        }
+
+        },
         'columns' => [
             [
                 'class' => 'yii\grid\SerialColumn',
                 'contentOptions' => ['style' => 'width:30px;'],
             ],
+            [
+                'attribute' => 'category_title',
+                'format' => 'raw',
+                'value' =>  function ($dataProvider) {
+                    return Html::a($dataProvider['category_title'],
+                        ['/categories/view','id' =>$dataProvider['category_id']],
+                        ['class' => 'profile-link']);},
+            ],
 
-            'category_title',
             [
                 'attribute' => 'category_id',
                 'label' => 'Parent Category',

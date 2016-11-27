@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\itemsSearch */
+/* @var $searchModel backend\models\ItemsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Items';
@@ -13,91 +13,33 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="items-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php // echo $this->render('_search', ['model' => $searchModel]);?>
 
-    <p>
-        <?= Html::a('Create Items', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'rowOptions' => function ($model)
-        {
-            if ($model->deleted_by)
-            {
-                return ['class' => 'danger'];
-            }
-        },
+        //'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn',
-                'contentOptions' => ['style' => 'width:30px;'],],
 
-            'item_title',
-            [
-                'attribute' => 'category_id',
-                'label' => 'Category',
-                'value' => function ($model)
-                {
-                    if ($model->category)
-                    {
-                        return $model->category->category_title;
-                    }
-                    return '-';
-                }
+            ['class' => 'yii\grid\SerialColumn'],
+            'item_id',
+            ['label'=> 'category' ,
+                'value'=>function ($data) {
+                    $name = \backend\models\Categories::find()->where(['category_id'=>$data['category_id']])->one();
+                    return $name['category_title'];}
             ],
-            [
-                'attribute' => 'created_by',
-                'value' => function ($model)
-                {
-                    if ($model->createdBy)
-                    {
-                        return $model->createdBy->username;
-                    }
-                    return '-';
-                }
-            ],
-            'created_at',
+
+            //'created_at',
+            //'created_by',
+            //'updated_at',
             // 'updated_by',
-            // 'updated_at',
-            // 'deleted_by',
+            // 'deleted',
             // 'deleted_at',
+            // 'deleted_by',
+            // 'modified_by',
 
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'contentOptions' => ['style' => 'width:60px;'],
-                'template' => '{view}{update}{delete}',
-                'buttons' => [
-                    'view' => function ($url, $model, $key)
-                    {
-                        return Html::a('<span class="pe-7s-look"></span>',
-                            ['items/view', 'id' => $model->item_id], [
-                                'title' => Yii::t('yii', 'View'),
-                            ]);
-                    },
-                    'update' => function ($url, $model, $key)
-                    {
-                        if ($model->deleted_by)
-                            return null;
-                        return Html::a('<span class="pe-7s-pen"></span>',
-                            ['items/update', 'id' => $model->item_id], [
-                                'title' => Yii::t('yii', 'Update'),
-                            ]);
-                    },
-                    'delete' => function ($url, $model, $key)
-                    {
-                        if ($model->deleted_by)
-                            return null;
-                        return Html::a('<span class="pe-7s-trash"></span>',
-                            ['items/delete', 'id' => $model->item_id], [
-                                'title' => Yii::t('yii', 'Delete'),
-                                'data' => [
-                                    'confirm' => 'Are you sure you want to delete this item?',
-                                    'method' => 'post',
-                                ],
-                            ]);
-                    },
-                ]
-            ],
+            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 </div>
