@@ -40,8 +40,11 @@ $this->params['breadcrumbs'][] = $this->title;
             </thead>
             <tbody>
             <?php  foreach ($dataItems as $item){
-                if ($item->deleted == 1 ){
+                if ($item->deleted == 1 )
+                {
                     echo '<tr bgcolor="#F7CACE">';
+                }else {
+                    echo '<tr>';}
                 $values = \backend\models\Values::find()->where(['item_id'=>$item['item_id']])->all();
                 foreach ($values as $value){
                     echo '<td>';
@@ -49,45 +52,23 @@ $this->params['breadcrumbs'][] = $this->title;
                     echo '</td>';
                 }
                 echo '<td>';
-                echo Html::a('<span class="pe-7s-pen"></span>',
-                    ['categories/update-row', 'id' => $item->item_id ,'id2'=>$item->category_id], [
-                        'title' => Yii::t('yii', 'Update'),
-                    ]);
-                echo Html::a('<span class="pe-7s-trash"></span>',
-                    ['categories/delete-row', 'id' => $item->item_id], [
-                        'title' => Yii::t('yii', 'Delete'),
-                        'data' => [
-                            'confirm' => 'Are you sure you want to delete this item?',
-                            'method' => 'post',
-                        ],
-                    ]);
-                echo '</td>';
-                echo '</tr>';
-            }
-            else {
-                echo '<tr>';
-                $values = \backend\models\Values::find()->where(['item_id'=>$item['item_id']])->all();
-                foreach ($values as $value){
-                    echo '<td>';
-                    echo $value['value'];
-                    echo '</td>';
+                if ($item->deleted != 1 )
+                {
+                    echo Html::a('<span class="pe-7s-pen"></span>',
+                        ['categories/update-row', 'id' => $item->item_id, 'id2' => $item->category_id], [
+                            'title' => Yii::t('yii', 'Update'),
+                        ]);
+                    echo Html::a('<span class="pe-7s-trash"></span>',
+                        ['categories/delete-row', 'id' => $item->item_id], [
+                            'title' => Yii::t('yii', 'Delete'),
+                            'data' => [
+                                'confirm' => 'Are you sure you want to delete this item?',
+                                'method' => 'post',
+                            ],
+                        ]);
                 }
-                echo '<td>';
-                echo Html::a('<span class="pe-7s-pen"></span>',
-                    ['categories/update-row', 'id' => $item->item_id ,'id2'=>$item->category_id], [
-                        'title' => Yii::t('yii', 'Update'),
-                    ]);
-                echo Html::a('<span class="pe-7s-trash"></span>',
-                    ['categories/delete-row', 'id' => $item->item_id], [
-                        'title' => Yii::t('yii', 'Delete'),
-                        'data' => [
-                            'confirm' => 'Are you sure you want to delete this item?',
-                            'method' => 'post',
-                        ],
-                    ]);
                 echo '</td>';
                 echo '</tr>';
-            }
             }
             ?>
             </tbody>

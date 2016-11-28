@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use Yii;
 
@@ -18,6 +18,7 @@ use Yii;
  * @property integer $deleted_by
  * @property string $modified_by
  *
+ * @property Categories $category
  * @property Menus[] $menuses
  * @property Values[] $values
  */
@@ -37,10 +38,11 @@ class Items extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_id', 'created_by', 'updated_by', 'modified_by'], 'required'],
+            [['category_id', 'created_at', 'created_by', 'updated_at', 'updated_by', 'modified_by'], 'required'],
             [['category_id', 'created_by', 'updated_by', 'deleted', 'deleted_by'], 'integer'],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
             [['modified_by'], 'string'],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::className(), 'targetAttribute' => ['category_id' => 'category_id']],
         ];
     }
 
@@ -63,11 +65,12 @@ class Items extends \yii\db\ActiveRecord
         ];
     }
 
-    public function beforeSave($insert)
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategory()
     {
-        $this->updated_at = date('Y-m-d h:i:s',time());
-        $this->updated_by = Yii::$app->user->id;
-        return parent::beforeSave($insert);
+        return $this->hasOne(Categories::className(), ['category_id' => 'category_id']);
     }
 
     /**
