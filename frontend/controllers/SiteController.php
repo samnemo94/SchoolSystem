@@ -112,7 +112,8 @@ class SiteController extends MyController
         }
 
         $rows = [];
-        foreach ($cat->items as $item)
+        $items = $cat->getItems()->where(['deleted'=>'0'])->all();
+        foreach ($items as $item)
         {
             $rows[$item->item_id]['id'] = $item->item_id;
             foreach ($cat->fields as $field)

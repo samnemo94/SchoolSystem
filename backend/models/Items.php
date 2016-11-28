@@ -63,6 +63,13 @@ class Items extends \yii\db\ActiveRecord
         ];
     }
 
+    public function beforeSave($insert)
+    {
+        $this->updated_at = date('Y-m-d h:i:s',time());
+        $this->updated_by = Yii::$app->user->id;
+        return parent::beforeSave($insert);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

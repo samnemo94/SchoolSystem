@@ -4,10 +4,12 @@ namespace backend\controllers;
 
 use backend\models\Fields;
 use backend\models\Items;
+use backend\models\Languages;
 use backend\models\Values;
 use Yii;
 use backend\models\Categories;
 use backend\models\CategoriesSearch;
+use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -214,29 +216,31 @@ class CategoriesController extends MyController
                             $val = new Values();
                             $val->item_id = $item->item_id;
                             $val->field_id = $field['field_id'];
-                            $val->language_id = 1;
+                            $val->language_id = 8;
                             $imagename = $_FILES[$post]["name"];
-                            $folder = "/xampp/htdocs/SchoolSystem/backend/web/img/uploads/";
-                            move_uploaded_file($_FILES[$post]["tmp_name"], "$folder" . $_FILES[$post]["name"]);
-                            $val->value = $imagename;
+                            $folder = "../../common/web/uploads/";
+                            $new_name = time().$imagename;
+                            move_uploaded_file($_FILES[$post]["tmp_name"], $folder.$new_name);
+                            $val->value = $folder.$new_name;
                             $val->save(false);
                             break;
                         case 'file':
                             $val = new Values();
                             $val->item_id = $item->item_id;
                             $val->field_id = $field['field_id'];
-                            $val->language_id = 1;
+                            $val->language_id = Languages::find()->one()->language_id;
                             $filename = $_FILES[$post]["name"];
-                            $folder = "/xampp/htdocs/SchoolSystem/backend/web/files/uploads/";
-                            move_uploaded_file($_FILES[$post]["tmp_name"], "$folder" . $_FILES[$post]["name"]);
-                            $val->value = $filename;
+                            $folder = "../../common/web/uploads/";
+                            $new_name = time().$filename;
+                            move_uploaded_file($_FILES[$post]["tmp_name"], "$folder" .$new_name);
+                            $val->value = $folder.$new_name;
                             $val->save(false);
                             break;
                         default :
                             $val = new Values();
                             $val->item_id = $item->item_id;
                             $val->field_id = $field['field_id'];
-                            $val->language_id = 1;
+                            $val->language_id = Languages::find()->one()->language_id;
                             $val->value = $_POST[$post];
                             $val->save(false);
                     }
