@@ -18,21 +18,42 @@ class MyController extends Controller
 {
     public function beforeAction($action)
     {
-        $lang_id = Languages::findOne(['language_code'=>\Yii::$app->language])->language_id;
-        $main_menu_category = Categories::findOne(['category_title' => 'main menu']);
-        $menus = Menus::find()->where(['category_id' => $main_menu_category->category_id , 'menu_position' => 'top'])->all();
-        $res = [];
+        $lang_id = Languages::findOne(['language_code' => \Yii::$app->language])->language_id;
+
+        $menus = Menus::find()->where(['menu_position' => 'top','parent_id' => NULL])->all();
+
+        global $main_menu_top;
+        $main_menu_top = [];
         foreach ($menus as $menu)
         {
-            $menu->menu_title = $menu->getMenuLanguages()->where(['language_id'=>$lang_id])->one()->title;
+            $main_menu_top [] = $this->generateMenuItem($menu->menu_id);
         }
-        global $main_menu_top;
-        $main_menu_top = $menus;
 
 //        var_dump($main_menu_top);
 //        die();
         return parent::beforeAction($action);
     }
 
+    private function generateMenuItem($id)
+    {
+        $lang_id = Languages::findOne(['language_code' => \Yii::$app->language])->language_id;
+        $menu = Menus::findOne(['menu_id' => $id]);
+        $item = [];
+        $item['id'] = $menu->menu_id;
+        $item['hasChild'] = $menu->haveChilds();
+        $item['title'] = $menu->menu_title;
+        $menu_translate = $menu->getMenuLanguages()->where(['language_id' => $lang_id])->one();
+        if ($menu_translate)
+            $item['title'] = $menu_translate->title;
+        if ($menu->haveChilds())
+        {
+            $item['children'] = [];
+            foreach ($menu->getMenuses()->all() as $subMenu)
+            {
+                $item['children'][] = $this->generateMenuItem($subMenu->menu_id);
+            }
+        }
+        return $item;
+    }
 
 }

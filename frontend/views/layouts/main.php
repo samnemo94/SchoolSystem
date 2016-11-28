@@ -46,11 +46,13 @@ else
 <?= $this->render('left.php'); ?>
 
 <div class="layout-content" data-scrollable>
+    <div class="container-fluid">
     <?= Breadcrumbs::widget([
         'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
     ]) ?>
     <?= Alert::widget() ?>
     <?= $content ?>
+    </div>
 </div>
 
 <?php $this->endBody() ?>

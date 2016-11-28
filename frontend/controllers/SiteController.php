@@ -1,13 +1,15 @@
 <?php
 namespace frontend\controllers;
 
-use backend\models\Categories;
-use backend\models\Items;
+use backend\models\Languages;
+use common\models\Categories;
+use common\models\Fields;
+use common\models\Items;
 use backend\models\Menus;
+use common\models\Values;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
-use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
@@ -82,34 +84,119 @@ class SiteController extends MyController
     public function actionMenu($id)
     {
         $menu = Menus::findOne(['menu_id' => $id]);
-        if ($menu->menu_title == 'Home')
-            $this->redirect(['index']);
-        $page_category = Categories::findOne(['category_title' => 'page']);
-
-        if ($menu->category_id = $page_category->category_id)
+        if ($menu->category_id)
         {
-            if ($menu->item)
+            return $this->redirect(['category', 'id' => $menu->category_id]);
+        }
+
+        if ($menu->menu_title == 'Home')
+            return $this->redirect(['index']);
+
+
+        if ($menu->item_id)
+        {
+            $this->redirect(['page', 'id' => $menu->item_id]);
+        }
+    }
+
+    public function actionCategory($id)
+    {
+        $lang = Languages::findOne(['language_code' => Yii::$app->language])->language_id;
+
+        $cat = Categories::findOne(['category_id' => $id]);
+
+        $columns = [];
+        foreach ($cat->fields as $field)
+        {
+            $columns[]['title'] = $field->field_title;
+        }
+
+        $rows = [];
+        foreach ($cat->items as $item)
+        {
+            $rows[$item->item_id]['id'] = $item->item_id;
+            foreach ($cat->fields as $field)
             {
-                $this->redirect(['page','id' => $menu->item->item_id]);
+                $value = $field->has_translate ? $item->getValues()->where(['language_id' => $lang, 'field_id' => $field->field_id])->one() : $item->getValues()->where(['field_id' => $field->field_id])->one();
+                $value = $value ? $value->value : '';
+                if ($value && $value != '' && $field->field_type == 'foreign_key')
+                {
+                    $foreign_item = Items::findOne(['item_id' => $value]);
+                    if ($foreign_item)
+                    {
+                        $foreign_cat = $foreign_item->category_id;
+                        $foreign_field = Fields::findOne(['category_id' => $foreign_cat, 'field_title' => 'title']);
+                        if ($foreign_field)
+                        {
+                            $foreign_value = Values::findOne(['language_id' => $lang, 'field_id' => $foreign_field->field_id, 'item_id' => $foreign_item->item_id]);
+                            if ($foreign_value)
+                                $value = $foreign_value->value;
+                        }
+                    }
+                }
+                $rows[$item->item_id][$field->field_title] = $value;
             }
         }
+
+        if ($cat->category_title == 'faculty' || $cat->category_title == 'subject')
+        {
+            return $this->render('category_list_images', [
+                'columns' => $columns,
+                'rows' => $rows,
+            ]);
+        }
+        return $this->render('category', [
+            'columns' => $columns,
+            'rows' => $rows,
+        ]);
     }
 
     public function actionPage($id)
     {
+        $lang = Languages::findOne(['language_code' => Yii::$app->language])->language_id;
+
         $item = Items::findOne(['item_id' => $id]);
-        if ($item)
+        $cat = $item->category;
+
+        $columns = [];
+        foreach ($cat->fields as $field)
         {
-            $lang = \backend\models\Languages::findOne(['language_code' => Yii::$app->language])->language_id;
-            $item_lang = $item->getItemLanguages()->where(['language_id' => $lang])->one();
-            if ($item_lang)
-            {
-                return $this->render('page', [
-                    'item' => $item_lang,
-                ]);
-            }
+            $columns[]['title'] = $field->field_title;
         }
-        throw new NotFoundHttpException;
+
+        $row = [];
+        foreach ($cat->fields as $field)
+        {
+            $value = $field->has_translate ? $item->getValues()->where(['language_id' => $lang, 'field_id' => $field->field_id])->one() : $item->getValues()->where(['field_id' => $field->field_id])->one();
+            $value = $value ? $value->value : '';
+            if ($value && $value != '' && $field->field_type == 'foreign_key')
+            {
+                $foreign_item = Items::findOne(['item_id' => $value]);
+                if ($foreign_item)
+                {
+                    $foreign_cat = $foreign_item->category_id;
+                    $foreign_field = Fields::findOne(['category_id' => $foreign_cat, 'field_title' => 'title']);
+                    if ($foreign_field)
+                    {
+                        $foreign_value = Values::findOne(['language_id' => $lang, 'field_id' => $foreign_field->field_id, 'item_id' => $foreign_item->item_id]);
+                        if ($foreign_value)
+                            $value = $foreign_value->value;
+                    }
+                }
+            }
+            $row[$field->field_title] = $value;
+        }
+
+        if ($cat->category_title == 'subject')
+        {
+            return $this->render('page_subject', [
+                'item' => $row,
+            ]);
+        }
+
+        return $this->render('page', [
+            'item' => $row,
+        ]);
     }
 
     /**
@@ -119,14 +206,18 @@ class SiteController extends MyController
      */
     public function actionLogin()
     {
-        if (!Yii::$app->user->isGuest) {
+        if (!Yii::$app->user->isGuest)
+        {
             return $this->goHome();
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        if ($model->load(Yii::$app->request->post()) && $model->login())
+        {
             return $this->goBack();
-        } else {
+        }
+        else
+        {
             return $this->render('login', [
                 'model' => $model,
             ]);
@@ -153,15 +244,21 @@ class SiteController extends MyController
     public function actionContact()
     {
         $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate())
+        {
+            if ($model->sendEmail(Yii::$app->params['adminEmail']))
+            {
                 Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
-            } else {
+            }
+            else
+            {
                 Yii::$app->session->setFlash('error', 'There was an error sending email.');
             }
 
             return $this->refresh();
-        } else {
+        }
+        else
+        {
             return $this->render('contact', [
                 'model' => $model,
             ]);
@@ -186,9 +283,12 @@ class SiteController extends MyController
     public function actionSignup()
     {
         $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
+        if ($model->load(Yii::$app->request->post()))
+        {
+            if ($user = $model->signup())
+            {
+                if (Yii::$app->getUser()->login($user))
+                {
                     return $this->goHome();
                 }
             }
@@ -207,12 +307,16 @@ class SiteController extends MyController
     public function actionRequestPasswordReset()
     {
         $model = new PasswordResetRequestForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate())
+        {
+            if ($model->sendEmail())
+            {
                 Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
 
                 return $this->goHome();
-            } else {
+            }
+            else
+            {
                 Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
             }
         }
@@ -231,13 +335,16 @@ class SiteController extends MyController
      */
     public function actionResetPassword($token)
     {
-        try {
+        try
+        {
             $model = new ResetPasswordForm($token);
-        } catch (InvalidParamException $e) {
+        } catch (InvalidParamException $e)
+        {
             throw new BadRequestHttpException($e->getMessage());
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword())
+        {
             Yii::$app->session->setFlash('success', 'New password was saved.');
 
             return $this->goHome();
