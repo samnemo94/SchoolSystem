@@ -29,8 +29,9 @@ class Languages extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['language_name'], 'required'],
+            [['language_name','language_code'], 'required'],
             [['language_name'], 'string', 'max' => 255],
+            [['language_code'], 'string', 'max' => 2],
         ];
     }
 
@@ -42,6 +43,7 @@ class Languages extends \yii\db\ActiveRecord
         return [
             'language_id' => 'Language ID',
             'language_name' => 'Language Name',
+            'language_code'=> 'Language Code'
         ];
     }
 

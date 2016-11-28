@@ -20,6 +20,7 @@ class AppAsset extends AssetBundle
         'css/application.css'
     ];
     public $js = [
+
         'js/bootstrap.min.js',
         'js/bootstrap-checkbox-radio-switch.js',
         'js/chartist.min.js',

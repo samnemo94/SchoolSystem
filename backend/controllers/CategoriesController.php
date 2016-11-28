@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use backend\models\Fields;
 use backend\models\Items;
+use backend\models\Languages;
 use backend\models\Values;
 use Yii;
 use backend\models\Categories;
@@ -205,47 +206,67 @@ class CategoriesController extends MyController
             $item->created_at = date('Y-m-d H:i:s');
             $item->created_by = Yii::$app->user->id;
             $item->save(false);
-            foreach ($fields as $field) {
-                $post = $field['field_title'];
-                if (!empty($_POST[$post]) || !empty($_FILES[$post])) {
-                    switch ($field['field_type']) {
-                        case 'image' :
-                            echo $_FILES[$post]["name"];
-                            $val = new Values();
-                            $val->item_id = $item->item_id;
-                            $val->field_id = $field['field_id'];
-                            $val->language_id = 1;
-                            $imagename = $_FILES[$post]["name"];
-                            $folder = "/xampp/htdocs/SchoolSystem/backend/web/img/uploads/";
-                            move_uploaded_file($_FILES[$post]["tmp_name"], "$folder" . $_FILES[$post]["name"]);
-                            $val->value = $imagename;
-                            $val->save(false);
-                            break;
-                        case 'file':
-                            $val = new Values();
-                            $val->item_id = $item->item_id;
-                            $val->field_id = $field['field_id'];
-                            $val->language_id = 1;
-                            $filename = $_FILES[$post]["name"];
-                            $folder = "/xampp/htdocs/SchoolSystem/backend/web/files/uploads/";
-                            move_uploaded_file($_FILES[$post]["tmp_name"], "$folder" . $_FILES[$post]["name"]);
-                            $val->value = $filename;
-                            $val->save(false);
-                            break;
-                        default :
-                            $val = new Values();
-                            $val->item_id = $item->item_id;
-                            $val->field_id = $field['field_id'];
-                            $val->language_id = 1;
-                            $val->value = $_POST[$post];
-                            $val->save(false);
+            $langs = Languages::find()->all();
+            $language_code = array();
+            foreach ($langs as $lang) {
+                array_push($language_code,'_'.$lang['language_code']);
+            }
+            array_push($language_code,"");
+            foreach ($language_code as $lang) {
+                foreach ($fields as $field) {
+                    $post = $field['field_title'].$lang;
+                    if (!empty($_POST[$post]) || !empty($_FILES[$post])) {
+                        switch ($field['field_type']) {
+                            case 'image' :
+                                echo $_FILES[$post]["name"];
+                                $val = new Values();
+                                $val->item_id = $item->item_id;
+                                $val->field_id = $field['field_id'];
+                                $val->language_id = 1;
+                                $imagename = $_FILES[$post]["name"];
+                                $folder = "/xampp/htdocs/SchoolSystem/backend/web/img/uploads/";
+                                move_uploaded_file($_FILES[$post]["tmp_name"], "$folder" . $_FILES[$post]["name"]);
+                                $val->value = $imagename;
+                                $val->save(false);
+                                break;
+                            case 'file':
+                                $val = new Values();
+                                $val->item_id = $item->item_id;
+                                $val->field_id = $field['field_id'];
+                                $val->language_id = 1;
+                                $filename = $_FILES[$post]["name"];
+                                $folder = "/xampp/htdocs/SchoolSystem/backend/web/files/uploads/";
+                                move_uploaded_file($_FILES[$post]["tmp_name"], "$folder" . $_FILES[$post]["name"]);
+                                $val->value = $filename;
+                                $val->save(false);
+                                break;
+
+                            default :
+                                $val = new Values();
+                                $val->item_id = $item->item_id;
+                                $val->field_id = $field['field_id'];
+
+                                if($lang != "")
+                                {
+                                    $code = substr($lang,1);
+                                    $langsID = Languages::find()->where(['language_code'=>$code])->one();
+                                    $val->language_id =$langsID['language_id'];
+
+                                }else
+                                {
+                                    $val->language_id = 1;
+                                }
+                                $val->value = $_POST[$post];
+                                $val->save(false);
+                        }
                     }
                 }
             }
-            $dataFields = Fields::find()->where(['category_id'=>$id])->all();
-            $dataItems = Items::find()->where(['category_id'=>$id])->all();
-            return $this->render('view',['model' => $model,'dataItems'=>$dataItems,'dataFields'=>$dataFields]);
-        }
+                $dataFields = Fields::find()->where(['category_id' => $id])->all();
+                $dataItems = Items::find()->where(['category_id' => $id])->all();
+          //      return $this->render('view', ['model' => $model, 'dataItems' => $dataItems, 'dataFields' => $dataFields]);
+            }
+
         else
        return $this->render('insert',['fields'=> $fields,'id'=>$id,'items'=>$items]);
     }
