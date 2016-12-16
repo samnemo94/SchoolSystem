@@ -285,6 +285,7 @@ class CategoriesController extends MyController
                 }
             }
 
+
             $dataFields = Fields::find()->where(['category_id' => $id])->all();
             $dataItems = Items::find()->where(['category_id' => $id])->all();
             return $this->render('view', ['model' => $model, 'dataItems' => $dataItems, 'dataFields' => $dataFields]);
