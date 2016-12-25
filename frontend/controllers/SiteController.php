@@ -115,28 +115,8 @@ class SiteController extends MyController
         $items = $cat->getItems()->where(['deleted'=>'0'])->all();
         foreach ($items as $item)
         {
-            $rows[$item->item_id]['id'] = $item->item_id;
-            foreach ($cat->fields as $field)
-            {
-                $value = $field->has_translate ? $item->getValues()->where(['language_id' => $lang, 'field_id' => $field->field_id])->one() : $item->getValues()->where(['field_id' => $field->field_id])->one();
-                $value = $value ? $value->value : '';
-                if ($value && $value != '' && $field->field_type == 'foreign_key')
-                {
-                    $foreign_item = Items::findOne(['item_id' => $value]);
-                    if ($foreign_item)
-                    {
-                        $foreign_cat = $foreign_item->category_id;
-                        $foreign_field = Fields::findOne(['category_id' => $foreign_cat, 'field_title' => 'title']);
-                        if ($foreign_field)
-                        {
-                            $foreign_value = Values::findOne(['language_id' => $lang, 'field_id' => $foreign_field->field_id, 'item_id' => $foreign_item->item_id]);
-                            if ($foreign_value)
-                                $value = $foreign_value->value;
-                        }
-                    }
-                }
-                $rows[$item->item_id][$field->field_title] = $value;
-            }
+            $item_info = $this->getItemInfo($item->item_id,$lang);
+            $rows[$item->item_id] = $item_info;
         }
 
         if ($cat->category_title == 'faculty' || $cat->category_title == 'subject')
