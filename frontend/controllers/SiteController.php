@@ -142,21 +142,32 @@ class SiteController extends MyController
         $cat = $item->category;
         $parent = $cat->category_id;
         $childs = Categories::find()->where(['parent_id' =>$parent])->all();
+        $childArray =[];
         foreach ($childs as $child) {
             echo $child['category_title'].' :';
-            $items=  \backend\models\Items::find()->where(['category_id'=>$child['category_id']])->all();
-            foreach ($items as $item){
-                print_r($this->getItemInfo($item['item_id'],$lang)) ;
-                echo '<br>';
-//                $infos [] = $this->getItemInfo($item['item_id'],$lang) ;
-//                echo '</br>';
-//                foreach ($infos as $key => $value) {
-//
-//                }
-//                echo '<br>';
+            $fields =  \backend\models\Fields::find()->where(['category_id'=>$child['category_id']])->all();
+            foreach ($fields as $field){
+                if ($field['field_type'] == 'foreign_key')
+                 $f = $field['field_id'];
             }
-        }
-      /* $columns = [];
+
+            $myItems=  \backend\models\Items::find()->where(['category_id'=>$child['category_id']])->all();
+            $secondArray =[];
+            foreach ($myItems as $myItem) {
+                $values = Values::find()->where(['item_id' => $myItem['item_id'], 'field_id' => $f])->All();
+                foreach ($values as $vv) {
+                    if ($vv['value'] == $id)
+                    {
+                        $itemInfo = $this->getItemInfo($myItem['item_id'] ,$lang);
+                        $secondArray[$myItem['item_id'] ]=$itemInfo;
+                    }
+                }
+            }
+            array_push($childArray , array($child['category_title'] => $secondArray ));
+            }
+
+
+       $columns = [];
         foreach ($cat->fields as $field)
         {
             $columns[]['title'] = $field->field_title;
@@ -167,12 +178,12 @@ class SiteController extends MyController
         if ($cat->category_title == 'subject')
         {
             return $this->render('page_subject', [
-                'item' => $row,
+                'item' => $row,'childs'=> $childArray
             ]);
         }
 
         return $this->render('page', [
-            'item' => $row]*/
+            'item' => $row ,'childs'=> $childArray ]);
     }
 
     /**
