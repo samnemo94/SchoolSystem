@@ -69,6 +69,8 @@ class MyController extends Controller
         {
             $res[$field->field_title]['field_type'] = $field->field_type;
             $res[$field->field_title]['fk_table'] = $field->fk_table;
+            $res[$field->field_title]['field_id'] = $field->field_id;
+
 
             $value = $field->has_translate ? $item->getValues()->where(['language_id' => $lang_id, 'field_id' => $field->field_id])->one() : $item->getValues()->where(['field_id' => $field->field_id])->one();
             $value = $value ? $value->value : '';
