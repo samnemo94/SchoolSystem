@@ -16,17 +16,17 @@ use yii\web\ForbiddenHttpException;
 
 
 
-class MyController extends Controller {
+class MyController extends Controller
+{
 
     public function beforeAction($action)
     {
-        if (!(Yii::$app->controller->id == 'site' && Yii::$app->controller->action->id == 'login') && Yii::$app->user->isGuest)
-        {
+        if (!(Yii::$app->controller->id == 'site' && Yii::$app->controller->action->id == 'login') && Yii::$app->user->isGuest) {
             $this->redirect(['site/login']);
         }
         return true;
         $id = Yii::$app->user->id;
-        if ($id != null ) {
+        if ($id != null) {
             $role = Admin::find()->where(['id' => $id])->one();
             $role = $role['role_id'];
             $query = RolePerm:: find()
@@ -43,9 +43,10 @@ class MyController extends Controller {
             } else {
                 throw new ForbiddenHttpException;
             }
+        } else {
+            throw new ForbiddenHttpException;
         }
-        else { throw new ForbiddenHttpException;}
+
+
     }
-
-
 }

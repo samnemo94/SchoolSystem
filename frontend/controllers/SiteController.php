@@ -138,8 +138,10 @@ class SiteController extends MyController
 
         $item = Items::findOne(['item_id' => $id]);
         $cat = $item->category;
+        $parent = $cat->category_id;
+        $childs = Categories::find()->where(['parent_id' =>$parent])->all();
 
-        $columns = [];
+       $columns = [];
         foreach ($cat->fields as $field)
         {
             $columns[]['title'] = $field->field_title;
@@ -176,8 +178,9 @@ class SiteController extends MyController
         }
 
         return $this->render('page', [
-            'item' => $row,
+            'item' => $row,'childs' =>$childs
         ]);
+
     }
 
     /**
