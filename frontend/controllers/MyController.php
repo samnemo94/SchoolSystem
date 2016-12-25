@@ -67,6 +67,9 @@ class MyController extends Controller
         $res['item_id'] = $item_id;
         foreach ($cat->fields as $field)
         {
+            $res[$field->field_title]['field_type'] = $field->field_type;
+            $res[$field->field_title]['fk_table'] = $field->fk_table;
+
             $value = $field->has_translate ? $item->getValues()->where(['language_id' => $lang_id, 'field_id' => $field->field_id])->one() : $item->getValues()->where(['field_id' => $field->field_id])->one();
             $value = $value ? $value->value : '';
             if ($value && $value != '' && $field->field_type == 'foreign_key')
@@ -84,7 +87,7 @@ class MyController extends Controller
                     }
                 }
             }
-            $res[$field->field_title] = $value;
+            $res[$field->field_title]['value'] = $value;
         }
         return $res;
     }
