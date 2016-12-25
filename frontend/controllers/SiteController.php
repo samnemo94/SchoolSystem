@@ -49,7 +49,7 @@ class SiteController extends MyController
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    'logout' => ['get'],
                 ],
             ],
         ];
@@ -162,28 +162,7 @@ class SiteController extends MyController
             $columns[]['title'] = $field->field_title;
         }
 
-        $row = [];
-        foreach ($cat->fields as $field)
-        {
-            $value = $field->has_translate ? $item->getValues()->where(['language_id' => $lang, 'field_id' => $field->field_id])->one() : $item->getValues()->where(['field_id' => $field->field_id])->one();
-            $value = $value ? $value->value : '';
-            if ($value && $value != '' && $field->field_type == 'foreign_key')
-            {
-                $foreign_item = Items::findOne(['item_id' => $value]);
-                if ($foreign_item)
-                {
-                    $foreign_cat = $foreign_item->category_id;
-                    $foreign_field = Fields::findOne(['category_id' => $foreign_cat, 'field_title' => 'title']);
-                    if ($foreign_field)
-                    {
-                        $foreign_value = Values::findOne(['language_id' => $lang, 'field_id' => $foreign_field->field_id, 'item_id' => $foreign_item->item_id]);
-                        if ($foreign_value)
-                            $value = $foreign_value->value;
-                    }
-                }
-            }
-            $row[$field->field_title] = $value;
-        }
+        $row = $this->getItemInfo($id,$lang);
 
         if ($cat->category_title == 'subject')
         {
