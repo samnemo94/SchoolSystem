@@ -33,8 +33,8 @@ class Fields extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['field_title', 'field_type', 'has_translate'], 'required'],
-            [['category_id', 'has_translate'], 'integer'],
+            [['field_title', 'field_type', 'has_translate','is_null','is_show'], 'required'],
+            [['category_id', 'has_translate','is_null','is_show'], 'integer'],
             [['field_type'], 'string'],
             [['field_title', 'fk_table'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::className(), 'targetAttribute' => ['category_id' => 'category_id']],
@@ -53,6 +53,8 @@ class Fields extends \yii\db\ActiveRecord
             'field_type' => 'Field Type',
             'fk_table' => 'Fk Table',
             'has_translate' => 'Has Translate',
+            'is_null'=> 'NULL',
+            'is_show'=> 'Show',
         ];
     }
 
