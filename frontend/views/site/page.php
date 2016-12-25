@@ -21,13 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </br>
         <div>
             <?php
-            foreach ($childs as $child) {
-                echo $child['category_title'].' :';
-               $items=  \backend\models\Items::find()->where(['category_id'=>$child['category_id']])->all();
-                foreach ($items as $item){
-                    echo $item['item_id'].'</br>';
-                }
-            }
+
             ?>
         </div>
 
