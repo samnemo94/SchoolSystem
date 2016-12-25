@@ -43,7 +43,9 @@ use wbraganca\dynamicform\DynamicFormWidget;
                         'field_title',
                         'field_type',
                         'fk_table',
-                        'has_translate'
+                        'has_translate',
+                        'is_null',
+                        'is_show'
                     ],
                 ]); ?>
 
@@ -70,7 +72,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                     <div class="col-sm-3">
                                         <?= $form->field($modelFields, "[{$i}]field_title")->textInput(['maxlength' => true])->label('Name') ?>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <?= $form->field($modelFields, "[{$i}]field_type")->dropDownList([ 'varchar' => 'varchar', 'text' => 'text',
                                                                                                             'int' => 'int', 'double' => 'double',
                                                                                                             'date'=>'date','time'=>'time' ,
@@ -78,13 +80,19 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                                                                                             'file'=>'file' , 'foreign_key' => 'foreign_key'],
                                                                                                             ['prompt' => ''])->label('Type')  ?>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <?= $form->field($modelFields, "[{$i}]fk_table")->dropDownList(ArrayHelper::map(Categories::find()->all(),'category_id','category_title'),
                                                                                             ['prompt'=>'select table'])->label('Related Table') ?>
                                     </div>
 
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <?= $form->field($modelFields , "[{$i}]has_translate")->checkbox(['label'=>''])->label('Has translate') ?>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <?= $form->field($modelFields , "[{$i}]is_null")->checkbox(['label'=>''])->label('Null') ?>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <?= $form->field($modelFields , "[{$i}]is_show")->checkbox(['label'=>''])->label('Show') ?>
                                     </div>
                                 </div>
                              </div>
