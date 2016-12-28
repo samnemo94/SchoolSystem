@@ -66,9 +66,12 @@ class PermissionsController extends Controller
         $model = new Permissions();
         $model->created_by = 1;
         $model->updated_by = 1;
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save())
+        {
             return $this->redirect(['view', 'id' => $model->permission_id]);
-        } else {
+        }
+        else
+        {
             return $this->render('create', [
                 'model' => $model,
             ]);
@@ -85,9 +88,12 @@ class PermissionsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save())
+        {
             return $this->redirect(['view', 'id' => $model->permission_id]);
-        } else {
+        }
+        else
+        {
             return $this->render('update', [
                 'model' => $model,
             ]);
@@ -116,9 +122,12 @@ class PermissionsController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Permissions::findOne($id)) !== null) {
+        if (($model = Permissions::findOne($id)) !== null)
+        {
             return $model;
-        } else {
+        }
+        else
+        {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }

@@ -23,7 +23,7 @@ class MyController extends Controller
     {
         $lang_id = Languages::findOne(['language_code' => \Yii::$app->language])->language_id;
 
-        $menus = Menus::find()->where(['menu_position' => 'top','parent_id' => NULL])->all();
+        $menus = Menus::find()->where(['menu_position' => 'top', 'parent_id' => NULL])->all();
 
         global $main_menu_top;
         $main_menu_top = [];
@@ -59,7 +59,7 @@ class MyController extends Controller
         return $item;
     }
 
-    public function getItemInfo($item_id,$lang_id)
+    public static function getItemInfo($item_id, $lang_id)
     {
         $item = Items::findOne(['item_id' => $item_id]);
         $cat = Categories::findOne(["category_id" => $item->category_id]);
@@ -94,20 +94,26 @@ class MyController extends Controller
         return $res;
     }
 
-    public function getFilteredItems($category_id,$filters,$lang_id)
+    /**
+     * @param $category_id
+     * @param $filters
+     * @param $lang_id
+     * @return array
+     */
+    public static function getFilteredItems($category_id, $filters, $lang_id)
     {
-        $items = Items::findAll(['category_id' => $category_id,'deleted'=>'0']);
+        $items = Items::findAll(['category_id' => $category_id, 'deleted' => '0']);
 
         $res = [];
         foreach ($items as $item)
         {
-            $info = $this->getItemInfo($item->item_id,$lang_id);
+            $info = MyController::getItemInfo($item->item_id, $lang_id);
             $valid = true;
-            foreach ($filters as $key=>$value)
+            foreach ($filters as $key => $value)
             {
                 if (array_key_exists($key, $info))
                 {
-                    if (strcmp($info[$key]['value'],$value)!=0)
+                    if (strcmp($info[$key]['value'], $value) != 0)
                     {
                         $valid = false;
                         break;
@@ -120,7 +126,7 @@ class MyController extends Controller
                 }
             }
             if ($valid)
-                $res[]=$info;
+                $res[] = $info;
         }
         return $res;
     }

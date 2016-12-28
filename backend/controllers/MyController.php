@@ -14,19 +14,19 @@ use yii\filters\VerbFilter;
 use yii\web\ForbiddenHttpException;
 
 
-
-
 class MyController extends Controller
 {
 
     public function beforeAction($action)
     {
-        if (!(Yii::$app->controller->id == 'site' && Yii::$app->controller->action->id == 'login') && Yii::$app->user->isGuest) {
+        if (!(Yii::$app->controller->id == 'site' && Yii::$app->controller->action->id == 'login') && Yii::$app->user->isGuest)
+        {
             $this->redirect(['site/login']);
         }
         return true;
         $id = Yii::$app->user->id;
-        if ($id != null) {
+        if ($id != null)
+        {
             $role = Admin::find()->where(['id' => $id])->one();
             $role = $role['role_id'];
             $query = RolePerm:: find()
@@ -37,13 +37,18 @@ class MyController extends Controller
                 ->where([' `permissions`.`permission_page` ' => YII::$app->controller->id, ' `permissions`.`permission_action` ' => YII::$app->controller->action->id, ' `role`.`role_id` ' => $role])
                 ->all();
             // test the auth
-            if ($query) {
+            if ($query)
+            {
                 parent::beforeAction($action);
                 return true;
-            } else {
+            }
+            else
+            {
                 throw new ForbiddenHttpException;
             }
-        } else {
+        }
+        else
+        {
             throw new ForbiddenHttpException;
         }
 

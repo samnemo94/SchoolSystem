@@ -113,10 +113,10 @@ class SiteController extends MyController
         }
 
         $rows = [];
-        $items = $cat->getItems()->where(['deleted'=>'0'])->all();
+        $items = $cat->getItems()->where(['deleted' => '0'])->all();
         foreach ($items as $item)
         {
-            $item_info = $this->getItemInfo($item->item_id,$lang);
+            $item_info = MyController::getItemInfo($item->item_id, $lang);
             $rows[$item->item_id] = $item_info;
         }
 
@@ -141,49 +141,53 @@ class SiteController extends MyController
 
         $cat = $item->category;
         $parent = $cat->category_id;
-        $childs = Categories::find()->where(['parent_id' =>$parent])->all();
-        $childArray =[];
-        foreach ($childs as $child) {
-            echo $child['category_title'].' :';
-            $fields =  \backend\models\Fields::find()->where(['category_id'=>$child['category_id']])->all();
-            foreach ($fields as $field){
+        $childs = Categories::find()->where(['parent_id' => $parent])->all();
+        $childArray = [];
+        foreach ($childs as $child)
+        {
+            echo $child['category_title'] . ' :';
+            $fields = \backend\models\Fields::find()->where(['category_id' => $child['category_id']])->all();
+            foreach ($fields as $field)
+            {
                 if ($field['field_type'] == 'foreign_key')
-                 $f = $field['field_id'];
+                    $f = $field['field_id'];
             }
 
-            $myItems=  \backend\models\Items::find()->where(['category_id'=>$child['category_id']])->all();
-            $secondArray =[];
-            foreach ($myItems as $myItem) {
+            $myItems = \backend\models\Items::find()->where(['category_id' => $child['category_id']])->all();
+            $secondArray = [];
+            foreach ($myItems as $myItem)
+            {
                 $values = Values::find()->where(['item_id' => $myItem['item_id'], 'field_id' => $f])->All();
-                foreach ($values as $vv) {
+                foreach ($values as $vv)
+                {
                     if ($vv['value'] == $id)
                     {
-                        $itemInfo = $this->getItemInfo($myItem['item_id'] ,$lang);
-                        $secondArray[$myItem['item_id'] ]=$itemInfo;
+                        $itemInfo = MyController::getItemInfo($myItem['item_id'], $lang);
+                        $secondArray[$myItem['item_id']] = $itemInfo;
                     }
                 }
             }
-            array_push($childArray , array($child['category_title'] => $secondArray ));
-            }
+            array_push($childArray, array($child['category_title'] => $secondArray));
+        }
 
 
-       $columns = [];
+        $columns = [];
         foreach ($cat->fields as $field)
         {
             $columns[]['title'] = $field->field_title;
         }
 
-        $row = $this->getItemInfo($id,$lang);
+        $row = MyController::getItemInfo($id, $lang);
 
         if ($cat->category_title == 'subject')
         {
             return $this->render('page_subject', [
-                'item' => $row,'childs'=> $childArray
+                'item' => $row, 'childs' => $childArray
             ]);
         }
 
         return $this->render('page', [
-            'item' => $row ,'childs'=> $childArray ]);
+            'item' => $row, 'childs' => $childArray]);
     }
 
     /**
@@ -289,10 +293,10 @@ class SiteController extends MyController
     public function actionUpdateUser()
     {
         $lang = Languages::findOne(['language_code' => Yii::$app->language])->language_id;
-        $student_cat = Categories::findOne(['category_title'=>'students']);
+        $student_cat = Categories::findOne(['category_title' => 'students']);
         if (!$student_cat)
             return null;
-        $student = $this->getFilteredItems($student_cat->category_id,['user_id'=>Yii::$app->user->id],$lang);
+        $student = MyController::getFilteredItems($student_cat->category_id, ['user_id' => Yii::$app->user->id], $lang);
         foreach ($student as $std)
         {
             return $this->redirect(['update-row', 'id' => $std['item_id']]);
@@ -300,7 +304,7 @@ class SiteController extends MyController
         return true;
     }
 
-     public function actionUpdateRow($id)
+    public function actionUpdateRow($id)
     {
         $item = Items::findOne(['item_id' => $id]);
         $fields = Fields::find()->where(['category_id' => $item['category_id']])->all();

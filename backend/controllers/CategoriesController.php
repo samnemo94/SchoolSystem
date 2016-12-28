@@ -62,7 +62,7 @@ class CategoriesController extends MyController
         $model = new Categories();
         $model->created_by = Yii::$app->user->id;
         $model->created_at = date('Y-m-d H:i:s');
-        $modelsFields = [new Fields ];
+        $modelsFields = [new Fields];
         if ($model->load(Yii::$app->request->post()) && $model->save())
         {
             $modelsFields = Model::createMultiple(Fields::classname());
@@ -253,7 +253,7 @@ class CategoriesController extends MyController
                         {
                             $code = substr($lang, 1);
                             $langsID = Languages::find()->where(['language_code' => $code])->one();
-                            $val->language_id = $langsID?$langsID['language_id']:null;
+                            $val->language_id = $langsID ? $langsID['language_id'] : null;
                         }
                         else
                         {
@@ -264,17 +264,17 @@ class CategoriesController extends MyController
                             case 'image' :
                                 $imagename = $_FILES[$post]["name"];
                                 $folder = "../../common/web/uploads/";
-                                $new_name = time().$imagename;
-                                move_uploaded_file($_FILES[$post]["tmp_name"], $folder.$new_name);
-                                $val->value = $folder.$new_name;
+                                $new_name = time() . $imagename;
+                                move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
+                                $val->value = $folder . $new_name;
                                 $val->save(false);
                                 break;
                             case 'file':
                                 $filename = $_FILES[$post]["name"];
                                 $folder = "../../common/web/uploads/";
-                                $new_name = time().$filename;
-                                move_uploaded_file($_FILES[$post]["tmp_name"], $folder.$new_name);
-                                $val->value = $folder.$new_name;
+                                $new_name = time() . $filename;
+                                move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
+                                $val->value = $folder . $new_name;
                                 $val->save(false);
                                 break;
                             default :

@@ -65,12 +65,12 @@ class RoleController extends Controller
         {
             $res[$data['permission_page']][] = $data;
         }
-        $checked = RolePerm::find()->where(['role_id'=>$model->role_id])->all();
-        $checked = ArrayHelper::map($checked,'permission_id','permission_id');
+        $checked = RolePerm::find()->where(['role_id' => $model->role_id])->all();
+        $checked = ArrayHelper::map($checked, 'permission_id', 'permission_id');
 
         return $this->render('view', [
             'model' => $model,
-            'checked' =>$checked,
+            'checked' => $checked,
             'dataProvider' => $res,
         ]);
     }
@@ -92,22 +92,26 @@ class RoleController extends Controller
         $model = new Role();
         $model->created_by = Yii::$app->user->id;
         $model->updated_by = Yii::$app->user->id;
-        if ($model->load(Yii::$app->request->post()) && $model->save() ) {
-            foreach ($_POST['check_list'] as $row_id ) {
+        if ($model->load(Yii::$app->request->post()) && $model->save())
+        {
+            foreach ($_POST['check_list'] as $row_id)
+            {
                 $assign = new RolePerm();
                 $assign->created_by = Yii::$app->user->id;
                 $assign->updated_by = Yii::$app->user->id;
                 $assign->role_id = $model->role_id;
                 $assign->permission_id = $row_id;
-                $assign->save();}
+                $assign->save();
+            }
             return $this->redirect(['view', 'id' => $model->role_id]);
         }
-        else {
-            $checked = RolePerm::find()->where(['role_id'=>$model->role_id])->all();
-            $checked = ArrayHelper::map($checked,'permission_id','permission_id');
+        else
+        {
+            $checked = RolePerm::find()->where(['role_id' => $model->role_id])->all();
+            $checked = ArrayHelper::map($checked, 'permission_id', 'permission_id');
             return $this->render('create', [
                 'model' => $model,
-                'checked' =>$checked,
+                'checked' => $checked,
                 'dataProvider' => $res,
             ]);
         }
@@ -128,12 +132,15 @@ class RoleController extends Controller
         {
             $res[$data['permission_page']][] = $data;
         }
-        $checked = RolePerm::find()->where(['role_id'=>$model->role_id])->all();
-        $checked = ArrayHelper::map($checked,'permission_id','permission_id');
+        $checked = RolePerm::find()->where(['role_id' => $model->role_id])->all();
+        $checked = ArrayHelper::map($checked, 'permission_id', 'permission_id');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save() ) {
-            foreach ($_POST['check_list'] as $row_id ) {
-                if ( !in_array($row_id,$checked)) {
+        if ($model->load(Yii::$app->request->post()) && $model->save())
+        {
+            foreach ($_POST['check_list'] as $row_id)
+            {
+                if (!in_array($row_id, $checked))
+                {
                     $assign = new RolePerm();
                     $assign->created_by = 1;
                     $assign->updated_by = 1;
@@ -142,19 +149,23 @@ class RoleController extends Controller
                     $assign->save();
                 }
             }
-            foreach ($checked as $check ){
-                if (!in_array($check , $_POST['check_list'])){
-                        $deleted = RolePerm::find()->where(['role_id'=>$model->role_id ,'permission_id' =>$check])->one();
+            foreach ($checked as $check)
+            {
+                if (!in_array($check, $_POST['check_list']))
+                {
+                    $deleted = RolePerm::find()->where(['role_id' => $model->role_id, 'permission_id' => $check])->one();
                     $deleted->delete();
                 }
             }
 
 
-                return $this->redirect(['view', 'id' => $model->role_id]);
-        } else {
+            return $this->redirect(['view', 'id' => $model->role_id]);
+        }
+        else
+        {
             return $this->render('update', [
                 'model' => $model,
-                'checked' =>$checked,
+                'checked' => $checked,
                 'dataProvider' => $res,
             ]);
         }
@@ -182,9 +193,12 @@ class RoleController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Role::findOne($id)) !== null) {
+        if (($model = Role::findOne($id)) !== null)
+        {
             return $model;
-        } else {
+        }
+        else
+        {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }

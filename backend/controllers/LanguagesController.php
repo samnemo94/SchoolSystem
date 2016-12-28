@@ -53,9 +53,12 @@ class LanguagesController extends MyController
     {
         $model = new Languages();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save())
+        {
             return $this->redirect(['index']);
-        } else {
+        }
+        else
+        {
             return $this->render('create', [
                 'model' => $model,
             ]);
@@ -72,9 +75,12 @@ class LanguagesController extends MyController
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save())
+        {
             return $this->redirect(['index']);
-        } else {
+        }
+        else
+        {
             return $this->render('update', [
                 'model' => $model,
             ]);
@@ -103,9 +109,12 @@ class LanguagesController extends MyController
      */
     protected function findModel($id)
     {
-        if (($model = Languages::findOne($id)) !== null) {
+        if (($model = Languages::findOne($id)) !== null)
+        {
             return $model;
-        } else {
+        }
+        else
+        {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }

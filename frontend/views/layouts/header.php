@@ -13,7 +13,7 @@ function drawButton($menu, $depth)
         ?>
         <li>
             <a <?= $depth > 1 ? 'class="sub-menu"' : '' ?>
-                href="<?= \yii\helpers\Url::to(['/site/menu', 'id' => $menu['id']]) ?>">
+                    href="<?= \yii\helpers\Url::to(['/site/menu', 'id' => $menu['id']]) ?>">
                 <?= $menu['title'] ?>
             </a>
         </li>
@@ -25,7 +25,7 @@ function drawButton($menu, $depth)
 
         <li>
             <a <?= $depth > 1 ? 'class="sub-menu"' : '' ?>
-                href="<?= \yii\helpers\Url::to(['/site/menu', 'id' => $menu['id']]) ?>">
+                    href="<?= \yii\helpers\Url::to(['/site/menu', 'id' => $menu['id']]) ?>">
                 <?= $menu['title'] ?>
             </a>
 
@@ -52,7 +52,7 @@ function drawButton($menu, $depth)
 
     <!-- Brand -->
     <a href="<?= \yii\helpers\Url::to(['/site/index']) ?>" class="navbar-brand"><i
-            class="material-icons">school</i> <?= Yii::$app->name ?></a>
+                class="material-icons">school</i> <?= Yii::$app->name ?></a>
 
     <!-- Search -->
     <form class="form-inline pull-xs-<?= Yii::$app->language == "ar" ? "right" : "left" ?> hidden-sm-down">
@@ -95,12 +95,13 @@ function drawButton($menu, $depth)
                     <img src="assets/images/people/50/guy-6.jpg" alt="Avatar" class="img-circle" width="40">
                 </a>
                 <div
-                    class="dropdown-menu dropdown-menu-<?= Yii::$app->language == "ar" ? "left" : "right" ?> dropdown-menu-list"
-                    aria-labelledby="Preview">
-                    <a class="dropdown-item" href="<?= \yii\helpers\Url::to(['/site/update-user']) ?>"><i class="material-icons md-18">lock</i> <span
-                            class="icon-text">Edit Account</span></a>
+                        class="dropdown-menu dropdown-menu-<?= Yii::$app->language == "ar" ? "left" : "right" ?> dropdown-menu-list"
+                        aria-labelledby="Preview">
+                    <a class="dropdown-item" href="<?= \yii\helpers\Url::to(['/site/update-user']) ?>"><i
+                                class="material-icons md-18">lock</i> <span
+                                class="icon-text">Edit Account</span></a>
                     <a class="dropdown-item" href="profile.html"><i class="material-icons md-18">person</i> <span
-                            class="icon-text">Public Profile</span></a>
+                                class="icon-text">Public Profile</span></a>
                     <?= \yii\helpers\Html::a(
                         'Log Out',
                         ['/site/logout'],
@@ -117,12 +118,14 @@ function drawButton($menu, $depth)
         {
             ?>
             <li class="nav-item dropdown">
-                <a style="color: #FFF; padding-<?= Yii::$app->language == "ar" ? "left" : "right" ?>: 20px" href="<?= \yii\helpers\Url::to(['/site/login']) ?>">
+                <a style="color: #FFF; padding-<?= Yii::$app->language == "ar" ? "left" : "right" ?>: 20px"
+                   href="<?= \yii\helpers\Url::to(['/site/login']) ?>">
                     <?= Yii::$app->language == "ar" ? "تسجيل الدخول" : "Log In" ?>
                 </a>
             </li>
             <li class="nav-item dropdown">
-                <a style="color: #FFF; padding-<?= Yii::$app->language == "ar" ? "left" : "right" ?>: 20px" href="<?= \yii\helpers\Url::to(['/site/signup']) ?>">
+                <a style="color: #FFF; padding-<?= Yii::$app->language == "ar" ? "left" : "right" ?>: 20px"
+                   href="<?= \yii\helpers\Url::to(['/site/signup']) ?>">
                     <?= Yii::$app->language == "ar" ? "إنشاء حساب" : "Sign Up" ?>
                 </a>
             </li>

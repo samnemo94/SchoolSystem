@@ -65,9 +65,12 @@ class ItemsController extends Controller
     {
         $model = new Items();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save())
+        {
             return $this->redirect(['view', 'id' => $model->item_id]);
-        } else {
+        }
+        else
+        {
             return $this->render('create', [
                 'model' => $model,
             ]);
@@ -84,9 +87,12 @@ class ItemsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save())
+        {
             return $this->redirect(['view', 'id' => $model->item_id]);
-        } else {
+        }
+        else
+        {
             return $this->render('update', [
                 'model' => $model,
             ]);
@@ -115,9 +121,12 @@ class ItemsController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Items::findOne($id)) !== null) {
+        if (($model = Items::findOne($id)) !== null)
+        {
             return $model;
-        } else {
+        }
+        else
+        {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
