@@ -22,4 +22,21 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
 
+    <div>
+        <?php
+        if (!empty($childs ) ){
+            foreach($childs as $child) {
+            foreach ($child as $key => $value) {
+                echo $key.' : '.'<br>';
+                foreach ($value  as $key => $val ) {
+                  echo  Html::a(  $val['title']['value'], $url = ['/site/page','id'=>$key] );
+                    echo '<br>';
+                }
+            }
+        }
+        }
+        ?>
+    </div>
+
+
 </div>

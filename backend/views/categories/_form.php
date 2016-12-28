@@ -24,6 +24,8 @@ use wbraganca\dynamicform\DynamicFormWidget;
             'allowClear' => true
         ],
     ]); ?>
+    <?= $form->field($model , 'showing_parent')->checkbox() ?>
+
     <div class="row">
 
         <div class="panel panel-default">
