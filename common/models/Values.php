@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use backend\models\Languages;
 use Yii;
 
 /**

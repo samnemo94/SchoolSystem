@@ -33,29 +33,35 @@ $this->params['breadcrumbs'][] = $this->title;
         <table class="table table-hover table-striped">
             <thead>
             <tr>
-                <?php foreach ($dataFields as $field){
-                    echo '<th>'. $field['field_title'].'</th>';
-                }?>
+                <?php foreach ($dataFields as $field)
+                {
+                    echo '<th>' . $field['field_title'] . '</th>';
+                } ?>
             </tr>
             </thead>
             <tbody>
-            <?php  foreach ($dataItems as $item){
-                if ($item->deleted == 1 )
+            <?php foreach ($dataItems as $item)
+            {
+                if ($item->deleted == 1)
                 {
                     echo '<tr bgcolor="#F7CACE">';
-                }else {
-                    echo '<tr>';}
-                $values = \backend\models\Values::find()->where(['item_id'=>$item['item_id']])->all();
-                foreach ($values as $value){
-                    echo '<td>';
+                }
+                else
+                {
+                    echo '<tr>';
+                }
+                $values = \backend\models\Values::find()->where(['item_id' => $item['item_id']])->all();
+                foreach ($values as $value)
+                {
+                    echo '<td title="'.$value->getField()->one()->field_title.'">';
                     echo $value['value'];
                     echo '</td>';
                 }
                 echo '<td>';
-                if ($item->deleted != 1 )
+                if ($item->deleted != 1)
                 {
                     echo Html::a('<span class="pe-7s-pen"></span>',
-                        ['categories/update-row', 'id' => $item->item_id, 'id2' => $item->category_id], [
+                        ['categories/update-row', 'id' => $item->item_id], [
                             'title' => Yii::t('yii', 'Update'),
                         ]);
                     echo Html::a('<span class="pe-7s-trash"></span>',

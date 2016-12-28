@@ -295,7 +295,7 @@ class CategoriesController extends MyController
             return $this->render('insert', ['fields' => $fields, 'id' => $id, 'items' => $items]);
     }
 
-    public function actionUpdateRow($id, $id2)
+    public function actionUpdateRow($id)
     {
         $item = $this->findItem($id);
         $fields = Fields::find()->where(['category_id' => $item['category_id']])->all();
@@ -345,13 +345,13 @@ class CategoriesController extends MyController
             $item->updated_at = date('Y-m-d H:i:s');
             $item->updated_by = Yii::$app->user->id;
             $item->save(false);
-            $model = $this->findModel($id2);
-            $dataFields = Fields::find()->where(['category_id' => $id2])->all();
-            $dataItems = Items::find()->where(['category_id' => $id2])->all();
+            $model = $this->findModel($item->category_id);
+            $dataFields = Fields::find()->where(['category_id' => $item->category_id])->all();
+            $dataItems = Items::find()->where(['category_id' => $item->category_id])->all();
             return $this->render('view', ['model' => $model, 'dataItems' => $dataItems, 'dataFields' => $dataFields]);
         }
         else
-            return $this->render('update-row', ['values' => $values, 'id' => $id, 'fields' => $fields, 'items' => $items, 'id2' => $id2]);
+            return $this->render('update-row', ['values' => $values, 'id' => $id, 'fields' => $fields, 'items' => $items, 'id2' => $item->category_id]);
     }
 
     public function actionDeleteRow($id)

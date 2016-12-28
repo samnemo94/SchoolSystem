@@ -259,6 +259,80 @@ class SiteController extends MyController
         ]);
     }
 
+    public function actionUpdateUser()
+    {
+        $lang = Languages::findOne(['language_code' => Yii::$app->language])->language_id;
+        $student_cat = Categories::findOne(['category_title'=>'students']);
+        if (!$student_cat)
+            return null;
+        $student = $this->getFilteredItems($student_cat->category_id,['user_id'=>Yii::$app->user->id],$lang);
+        foreach ($student as $std)
+        {
+            return $this->redirect(['update-row', 'id' => $std['item_id']]);
+        }
+        return true;
+    }
+
+     public function actionUpdateRow($id)
+    {
+        $item = Items::findOne(['item_id' => $id]);
+        $fields = Fields::find()->where(['category_id' => $item['category_id']])->all();
+        foreach ($fields as $field1)
+        {
+            if ($field1['field_type'] == 'foreign_key')
+            {
+                $fk = $field1['fk_table'];
+                $items = Items::find()->where(['category_id' => $fk])->all();
+            }
+            else $items = Null;
+        }
+
+        $values = Values::find()->leftJoin('`fields`', '`fields`.`field_id`=`values`.`field_id`')
+            ->where(['item_id' => $id])->all();
+        if (!empty($_POST))
+        {
+            foreach ($values as $value)
+            {
+                $field = Fields::find()->where(['field_id' => $value['field_id']])->one();
+                $type = $field['field_type'];
+                $post = $field['field_title'];
+                if (!empty($_POST[$post]) || !empty($_FILES[$post]))
+                {
+                    switch ($type)
+                    {
+                        case 'image' :
+                            $imagename = $_FILES[$post]["name"];
+                            $folder = "/xampp/htdocs/SchoolSystem/backend/web/img/uploads/";
+                            move_uploaded_file($_FILES[$post]["tmp_name"], "$folder" . $_FILES[$post]["name"]);
+                            $value->value = $imagename;
+                            $value->save(false);
+                            break;
+                        case 'file':
+                            $filename = $_FILES[$post]["name"];
+                            $folder = "/xampp/htdocs/SchoolSystem/backend/web/files/uploads/";
+                            move_uploaded_file($_FILES[$post]["tmp_name"], "$folder" . $_FILES[$post]["name"]);
+                            $value->value = $filename;
+                            $value->save(false);
+                            break;
+                        default :
+                            $value->value = $_POST[$post];
+                            $value->save(false);
+                    }
+                }
+            }
+            $item->updated_at = date('Y-m-d H:i:s');
+            $item->updated_by = Yii::$app->user->id;
+            $item->save(false);
+            $model = $this->findModel($item->category_id);
+            $dataFields = Fields::find()->where(['category_id' => $item->category_id])->all();
+            $dataItems = Items::find()->where(['category_id' => $item->category_id])->all();
+            return $this->render('view', ['model' => $model, 'dataItems' => $dataItems, 'dataFields' => $dataFields]);
+        }
+        else
+            return $this->render('update-row', ['values' => $values, 'id' => $id, 'fields' => $fields, 'items' => $items, 'id2' => $item->category_id]);
+    }
+
+
     /**
      * Requests password reset.
      *

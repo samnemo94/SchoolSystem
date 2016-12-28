@@ -74,22 +74,53 @@ class MyController extends Controller
 
             $value = $field->has_translate ? $item->getValues()->where(['language_id' => $lang_id, 'field_id' => $field->field_id])->one() : $item->getValues()->where(['field_id' => $field->field_id])->one();
             $value = $value ? $value->value : '';
-            if ($value && $value != '' && $field->field_type == 'foreign_key')
+//            if ($value && $value != '' && $field->field_type == 'foreign_key')
+//            {
+//                $foreign_item = Items::findOne(['item_id' => $value]);
+//                if ($foreign_item)
+//                {
+//                    $foreign_cat = $foreign_item->category_id;
+//                    $foreign_field = Fields::findOne(['category_id' => $foreign_cat, 'field_title' => 'title']);
+//                    if ($foreign_field)
+//                    {
+//                        $foreign_value = Values::findOne(['language_id' => $lang_id, 'field_id' => $foreign_field->field_id, 'item_id' => $foreign_item->item_id]);
+//                        if ($foreign_value)
+//                            $value = $foreign_value->value;
+//                    }
+//                }
+//            }
+            $res[$field->field_title]['value'] = $value;
+        }
+        return $res;
+    }
+
+    public function getFilteredItems($category_id,$filters,$lang_id)
+    {
+        $items = Items::findAll(['category_id' => $category_id,'deleted'=>'0']);
+
+        $res = [];
+        foreach ($items as $item)
+        {
+            $info = $this->getItemInfo($item->item_id,$lang_id);
+            $valid = true;
+            foreach ($filters as $key=>$value)
             {
-                $foreign_item = Items::findOne(['item_id' => $value]);
-                if ($foreign_item)
+                if (array_key_exists($key, $info))
                 {
-                    $foreign_cat = $foreign_item->category_id;
-                    $foreign_field = Fields::findOne(['category_id' => $foreign_cat, 'field_title' => 'title']);
-                    if ($foreign_field)
+                    if (strcmp($info[$key]['value'],$value)!=0)
                     {
-                        $foreign_value = Values::findOne(['language_id' => $lang_id, 'field_id' => $foreign_field->field_id, 'item_id' => $foreign_item->item_id]);
-                        if ($foreign_value)
-                            $value = $foreign_value->value;
+                        $valid = false;
+                        break;
                     }
                 }
+                else
+                {
+                    $valid = false;
+                    break;
+                }
             }
-            $res[$field->field_title]['value'] = $value;
+            if ($valid)
+                $res[]=$info;
         }
         return $res;
     }
