@@ -236,7 +236,7 @@ class CategoriesController extends MyController
             $language_code = array();
             foreach ($langs as $lang)
             {
-                array_push($language_code, '_' . $lang['language_code']);
+                array_push($language_code, $lang['language_code']);
             }
             array_push($language_code, "");
             foreach ($language_code as $lang)
@@ -251,8 +251,7 @@ class CategoriesController extends MyController
                         $val->field_id = $field['field_id'];
                         if ($lang != "")
                         {
-                            $code = substr($lang, 1);
-                            $langsID = Languages::find()->where(['language_code' => $code])->one();
+                            $langsID = Languages::find()->where(['language_code' => $lang])->one();
                             $val->language_id = $langsID ? $langsID['language_id'] : null;
                         }
                         else
@@ -288,11 +287,20 @@ class CategoriesController extends MyController
 
             $dataFields = Fields::find()->where(['category_id' => $id])->all();
             $dataItems = Items::find()->where(['category_id' => $id])->all();
-            return $this->render('view', ['model' => $model, 'dataItems' => $dataItems, 'dataFields' => $dataFields]);
+            return $this->render('view', [
+                'model' => $model,
+                'dataItems' => $dataItems,
+                'dataFields' => $dataFields,
+            ]);
         }
 
         else
-            return $this->render('insert', ['fields' => $fields, 'id' => $id, 'items' => $items]);
+            return $this->render('insert', [
+                'fields' => $fields,
+                'id' => $id,
+                'items' => $items,
+                'langs' => Languages::find()->all(),
+            ]);
     }
 
     public function actionUpdateRow($id)

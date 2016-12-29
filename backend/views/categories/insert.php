@@ -20,7 +20,6 @@ use backend\models\Items;
     <select id="language_selector">
         <option value="">Select language</option>
         <?php
-        $langs = \backend\models\Languages::find()->all();
         foreach ($langs as $lang)
         {
             echo '<option value="' . $lang['language_id'] . '">' . $lang['language_code'] . '</option> ';
@@ -28,68 +27,49 @@ use backend\models\Items;
         ?>
     </select>
 
-
-<?php ActiveForm::begin(['action' => 'index.php?r=categories/insert&id=' . $id, 'method' => 'post', 'options' => ['enctype' => 'multipart/form-data']]); ?>
 <?php
+ActiveForm::begin(['action' => 'index.php?r=categories/insert&id=' . $id, 'method' => 'post', 'options' => ['enctype' => 'multipart/form-data']]);
 foreach ($fields as $field)
 {
     if (!$field['has_translate'])
         printFieldInput($field);
 }
-?>
 
-    <div class="field_wrapper">
-
+foreach ($langs as $lang)
+{
+    ?>
+    <div hidden id="div_<?= $lang->language_code ?>">
+        <h2> <?= $lang->language_code ?> </h2>
+        <?php
+        foreach ($fields as $field)
+        {
+            if ($field['has_translate'])
+                printFieldInput($field, $lang->language_code);
+        }
+        ?>
     </div>
+    <?php
+}
 
-<?php
 echo Html::submitButton('Save', ['id' => 'btn', 'class' => 'btn']);
 ActiveForm::end();
 ?>
 
+<script type="text/javascript">
 
-    <script type="text/javascript">
+$(document).ready(function () {
 
-        $(document).ready(function () {
-            String.prototype.replaceAll = function(search, replacement) {
-                var target = this;
-                return target.replace(new RegExp(search, 'g'), replacement);
-            };
-            var addButton = $('.add_button'); //Add button selector
-            var wrapper = $('.field_wrapper');
-            var x = 1; //Initial field counter is 1
-            var add_languages = '';
-            $(addButton).click(function () {
-                var language_name = $('#language_selector').find(":selected").text();
-                if (language_name != 'Select language' && add_languages.indexOf('[' + language_name + ']') == -1) {
-                    add_languages += '[' + language_name + ']';
-                    var assignLanggauegToPhp = '<?php $lang = "'+language_name+'";?>';
-                    var fieldHTML = `<?php
-                        echo '<div>';
-                        echo '<h2>_FDSADFASD_</h2>';
-                        foreach ($fields as $field)
-                        {
-                            if ($field['has_translate'])
-                                printFieldInput($field, $lang);
-                        }
-                        echo '</div>';
-                        ?>`; //New input field html
-
-                    //Once add button is clicked
-                    console.log(fieldHTML);
-                    fieldHTML = fieldHTML.replaceAll('_FDSADFASD_','_'+language_name);
-                    $(wrapper).append(fieldHTML); // Add field html
-                    console.log(fieldHTML);
-                }
-            });
-            $(wrapper).on('click', '.remove_button', function (e) { //Once remove button is clicked
-                e.preventDefault();
-                $(this).parent('div').parent('div').parent().remove(); //Remove field html
-                x--; //Decrement field counter
-            });
-        });
-
-    </script>
+    var addButton = $('.add_button'); //Add button selector
+    var add_languages = '';
+    $(addButton).click(function () {
+        var language_name = $('#language_selector').find(":selected").text();
+        if (language_name != 'Select language' && add_languages.indexOf('[' + language_name + ']') == -1) {
+            add_languages += '[' + language_name + ']';
+            $('#div_'+language_name).show();
+        }
+    });
+});
+</script>
 
 
 <?php
@@ -98,7 +78,7 @@ function printFieldInput($field, $lang = '')
 {
     ?>
     <div class="row">
-        <label class="col-sm-2">
+        <label class="col-sm-2" id="label_<?= $field->field_id ?>_<?= $lang ?>">
             <?= $field['field_title'] ?>
         </label>
         <div class="col-sm-4">
@@ -107,62 +87,72 @@ function printFieldInput($field, $lang = '')
             {
                 case  'int':
                     ?>
-                    <input id="int" type="number"
-                           name=" <?= $field['field_title'] . (($lang) ? '_FDSADFASD_' : '') ?>">
+                    <input type="number" id="input_<?= $field->field_id ?>_<?= $lang ?>"
+                           name=" <?= $field['field_title'] . (($lang) ? $lang : '') ?>">
                     <?php
                     break;
                 case 'varchar' :
                     ?>
-                    <input id="varchar" type="text"
-                           name="<?= $field['field_title'] . (($lang) ? '_FDSADFASD_' : '') ?>">
+                    <input type="text" id="input_<?= $field->field_id ?>_<?= $lang ?>"
+                           name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
                     <?php
                     break;
                 case 'text' :
-                    echo \dosamigos\ckeditor\CKEditor::widget([
-                        'name' => $field['field_title'] . (($lang) ? '_FDSADFASD_' : ''),
+                    echo \dosamigos\tinymce\TinyMce::widget([
+                        'name' => $field['field_title'] . (($lang) ? $lang : ''),
+                        'id' => "input_" . $field->field_id . "_$lang",
                         'options' => ['rows' => 6],
-                        'preset' => 'basic'
+                        'language' => 'en_GB',
+                        'clientOptions' => [
+                            'plugins' => [
+                                "advlist autolink lists link charmap preview anchor",
+                                "searchreplace visualblocks code fullscreen",
+                                "insertdatetime media table contextmenu paste"
+                            ],
+                            'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+                        ]
                     ]);
                     break;
                 case 'double' :
                     ?>
-                    <input id="double" step="0.01" type="number"
-                           name="<?= $field['field_title'] . (($lang) ? '_FDSADFASD_' : '') ?>">
+                    <input step="0.01" type="number" id="input_<?= $field->field_id ?>_<?= $lang ?>"
+                           name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
                     <?php
                     break;
                 case 'date' :
                     ?>
-                    <input id="date" type="date"
-                           name="<?= $field['field_title'] . (($lang) ? '_FDSADFASD_' : '') ?>">
+                    <input type="date" id="input_<?= $field->field_id ?>_<?= $lang ?>"
+                           name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
                     <?php
                     break;
                 case 'time':
                     ?>
-                    <input id="time" type="time"
-                           name="<?= $field['field_title'] . (($lang) ? '_FDSADFASD_' : '') ?>">
+                    <input type="time" id="input_<?= $field->field_id ?>_<?= $lang ?>"
+                           name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
                     <?php
                     break;
                 case 'date_time' :
                     ?>
-                    <input id="datetime" type="datetime-local"
-                           name="<?= $field['field_title'] . (($lang) ? '_FDSADFASD_' : '') ?>">
+                    <input type="datetime-local" id="input_<?= $field->field_id ?>_<?= $lang ?>"
+                           name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
                     <?php
                     break;
                 case 'image' :
                     ?>
-                    <input id="image" type="file"
-                           name="<?= $field['field_title'] . (($lang) ? '_FDSADFASD_' : '') ?>">
+                    <input type="file" id="input_<?= $field->field_id ?>_<?= $lang ?>"
+                           name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
                     <?php
                     break;
                 case 'file' :
                     ?>
-                    <input id="file" type="file"
-                           name="<?= $field['field_title'] . (($lang) ? '_FDSADFASD_' : '') ?>">
+                    <input type="file" id="input_<?= $field->field_id ?>_<?= $lang ?>"
+                           name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
                     <?php
                     break;
                 case 'foreign_key' :
                     ?>
-                    <select name="<?= $field['field_title'] . (($lang) ? '_FDSADFASD_' : '') ?>">
+                    <select id="input_<?= $field->field_id ?>_<?= $lang ?>"
+                            name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
                         <option value="">Select Item</option>
                         <?php
                         foreach ($items as $item)
