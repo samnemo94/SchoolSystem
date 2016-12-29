@@ -64,7 +64,7 @@ ActiveForm::end();
                 if (language_name != 'Select language' && add_languages.indexOf('[' + language_name + ']') == -1) {
                     add_languages += '[' + language_name + ']';
                     var assignLanggauegToPhp = '<?php $lang = "'+language_name+'";?>';
-                    var fieldHTML = `<?php
+                    var fieldHTML = <?php
                         echo '<div>';
                         echo '<h2>_FDSADFASD_</h2>';
                         foreach ($fields as $field)
@@ -73,7 +73,7 @@ ActiveForm::end();
                                 printFieldInput($field, $lang);
                         }
                         echo '</div>';
-                        ?>`; //New input field html
+                        ?>; //New input field html
 
                     //Once add button is clicked
                     console.log(fieldHTML);

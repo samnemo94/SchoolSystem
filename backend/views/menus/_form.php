@@ -42,7 +42,7 @@ use yii\widgets\ActiveForm;
     ]); ?>
 
     <?= $form->field($model, 'item_id')->widget(\kartik\select2\Select2::classname(), [
-        'data' => \yii\helpers\ArrayHelper::map(\backend\models\Items::find()->all(),'item_id','item_title'),
+        'data' => \yii\helpers\ArrayHelper::map(\backend\models\Items::find()->all(),'item_id', 'item_id'),
         'language' => 'en',
         'options' => ['placeholder' => 'Select an item...'],
         'pluginOptions' => [
