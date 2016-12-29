@@ -324,16 +324,18 @@ class CategoriesController extends MyController
                     {
                         case 'image' :
                             $imagename = $_FILES[$post]["name"];
-                            $folder = "/xampp/htdocs/SchoolSystem/backend/web/img/uploads/";
-                            move_uploaded_file($_FILES[$post]["tmp_name"], "$folder" . $_FILES[$post]["name"]);
-                            $value->value = $imagename;
+                            $folder = "../../common/web/uploads/";
+                            $new_name = time() . $imagename;
+                            move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
+                            $value->value = $folder . $new_name;
                             $value->save(false);
                             break;
                         case 'file':
                             $filename = $_FILES[$post]["name"];
-                            $folder = "/xampp/htdocs/SchoolSystem/backend/web/files/uploads/";
-                            move_uploaded_file($_FILES[$post]["tmp_name"], "$folder" . $_FILES[$post]["name"]);
-                            $value->value = $filename;
+                            $folder = "../../common/web/uploads/";
+                            $new_name = time() . $filename;
+                            move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
+                            $value->value = $folder . $new_name;
                             $value->save(false);
                             break;
                         default :
