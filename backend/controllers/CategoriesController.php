@@ -198,6 +198,7 @@ class CategoriesController extends MyController
 
     public function actionView($id)
     {
+
         $model = $this->findModel($id);
         $dataFields = Fields::find()->where(['category_id' => $id])->all();
         $dataItems = Items::find()->where(['category_id' => $id])->all();
@@ -217,12 +218,14 @@ class CategoriesController extends MyController
         ]);
 
         $fields = Fields::find()->where(['category_id' => $id])->all();
+        $fks = [];
         foreach ($fields as $field1)
         {
             if ($field1['field_type'] == 'foreign_key')
             {
                 $fk = $field1['fk_table'];
                 $items = Items::find()->where(['category_id' => $fk])->all();
+                $fks [$fk] = $items ;
             }
         }
         if (!empty($_POST))
@@ -285,15 +288,19 @@ class CategoriesController extends MyController
                 }
             }
 
-
             $dataFields = Fields::find()->where(['category_id' => $id])->all();
             $dataItems = Items::find()->where(['category_id' => $id])->all();
             return $this->render('view', ['model' => $model, 'dataItems' => $dataItems, 'dataFields' => $dataFields]);
         }
 
         else
-            return $this->render('insert', ['fields' => $fields, 'id' => $id, 'items' => $items]);
+            return $this->render('insert', ['fields' => $fields, 'id' => $id,'items'=> $fks]);
     }
+
+
+
+
+
 
     public function actionUpdateRow($id)
     {

@@ -34,7 +34,7 @@ use backend\models\Items;
 foreach ($fields as $field)
 {
     if (!$field['has_translate'])
-        printFieldInput($field);
+        printFieldInput($field,$lang = '',$items);
 }
 ?>
 
@@ -64,16 +64,16 @@ ActiveForm::end();
                 if (language_name != 'Select language' && add_languages.indexOf('[' + language_name + ']') == -1) {
                     add_languages += '[' + language_name + ']';
                     var assignLanggauegToPhp = '<?php $lang = "'+language_name+'";?>';
-                    var fieldHTML = <?php
+                    var fieldHTML = `<?php
                         echo '<div>';
                         echo '<h2>_FDSADFASD_</h2>';
                         foreach ($fields as $field)
                         {
                             if ($field['has_translate'])
-                                printFieldInput($field, $lang);
+                                printFieldInput($field, $lang,$items);
                         }
                         echo '</div>';
-                        ?>; //New input field html
+                        ?>`; //New input field html
 
                     //Once add button is clicked
                     console.log(fieldHTML);
@@ -94,7 +94,7 @@ ActiveForm::end();
 
 <?php
 
-function printFieldInput($field, $lang = '')
+function printFieldInput($field, $lang = '',$items )
 {
     ?>
     <div class="row">
@@ -165,8 +165,11 @@ function printFieldInput($field, $lang = '')
                     <select name="<?= $field['field_title'] . (($lang) ? '_FDSADFASD_' : '') ?>">
                         <option value="">Select Item</option>
                         <?php
-                        foreach ($items as $item)
+                        $fk = $field['fk_table'];
+                        $fk_array = $items[$fk];
+                        foreach ($fk_array as $item)
                         {
+
                             echo "<option value=\"" . $item['item_id'] . "\">" . $item['item_id'] . "</option> ";
                         }
                         ?>

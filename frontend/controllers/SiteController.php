@@ -24,6 +24,7 @@ use yii\web\NotFoundHttpException;
  */
 class SiteController extends MyController
 {
+    public $enableCsrfValidation = false;
     /**
      * @inheritdoc
      */
@@ -86,6 +87,11 @@ class SiteController extends MyController
         $menu = Menus::findOne(['menu_id' => $id]);
         if ($menu->category_id)
         {
+            if ($menu->menu_title == 'Teachers' || $menu->menu_title == 'Students')
+            {
+                return $this->redirect(['teachers' ,'id'=> $menu->category_id]);
+            }
+
             return $this->redirect(['category', 'id' => $menu->category_id]);
         }
 
@@ -93,8 +99,7 @@ class SiteController extends MyController
             return $this->redirect(['index']);
 
 
-        if ($menu->item_id)
-        {
+        if ($menu->item_id) {
             $this->redirect(['page', 'id' => $menu->item_id]);
         }
     }
@@ -131,6 +136,42 @@ class SiteController extends MyController
             'columns' => $columns,
             'rows' => $rows,
         ]);
+    }
+
+    public function actionTeachers($id){
+        $lang = Languages::findOne(['language_code' => Yii::$app->language])->language_id;
+
+        $cat = Categories::findOne(['category_id' => $id]);
+        $columns = [];
+        foreach ($cat->fields as $field)
+        {
+            $columns[]['title'] = $field->field_title;
+        }
+        $rows = [];
+        $items = $cat->getItems()->where(['deleted' => '0'])->all();
+        foreach ($items as $item)
+        {
+            $item_info = MyController::getItemInfo($item->item_id, $lang);
+            $rows[$item->item_id] = $item_info;
+        }
+        return $this->render('teachers', [
+            'columns' => $columns,
+            'rows' => $rows,
+        ]);
+    }
+
+    public function actionActive()
+    {
+        $item = $_POST['key'];
+        $field = \backend\models\Fields::find()->where(['field_title'=>'is_active'])->one();
+        $field = $field['field_id'];
+        $model = new Values();
+        $model->item_id=$item;
+        $model->field_id = $field;
+        $model->language_id =Null;
+        $model->value = 1;
+        $model->save(false);
+
     }
 
     public function actionPage($id)

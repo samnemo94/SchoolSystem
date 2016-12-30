@@ -186,4 +186,10 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    public static function roleFind($id){
+        $role = User::find()->where(['id'=>$id])->one();
+        $role =$role['role_id'];
+        return $role;
+    }
 }
