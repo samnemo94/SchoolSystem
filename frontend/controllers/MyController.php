@@ -8,7 +8,7 @@
 
 namespace frontend\controllers;
 
-
+use yii;
 use backend\models\Categories;
 use backend\models\Items;
 use backend\models\Languages;
@@ -16,6 +16,7 @@ use backend\models\Menus;
 use common\models\Fields;
 use common\models\Values;
 use yii\web\Controller;
+use common\models\User;
 
 class MyController extends Controller
 {
@@ -30,6 +31,48 @@ class MyController extends Controller
         foreach ($menus as $menu)
         {
             $main_menu_top [] = $this->generateMenuItem($menu->menu_id);
+        }
+
+        $id = yii::$app->getUser()->id;
+        $role = User::roleFind($id);
+        switch ($role){
+            case 1:
+                $left_menus = Menus::find()->where(['menu_position' => 'left', 'parent_id' => NULL,'menu_for'=>'Admin'])->all();
+                global $main_menu_left;
+                $main_menu_left = [];
+                foreach ($left_menus as $menu)
+                {
+                    $main_menu_left [] = $this->generateMenuItem($menu->menu_id);
+                }
+                break;
+            case 2:
+                $left_menus = Menus::find()->where(['menu_position' => 'left', 'parent_id' => NULL,'menu_for'=>'Student'])->all();
+                global $main_menu_left;
+                $main_menu_left = [];
+                foreach ($left_menus as $menu)
+                {
+                    $main_menu_left [] = $this->generateMenuItem($menu->menu_id);
+                }
+                break;
+            case 3:
+                $left_menus = Menus::find()->where(['menu_position' => 'left', 'parent_id' => NULL,'menu_for'=>'Teacher'])->all();
+                global $main_menu_left;
+                $main_menu_left = [];
+                foreach ($left_menus as $menu)
+                {
+                    $main_menu_left [] = $this->generateMenuItem($menu->menu_id);
+                }
+                break;
+            default :
+                $left_menus = Menus::find()->where(['menu_position' => 'left', 'parent_id' => NULL,'menu_for'=>'Null'])->all();
+                global $main_menu_left;
+                $main_menu_left = [];
+                foreach ($left_menus as $menu)
+                {
+                    $main_menu_left [] = $this->generateMenuItem($menu->menu_id);
+                }
+                break;
+
         }
 
 //        var_dump($main_menu_top);

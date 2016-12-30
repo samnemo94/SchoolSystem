@@ -196,6 +196,7 @@ class CategoriesController extends MyController
 
     public function actionView($id)
     {
+
         $model = $this->findModel($id);
         $dataFields = Fields::find()->where(['category_id' => $id])->all();
         $dataItems = Items::find()->where(['category_id' => $id])->all();
@@ -289,6 +290,11 @@ class CategoriesController extends MyController
                 'langs' => Languages::find()->all(),
             ]);
     }
+
+
+
+
+
 
     public function actionUpdateRow($id)
     {

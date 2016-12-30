@@ -10,6 +10,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
+use common\models\User;
 
 AppAsset::register($this);
 ?>
@@ -43,7 +44,9 @@ else
     'main_menu_top' => $GLOBALS['main_menu_top'],
 ]); ?>
 
-<?= $this->render('left.php'); ?>
+<?= $this->render('left.php',[
+    'main_menu_left' => $GLOBALS['main_menu_left'],
+]); ?>
 
 <div class="layout-content" data-scrollable>
     <div class="container-fluid">

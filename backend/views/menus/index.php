@@ -60,7 +60,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 {
                     if ($model->item)
                     {
-                        return $model->item->item_title;
+                        $info = backend\controllers\MyController::getItemInfo( $model->item->item_id, 9);
+                        return $info['title']['value'];
                     }
                     return '-';
                 }

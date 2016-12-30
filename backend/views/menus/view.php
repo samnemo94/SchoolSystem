@@ -41,7 +41,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'menu_position',
             [
                 'label' => 'Item',
-                'value' => $model->item?$model->item->item_title:'',
+
+                'value' => $model->item?$model->item->item_id:'',
             ],
         ],
     ]) ?>

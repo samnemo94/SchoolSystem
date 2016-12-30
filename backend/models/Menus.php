@@ -37,7 +37,7 @@ class Menus extends \yii\db\ActiveRecord
     {
         return [
             [['parent_id', 'category_id', 'item_id'], 'integer'],
-            [['category_id', 'menu_position', 'menu_title'], 'required'],
+            [[ 'menu_position', 'menu_title'], 'required'],
             [['menu_position'], 'string'],
             [['menu_title'], 'string', 'max' => 255],
             [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Menus::className(), 'targetAttribute' => ['parent_id' => 'menu_id']],
