@@ -28,10 +28,10 @@ use backend\models\Items;
     </select>
 
 <?php
-ActiveForm::begin(['action' => 'index.php?r=categories/insert&id=' . $id, 'method' => 'post', 'options' => ['enctype' => 'multipart/form-data']]);
+ActiveForm::begin(['action' => 'index.php?r=site/insert&id=' . $id. '&fk_id='.$fk_id, 'method' => 'post', 'options' => ['enctype' => 'multipart/form-data']]);
 foreach ($fields as $field)
 {
-    if (!$field['has_translate'])
+    if (!$field['has_translate'] && $field['is_show'] == 1)
         printFieldInput($field,$items);
 }
 
@@ -43,7 +43,7 @@ foreach ($langs as $lang)
         <?php
         foreach ($fields as $field)
         {
-            if ($field['has_translate'])
+            if ($field['has_translate'] && $field['is_show'] == 1)
                 printFieldInput($field,$items, $lang->language_code);
         }
         ?>

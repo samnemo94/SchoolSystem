@@ -181,6 +181,22 @@ class SiteController extends MyController
 
         if ($cat->category_title == 'subject')
         {
+            if (Yii::$app->user->isStudent)
+            {
+                $is_registered = false;
+                $student_subject = Categories::findOne(['category_title'=>'student_subject']);
+                $student_subject_item = MyController::getFilteredItems($student_subject->category_id,['subject_id'=>$id,'student_id'=>Yii::$app->user->isStudent],null);
+                foreach ($student_subject_item as $items)
+                {
+                    $is_registered = true;
+                }
+                return $this->render('page_subject_student', [
+                    'item' => $row,
+                    'childs' => $childArray,
+                    'is_registered' => $is_registered,
+                    'student_subject_category' => $student_subject->category_id
+                ]);
+            }
             return $this->render('page_subject', [
                 'item' => $row, 'childs' => $childArray
             ]);
@@ -363,6 +379,103 @@ class SiteController extends MyController
             return $this->render('update-row', ['values' => $values, 'id' => $id, 'fields' => $fields, 'items' => $items, 'id2' => $item->category_id]);
     }
 
+    public function actionInsert($id,$fk_id)
+    {
+        $fields = Fields::find()->where(['category_id' => $id])->all();
+        foreach ($fields as $field1)
+        {
+            if ($field1['field_type'] == 'foreign_key')
+            {
+                $fk = $field1['fk_table'];
+                $items[$field1->fk_table] = Items::find()->where(['category_id' => $fk])->all();
+            }
+        }
+        if (!empty($_POST))
+        {
+            $item = new Items();
+            $item->category_id = $id;
+            $item->created_at = date('Y-m-d H:i:s');
+            $item->created_by = Yii::$app->user->id;
+            $item->save(false);
+            $langs = Languages::find()->all();
+            $language_code = array();
+            foreach ($langs as $lang)
+            {
+                array_push($language_code, $lang['language_code']);
+            }
+            array_push($language_code, "");
+            foreach ($language_code as $lang)
+            {
+                foreach ($fields as $field)
+                {
+                    $post = $field['field_title'] . $lang;
+                    if (!empty($_POST[$post]) || !empty($_FILES[$post]))
+                    {
+                        $val = new Values();
+                        $val->item_id = $item->item_id;
+                        $val->field_id = $field['field_id'];
+                        if ($lang != "")
+                        {
+                            $langsID = Languages::find()->where(['language_code' => $lang])->one();
+                            $val->language_id = $langsID ? $langsID['language_id'] : null;
+                        }
+                        else
+                        {
+                            $val->language_id = null;
+                        }
+                        switch ($field['field_type'])
+                        {
+                            case 'image' :
+                                $imagename = $_FILES[$post]["name"];
+                                $folder = "../../common/web/uploads/";
+                                $new_name = time() . $imagename;
+                                move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
+                                $val->value = $folder . $new_name;
+                                $val->save(false);
+                                break;
+                            case 'file':
+                                $filename = $_FILES[$post]["name"];
+                                $folder = "../../common/web/uploads/";
+                                $new_name = time() . $filename;
+                                move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
+                                $val->value = $folder . $new_name;
+                                $val->save(false);
+                                break;
+                            default :
+                                $val->value = $_POST[$post];
+                                $val->save(false);
+                        }
+                    }
+                }
+            }
+
+            if ($fk_id)
+            {
+                $category = Categories::findOne(['category_id' => $id]);
+                if ($category->parent_id)
+                {
+                    $parent = $category->parent;
+                    $fk_field = Fields::findOne(['category_id'=>$id,'fk_table'=>$parent->category_id]);
+                    $val = new Values();
+                    $val->item_id = $item->item_id;
+                    $val->field_id = $fk_field['field_id'];
+                    $val->language_id = null;
+                    $val->value = $fk_id;
+                    $val->save();
+                }
+            }
+
+            return $this->goHome();
+        }
+        else
+            return $this->render('insert', [
+                'fields' => $fields,
+                'id' => $id,
+                'items' => $items,
+                'langs' => Languages::find()->all(),
+                'fk_id' => $fk_id
+            ]);
+    }
 
     /**
      * Requests password reset.
