@@ -160,9 +160,7 @@ class CategoriesController extends MyController
                         $model->updated_at = date('Y-m-d H:i:s');
                         $model->updated_by = Yii::$app->user->id;
                         $model->save(false);
-                        $dataFields = Fields::find()->where(['category_id' => $id])->all();
-                        $dataItems = Items::find()->where(['category_id' => $id])->all();
-                        return $this->render('view', ['model' => $model, 'dataItems' => $dataItems, 'dataFields' => $dataFields]);
+                        return $this->redirect(['view', 'id' => $id]);
                     }
                 } catch (Exception $e)
                 {
@@ -212,14 +210,7 @@ class CategoriesController extends MyController
 
     public function actionInsert($id)
     {
-        $model = $this->findModel($id);
         $items = Items::find()->where(['category_id' => $id])->all();
-        $dataProvider = new ActiveDataProvider([
-            'query' => Fields::find()->where(['category_id' => $id]),
-            'pagination' => [
-                'pageSize' => 20,
-            ],
-        ]);
 
         $fields = Fields::find()->where(['category_id' => $id])->all();
         foreach ($fields as $field1)
@@ -289,14 +280,7 @@ class CategoriesController extends MyController
                 }
             }
 
-
-            $dataFields = Fields::find()->where(['category_id' => $id])->all();
-            $dataItems = Items::find()->where(['category_id' => $id])->all();
-            return $this->render('view', [
-                'model' => $model,
-                'dataItems' => $dataItems,
-                'dataFields' => $dataFields,
-            ]);
+            return $this->redirect(['view', 'id' => $id]);
         }
 
         else
@@ -311,6 +295,7 @@ class CategoriesController extends MyController
     public function actionUpdateRow($id)
     {
         $item = $this->findItem($id);
+
         $fields = Fields::find()->where(['category_id' => $item['category_id']])->all();
         foreach ($fields as $field1)
         {
@@ -322,51 +307,120 @@ class CategoriesController extends MyController
             else $items = Null;
         }
 
-        $values = Values::find()->leftJoin('`fields`', '`fields`.`field_id`=`values`.`field_id`')
-            ->where(['item_id' => $id])->all();
         if (!empty($_POST))
         {
-            foreach ($values as $value)
+            $langs = Languages::find()->all();
+            foreach ($fields as $field)
             {
-                $field = Fields::find()->where(['field_id' => $value['field_id']])->one();
-                $type = $field['field_type'];
-                $post = $field['field_title'];
-                if (!empty($_POST[$post]) || !empty($_FILES[$post]))
+                if ($field->has_translate)
                 {
-                    switch ($type)
+                    foreach ($langs as $lang)
                     {
-                        case 'image' :
-                            $imagename = $_FILES[$post]["name"];
-                            $folder = "../../common/web/uploads/";
-                            $new_name = time() . $imagename;
-                            move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
-                            $value->value = $folder . $new_name;
-                            $value->save(false);
-                            break;
-                        case 'file':
-                            $filename = $_FILES[$post]["name"];
-                            $folder = "../../common/web/uploads/";
-                            $new_name = time() . $filename;
-                            move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
-                            $value->value = $folder . $new_name;
-                            $value->save(false);
-                            break;
-                        default :
-                            $value->value = $_POST[$post];
-                            $value->save(false);
+                        $post = $field['field_title'] . $lang->language_code;
+                        if (!empty($_POST[$post]) || !empty($_FILES[$post]))
+                        {
+                            $val = Values::findOne(['field_id'=>$field->field_id,'item_id'=>$item->item_id,'language_id'=>$lang->language_id]);
+                            if (!$val)
+                            {
+                                $val = new Values();
+                                $val->item_id = $item->item_id;
+                                $val->field_id = $field['field_id'];
+                                $val->language_id = $lang->language_id;
+                            }
+                            switch ($field['field_type'])
+                            {
+                                case 'image' :
+                                    $imagename = $_FILES[$post]["name"];
+                                    $folder = "../../common/web/uploads/";
+                                    $new_name = time() . $imagename;
+                                    move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
+                                    $val->value = $folder . $new_name;
+                                    break;
+                                case 'file':
+                                    $filename = $_FILES[$post]["name"];
+                                    $folder = "../../common/web/uploads/";
+                                    $new_name = time() . $filename;
+                                    move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
+                                    $val->value = $folder . $new_name;
+                                    break;
+                                default :
+                                    $val->value = $_POST[$post];
+                            }
+                            $val->save(false);
+                        }
+                    }
+                }
+                else
+                {
+                    $post = $field['field_title'];
+                    if (!empty($_POST[$post]) || !empty($_FILES[$post]))
+                    {
+                        $val = Values::findOne(['field_id'=>$field->field_id,'item_id'=>$item->item_id]);
+                        if (!$val)
+                        {
+                            $val = new Values();
+                            $val->item_id = $item->item_id;
+                            $val->field_id = $field['field_id'];
+                            $val->language_id = null;
+                        }
+                        switch ($field['field_type'])
+                        {
+                            case 'image' :
+                                $imagename = $_FILES[$post]["name"];
+                                $folder = "../../common/web/uploads/";
+                                $new_name = time() . $imagename;
+                                move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
+                                $val->value = $folder . $new_name;
+                                break;
+                            case 'file':
+                                $filename = $_FILES[$post]["name"];
+                                $folder = "../../common/web/uploads/";
+                                $new_name = time() . $filename;
+                                move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
+                                $val->value = $folder . $new_name;
+                                break;
+                            default :
+                                $val->value = $_POST[$post];
+                        }
+                        $val->save(false);
                     }
                 }
             }
-            $item->updated_at = date('Y-m-d H:i:s');
-            $item->updated_by = Yii::$app->user->id;
-            $item->save(false);
-            $model = $this->findModel($item->category_id);
-            $dataFields = Fields::find()->where(['category_id' => $item->category_id])->all();
-            $dataItems = Items::find()->where(['category_id' => $item->category_id])->all();
-            return $this->render('view', ['model' => $model, 'dataItems' => $dataItems, 'dataFields' => $dataFields]);
+
+            return $this->redirect(['view', 'id' => $item->category_id]);
         }
         else
-            return $this->render('update-row', ['values' => $values, 'id' => $id, 'fields' => $fields, 'items' => $items, 'id2' => $item->category_id]);
+        {
+            $langs = Languages::find()->all();
+            $values = $item->getValues()->all();
+            $values_all = [];
+            foreach ($fields as $field)
+            {
+                if ($field->has_translate)
+                {
+                    foreach ($langs as $lang)
+                    {
+                        $values_all[$field->field_id][$lang->language_code] = '';
+                    }
+                }
+                else
+                {
+                    $values_all[$field->field_id]['0'] = '';
+                }
+            }
+            foreach ($values as $value)
+            {
+                $values_all[$value->field_id][$value->getLanguage()->one() ? $value->getLanguage()->one()->language_code : '0'] = $value->value;
+            }
+            return $this->render('update-row', [
+                'values' => $values_all,
+                'id' => $id,
+                'fields' => $fields,
+                'id' => $id,
+                'items' => $items,
+                'langs' =>$langs
+            ]);
+        }
     }
 
     public function actionDeleteRow($id)
@@ -376,13 +430,7 @@ class CategoriesController extends MyController
         $item->deleted_at = date('Y-m-d H:i:s');
         $item->deleted_by = Yii::$app->user->id;
         $item->save(false);
-        $id2 = Categories::find()->where(['category_id' => $item['category_id']])->one();
-        $id2 = $id2['category_id'];
-        $model = $this->findModel($id2);
-        $dataFields = Fields::find()->where(['category_id' => $id2])->all();
-        $dataItems = Items::find()->where(['category_id' => $id2])->all();
-        return $this->render('view', ['model' => $model, 'dataItems' => $dataItems, 'dataFields' => $dataFields]);
-
+        $this->redirect(['view', 'id' => $item['category_id']]);
     }
 
 
