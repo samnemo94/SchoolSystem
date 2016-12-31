@@ -8,104 +8,130 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 ?>
-<?php ActiveForm::begin(['action' => 'index.php?r=categories/update-row&id='.$id.'&id2='.$id2, 'method' => 'post','options'=>['enctype' => 'multipart/form-data']]); ?>
+<?php ActiveForm::begin(['action' => 'index.php?r=categories/update-row&id='.$id, 'method' => 'post','options'=>['enctype' => 'multipart/form-data']]);
+
+foreach ($fields as $field)
+{
+    if (!$field['has_translate'])
+        printFieldInput($field,$values);
+}
+
+foreach ($langs as $lang)
+{
+    ?>
+    <div>
+        <h2> <?= $lang->language_code ?> </h2>
+        <?php
+        foreach ($fields as $field)
+        {
+            if ($field['has_translate'])
+                printFieldInput($field,$values,$lang->language_code);
+        }
+        ?>
+    </div>
+    <?php
+}
+
+echo Html::submitButton('Save', ['id' => 'btn', 'class' => 'btn']);
+ActiveForm::end();
+?>
 
 <?php
 
-$i = 0;
-foreach ($values as $value){
-        $field = \backend\models\Fields::find()->where(['field_id'=>$value['field_id']])->one();
-        $type = $field['field_type'];
-        switch ($type){
-            case  'int':
-                echo '<div class="row">';
-                echo '<label class="col-sm-2" for="int">'.$field['field_title'].'</label>';
-                echo '<div class="col-sm-4">
-				<input id="int" value="'.$value['value'].'" type="number" name="'.$field['field_title'].'">
-				</div>
-			</div>';
-                break;
-
-            case 'varchar' :
-                echo '<div class="row">';
-                echo '<label class="col-sm-2" for="varchar">'.$field['field_title'].'</label>';
-                echo '<div class="col-sm-4">
-				<input id="varchar" value="'.$value['value'].'" type="text" name="'.$field['field_title'].'">
-				</div>
-			</div>';
-                break;
-            case 'text' :
-                echo '<div class="row">';
-                echo '<label class="col-sm-2" for="text">'.$field['field_title'].'</label>';
-                echo '<div class="col-sm-4">
-				<textarea id="text" value="'.$value['value'].'" name="'.$field['field_title'].'" cols="40" rows="5"></textarea>
-				</div>
-			</div>';
-                break;
-            case 'double' :
-                echo '<div class="row">';
-                echo '<label class="col-sm-2" for="double">'.$field['field_title'].'</label>';
-                echo '<div class="col-sm-4">
-				<input id="double" value="'.$value['value'].'" step="0.01" type="number" name="'.$field['field_title'].'">
-				</div>
-			</div>';
-                break;
-            case 'date' :
-                echo '<div class="row">';
-                echo '<label class="col-sm-2" for="date">'.$field['field_title'].'</label>';
-                echo '<div class="col-sm-4">
-				<input id="date" value="'.$value['value'].'"  type="date" name="'.$field['field_title'].'">
-				</div>
-			</div>';
-                break;
-            case 'time':
-                echo '<div class="row">';
-                echo '<label class="col-sm-2" for="time">'.$field['field_title'].'</label>';
-                echo '<div class="col-sm-4">
-				<input id="time" value="'.$value['value'].'" type="time" name="'.$field['field_title'].'">
-				</div>
-			</div>';
-                break;
-            case 'date_time' :
-                echo '<div class="row">';
-                echo '<label class="col-sm-2" for="datetime">'.$field['field_title'].'</label>';
-                echo '<div class="col-sm-4">
-				<input id="datetime" value="'.$value['value'].'" type="datetime-local" name="'.$field['field_title'].'">
-				</div>
-			</div>';
-                break;
-            case 'image' :
-                echo '<div class="row">';
-                echo '<label class="col-sm-2" for="image">'.$field['field_title'].'</label>';
-                echo '<div class="col-sm-4">
-				<input id="image" value="'.$value['value'].'" type="file" name="'.$field['field_title'].'">
-				</div>
-			</div>';
-                break;
-            case 'file' :
-                echo '<div class="row">';
-                echo '<label class="col-sm-2" for="file">'.$field['field_title'].'</label>';
-                echo '<div class="col-sm-4">
-				<input id="file" value="'.$value['value'].'" type="file" name="'.$field['field_title'].'">
-				</div>
-			</div>';
-                break;
-            case 'foreign_key' :
-                echo '<div class="row">';
-                echo '<label class="col-sm-2" for="varchar">'.$field['field_title'].'</label>';
-                echo '<div class="col-sm-4">
-				<select name="'.$field['field_title'].'">
-				<option value="" >Select Item </option>';
-                foreach ($items as $item){
-                    echo "<option value=\"".$item['item_id']."\">".$item['item_id']."</option> ";
-                }
-                echo '</select>
-                </div>
-			</div>';
-                break;
-        }
+function printFieldInput($field,$values,$lang = '')
+{
+    ?>
+    <div class="row">
+        <label class="col-sm-2" id="label_<?= $field->field_id ?>_<?= $lang ?>">
+            <?= $field['field_title'] ?>
+        </label>
+        <div class="col-sm-4">
+            <?php
+            switch ($field['field_type'])
+            {
+                case  'int':
+                    ?>
+                    <input type="number" value="<?= $values[$field['field_id']][$lang?$lang:'0'] ?>"
+                           name=" <?= $field['field_title'] . (($lang) ? $lang : '') ?>">
+                    <?php
+                    break;
+                case 'varchar' :
+                    ?>
+                    <input type="text" value="<?= $values[$field['field_id']][$lang?$lang:'0'] ?>"
+                           name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
+                    <?php
+                    break;
+                case 'text' :
+                    echo \dosamigos\tinymce\TinyMce::widget([
+                        'name' => $field['field_title'] . (($lang) ? $lang : ''),
+                        'value' => $values[$field['field_id']][$lang?$lang:'0'],
+                        'options' => ['rows' => 6],
+                        'language' => 'en_GB',
+                        'clientOptions' => [
+                            'plugins' => [
+                                "advlist autolink lists link charmap preview anchor",
+                                "searchreplace visualblocks code fullscreen",
+                                "insertdatetime media table contextmenu paste"
+                            ],
+                            'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+                        ]
+                    ]);
+                    break;
+                case 'double' :
+                    ?>
+                    <input step="0.01" type="number" value="<?= $values[$field['field_id']][$lang?$lang:'0'] ?>"
+                           name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
+                    <?php
+                    break;
+                case 'date' :
+                    ?>
+                    <input type="date" value="<?= $values[$field['field_id']][$lang?$lang:'0'] ?>"
+                           name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
+                    <?php
+                    break;
+                case 'time':
+                    ?>
+                    <input type="time" value="<?= $values[$field['field_id']][$lang?$lang:'0'] ?>"
+                           name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
+                    <?php
+                    break;
+                case 'date_time' :
+                    ?>
+                    <input type="datetime-local" value="<?= $values[$field['field_id']][$lang?$lang:'0'] ?>"
+                           name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
+                    <?php
+                    break;
+                case 'image' :
+                    ?>
+                    <input type="file" value="<?= $values[$field['field_id']][$lang?$lang:'0'] ?>"
+                           name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
+                    <?php
+                    break;
+                case 'file' :
+                    ?>
+                    <input type="file" value="<?= $values[$field['field_id']][$lang?$lang:'0'] ?>"
+                           name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
+                    <?php
+                    break;
+                case 'foreign_key' :
+                    ?>
+                    <select value="<?= $values[$field['field_id']][$lang?$lang:'0'] ?>"
+                            name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
+                        <option value="">Select Item</option>
+                        <?php
+                        foreach ($items as $item)
+                        {
+                            echo "<option value=\"" . $item['item_id'] . "\">" . $item['item_id'] . "</option> ";
+                        }
+                        ?>
+                    </select>
+                    <?php
+                    break;
+            }
+            ?>
+        </div>
+    </div>
+    <?php
 }
 
-echo Html::submitButton('Save', ['class' => 'btn']) ?>
-<?php ActiveForm::end(); ?>
-
+?>

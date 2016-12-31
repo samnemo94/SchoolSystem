@@ -33,10 +33,22 @@ $this->params['breadcrumbs'][] = $this->title;
         <table class="table table-hover table-striped">
             <thead>
             <tr>
-                <?php foreach ($dataFields as $field)
+                <?php
+                foreach ($dataFields as $field)
                 {
-                    echo '<th>' . $field['field_title'] . '</th>';
+                    if ($field['has_translate'])
+                    {
+                        foreach ($langs as $lang)
+                        {
+                            echo '<th>' . $field['field_title'].'_'.$lang->language_code . '</th>';
+                        }
+                    }
+                    else
+                        echo '<th>' . $field['field_title'] . '</th>';
                 } ?>
+                <th>
+
+                </th>
             </tr>
             </thead>
             <tbody>
@@ -50,13 +62,35 @@ $this->params['breadcrumbs'][] = $this->title;
                 {
                     echo '<tr>';
                 }
-                $values = \backend\models\Values::find()->where(['item_id' => $item['item_id']])->all();
-                foreach ($values as $value)
+
+                foreach ($dataFields as $field)
                 {
-                    echo '<td title="'.$value->getField()->one()->field_title.'">';
-                    echo $value['value'];
-                    echo '</td>';
+                    if ($field['has_translate'])
+                    {
+                        foreach ($langs as $lang)
+                        {
+                            $value = \backend\models\Values::find()->where(['item_id' => $item['item_id'],'field_id'=>$field['field_id'],'language_id'=>$lang->language_id])->one();
+                            echo '<td>';
+                            if ($value)
+                            {
+                                echo $value['value'];
+                            }
+                            echo '</td>';
+                        }
+                    }
+                    else
+                    {
+                        $value = \backend\models\Values::find()->where(['item_id' => $item['item_id'],'field_id'=>$field['field_id']])->one();
+                        echo '<td>';
+                        if ($value)
+                        {
+                            echo $value['value'];
+                        }
+                        echo '</td>';
+                    }
+
                 }
+
                 echo '<td>';
                 if ($item->deleted != 1)
                 {
