@@ -1,11 +1,47 @@
 <?php use yii\helpers\Html; ?>
 <div class="site-about">
+
+    <table class="table">
+      <thead>
+       <tr>
+           <?php
+           foreach ($columns as $col)
+           {
+               ?>
+               <th><?= $col['title'] ?></th>
+    <?php
+            }
+            ?>
+        </tr>
+       </thead>
+        <tbody>
+      <?php
+      foreach ($rows as $row)
+       {
+            ?>
+          <tr>
+             <?php
+              foreach ($row as $col)
+             {
+             ?>
+                   <td><?= $col['value'] ?></td>
+                       <?php
+               }
+             ?>
+          </tr>
+   <?php
+        }
+       ?>
+     </tbody>
+    </table>
     <div class="row">
+
 
         <?php
         if( Yii::$app->language == 'en')
             echo '<h1> Teachers Requests :</h1>';
         else echo '<h1>طلبات الانضمام:</h1>';
+
         foreach ($rows as $key =>$row)
         {
             if (!$row['is_active']['value']){
@@ -16,7 +52,6 @@
                 else {
                     echo Html::button('قبول', ['id' => 'demo', 'onclick' => 'approve(' . $key . ')']) . '<br>';
                 }
-
             }
         }
         ?>
@@ -33,6 +68,7 @@
             if ($row['is_active']['value']){
                 echo $row['first_name']['value'].'  '.$row['last_name']['value'];
                 echo '<br>';
+
             }
         }
         ?>

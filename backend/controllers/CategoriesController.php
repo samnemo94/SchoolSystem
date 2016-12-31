@@ -124,10 +124,15 @@ class CategoriesController extends MyController
         if ($model->load(Yii::$app->request->post()))
         {
             $oldIDs = ArrayHelper::map($modelsFields, 'field_id', 'field_id');
+
             $modelsFields = Model::createMultiple(Fields::classname(), $modelsFields);
             Model::loadMultiple($modelsFields, Yii::$app->request->post());
             $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelsFields, 'field_id', 'field_id')));
 
+//            $oldVal=[];
+//            foreach ( $deletedIDs as $deletedID){
+//                $oldVal[$deletedID] = Values::find()->where(['field_id'=> $deletedID])->all();
+//            }
             // validate all models
             $valid = $model->validate();
             $valid = Model::validateMultiple($modelsFields) && $valid;
@@ -147,6 +152,7 @@ class CategoriesController extends MyController
                         foreach ($modelsFields as $modelFields)
                         {
                             $modelFields->category_id = $model->category_id;
+
                             if (!($flag = $modelFields->save(false)))
                             {
                                 $transaction->rollBack();
@@ -178,6 +184,7 @@ class CategoriesController extends MyController
             ]);
         }
     }
+
 
     /**
      * Deletes an existing categories model.
