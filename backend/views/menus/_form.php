@@ -41,10 +41,18 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
 
+    <?= $form->field($model, 'menu_for')->widget(\kartik\select2\Select2::classname(), [
+        'data' => ['Admin' => 'Admin', 'Student' => 'Student', 'Teacher' => 'Teacher'],
+        'language' => 'en',
+        'options' => ['placeholder' => 'Select menu position...'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]); ?>
     <?= $form->field($model, 'item_id')->widget(\kartik\select2\Select2::classname(), [
         'data' => \yii\helpers\ArrayHelper::map(\backend\models\Items::find()->all(),'item_id', 'item_id'),
         'language' => 'en',
-        'options' => ['placeholder' => 'Select an item...'],
+      'options' => ['placeholder' => 'Select an item...'],
         'pluginOptions' => [
             'allowClear' => true
         ],

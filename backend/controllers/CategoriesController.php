@@ -124,10 +124,15 @@ class CategoriesController extends MyController
         if ($model->load(Yii::$app->request->post()))
         {
             $oldIDs = ArrayHelper::map($modelsFields, 'field_id', 'field_id');
+
             $modelsFields = Model::createMultiple(Fields::classname(), $modelsFields);
             Model::loadMultiple($modelsFields, Yii::$app->request->post());
             $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelsFields, 'field_id', 'field_id')));
 
+//            $oldVal=[];
+//            foreach ( $deletedIDs as $deletedID){
+//                $oldVal[$deletedID] = Values::find()->where(['field_id'=> $deletedID])->all();
+//            }
             // validate all models
             $valid = $model->validate();
             $valid = Model::validateMultiple($modelsFields) && $valid;
@@ -147,6 +152,7 @@ class CategoriesController extends MyController
                         foreach ($modelsFields as $modelFields)
                         {
                             $modelFields->category_id = $model->category_id;
+
                             if (!($flag = $modelFields->save(false)))
                             {
                                 $transaction->rollBack();
@@ -176,6 +182,7 @@ class CategoriesController extends MyController
             ]);
         }
     }
+
 
     /**
      * Deletes an existing categories model.
@@ -212,6 +219,7 @@ class CategoriesController extends MyController
     public function actionInsert($id)
     {
         $fields = Fields::find()->where(['category_id' => $id])->all();
+        $items =[];
         foreach ($fields as $field1)
         {
             if ($field1['field_type'] == 'foreign_key')
@@ -219,6 +227,7 @@ class CategoriesController extends MyController
                 $fk = $field1['fk_table'];
                 $items[$field1->fk_table] = Items::find()->where(['category_id' => $fk])->all();
             }
+
         }
         if (!empty($_POST))
         {
