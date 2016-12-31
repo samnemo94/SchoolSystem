@@ -19,7 +19,7 @@ class menusSearch extends menus
     {
         return [
             [['menu_id', 'parent_id', 'category_id', 'item_id'], 'integer'],
-            [['menu_position', 'menu_title'], 'safe'],
+            [['menu_position', 'menu_title','menu_for'], 'safe'],
         ];
     }
 
@@ -66,7 +66,9 @@ class menusSearch extends menus
         ]);
 
         $query->andFilterWhere(['like', 'menu_position', $this->menu_position])
-            ->andFilterWhere(['like', 'menu_title', $this->menu_title]);
+            ->andFilterWhere(['like', 'menu_title', $this->menu_title])
+            ->andFilterWhere(['like', 'menu_for', $this->menu_for]);
+
 
         return $dataProvider;
     }

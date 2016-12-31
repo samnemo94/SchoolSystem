@@ -155,10 +155,31 @@ function printFieldInput($field,$items, $lang = '')
                             name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
                         <option value="">Select Item</option>
                         <?php
-                        foreach ($items[$field->fk_table] as $item)
-                        {
+                        foreach ($items[$field->fk_table] as $item) {
                             echo "<option value=\"" . $item['item_id'] . "\">" . $item['item_id'] . "</option> ";
+
                         }
+                     /*  foreach ($items[$field->fk_table] as $item)
+                        {
+                            $fkTable = Categories::find()->where(['category_id'=>$field->fk_table])->one();
+                            $fkTable = $fkTable['category_title'];
+                          switch ($fkTable ) {
+                               case 'subject' :
+                                   foreach ($item as $k => $value) {
+                                       echo "<option value=\"" . $k . "\">" . $value['title']['value'] . "</option> ";
+                                   }
+                                break;
+                               case 'teachers' :
+                                   foreach ($item as $k => $value) {
+                                       echo "<option value=\"" . $k . "\">" .$value['first_name']['value'].'\t'.$value['last_name']['value'] . "</option> ";
+                                   }
+                                   break;
+                               default :
+                                   foreach ($item as $k => $value) {
+                                       echo "<option value=\"" . $k . "\">" . $k . "</option> ";
+                                   }
+                           }
+                        }*/
                         ?>
                     </select>
                     <?php
@@ -171,3 +192,4 @@ function printFieldInput($field,$items, $lang = '')
 }
 
 ?>
+

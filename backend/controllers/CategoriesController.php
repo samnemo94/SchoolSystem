@@ -219,6 +219,7 @@ class CategoriesController extends MyController
     public function actionInsert($id)
     {
         $fields = Fields::find()->where(['category_id' => $id])->all();
+        $items =[];
         foreach ($fields as $field1)
         {
             if ($field1['field_type'] == 'foreign_key')
@@ -226,6 +227,7 @@ class CategoriesController extends MyController
                 $fk = $field1['fk_table'];
                 $items[$field1->fk_table] = Items::find()->where(['category_id' => $fk])->all();
             }
+
         }
         if (!empty($_POST))
         {

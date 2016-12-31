@@ -24,22 +24,24 @@ function drawButtonLeft($menu, $depth)
     else
     {
         ?>
-
-        <li class="sidebar-menu-item">
-            <a <?= $depth > 1 ? 'class="sub-menu"' : '' ?>
-                href="<?= \yii\helpers\Url::to(['/site/menu', 'id' => $menu['id']]) ?>">
-                <?= $menu['title'] ?>
-            </a>
-
-            <ul class="sidebar-submenu sm-condensed">
-                <?php
-                foreach ($menu['children'] as $subMenu)
-                {
-                    drawButtonLeft($subMenu, $depth + 1);
-                }
-                ?>
+            <ul class="sidebar-menu">
+                <li class="sidebar-menu-item">
+                    <a class="sidebar-menu-button" href="">
+                        <i class="sidebar-menu-icon material-icons">tune</i> <?= $menu['title'] ?>
+                    </a>
+                    <ul class="sidebar-submenu sm-condensed">
+                        <?php
+                        foreach ($menu['children'] as $subMenu)
+                        { ?>
+                            <li class="sidebar-menu-item">
+                                <?=  drawButtonLeft($subMenu, $depth + 1);?>
+                            </li>
+                        <?php  }
+                        ?>
+                    </ul>
+                </li>
             </ul>
-        </li>
+
         <?php
     }
 }
@@ -106,6 +108,7 @@ function drawButtonLeft($menu, $depth)
 <!--        </li>-->
 <!--    </ul>-->
     <!-- // END Components Menu -->
-    <div class="sidebar-heading">CMS Generated</div>
+<!--    <div class="sidebar-heading">CMS Generated</div>-->
 </div>
 <!-- // END Sidebar -->
+

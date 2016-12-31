@@ -87,11 +87,19 @@ class SiteController extends MyController
         $menu = Menus::findOne(['menu_id' => $id]);
         if ($menu->category_id)
         {
-            if ($menu->menu_title == 'Teachers' || $menu->menu_title == 'Students')
+            if ($menu->menu_title == 'See All Teachers' || $menu->menu_title == 'See All Students')
             {
-                return $this->redirect(['teachers' ,'id'=> $menu->category_id]);
+                return $this->redirect(['members' ,'id'=> $menu->category_id]);
+            }
+            if($menu->menu_title == 'View All informations' || $menu->menu_title == 'View All Events')
+            {
+                return $this->redirect(['category-table' ,'id'=> $menu->category_id ]);
             }
 
+            if ($menu->menu_title == 'Teachers And Subjects' || $menu->menu_title == 'Add information' || $menu->menu_title == 'Add event' )
+            {
+                return $this->redirect(['insert' ,'id'=> $menu->category_id]);
+            }
             return $this->redirect(['category', 'id' => $menu->category_id]);
         }
 
@@ -138,7 +146,35 @@ class SiteController extends MyController
         ]);
     }
 
-    public function actionTeachers($id){
+
+    public function actionCategoryTable($id)
+    {
+        $lang = Languages::findOne(['language_code' => Yii::$app->language])->language_id;
+
+        $cat = Categories::findOne(['category_id' => $id]);
+
+
+        $columns = [];
+        foreach ($cat->fields as $field)
+        {
+            $columns[]['title'] = $field->field_title;
+        }
+
+        $rows = [];
+        $items = $cat->getItems()->where(['deleted' => '0'])->all();
+        foreach ($items as $item)
+        {
+            $item_info = MyController::getItemInfo($item->item_id, $lang);
+            $rows[$item->item_id] = $item_info;
+        }
+
+        return $this->render('category-table', [
+            'columns' => $columns,
+            'rows' => $rows,
+        ]);
+    }
+
+    public function actionMembers($id){
         $lang = Languages::findOne(['language_code' => Yii::$app->language])->language_id;
 
         $cat = Categories::findOne(['category_id' => $id]);
@@ -154,23 +190,40 @@ class SiteController extends MyController
             $item_info = MyController::getItemInfo($item->item_id, $lang);
             $rows[$item->item_id] = $item_info;
         }
-        return $this->render('teachers', [
+        return $this->render('members', [
             'columns' => $columns,
             'rows' => $rows,
         ]);
     }
-
+//this for ajax function for approve teachers
     public function actionActive()
     {
         $item = $_POST['key'];
-        $field = \backend\models\Fields::find()->where(['field_title'=>'is_active'])->one();
+        $item_model = $this->findItem($item);
+        $cat = $item_model->category_id;
+        $field = \backend\models\Fields::find()->where(['field_title'=>'is_active','category_id'=>$cat])->one();
         $field = $field['field_id'];
-        $model = new Values();
-        $model->item_id=$item;
-        $model->field_id = $field;
-        $model->language_id =Null;
-        $model->value = 1;
-        $model->save(false);
+        $value = Values::find()->where(['item_id' => $item ,'field_id'=>$field ])->one();
+        if ($value) {
+            if ($value['value'] == 1 ) {
+                $model = $this->findValue($value['value_id']);
+                $model->value = 0;
+                $model->save(false);
+            }
+            else {
+                $model = $this->findValue($value['value_id']);
+                $model->value = 1 ;
+                $model->save(false);
+            }
+        }
+        else {
+            $model = new Values();
+            $model->item_id = $item;
+            $model->field_id = $field;
+            $model->language_id = Null;
+            $model->value = 1;
+            $model->save(false);
+        }
 
     }
 
@@ -420,15 +473,19 @@ class SiteController extends MyController
             return $this->render('update-row', ['values' => $values, 'id' => $id, 'fields' => $fields, 'items' => $items, 'id2' => $item->category_id]);
     }
 
-    public function actionInsert($id,$fk_id)
+
+
+    public function actionInsert($id,$fk_id='')
     {
+        $lang = yii::$app->language;
         $fields = Fields::find()->where(['category_id' => $id])->all();
+        $items = [];
         foreach ($fields as $field1)
         {
             if ($field1['field_type'] == 'foreign_key')
             {
                 $fk = $field1['fk_table'];
-                $items[$field1->fk_table] = Items::find()->where(['category_id' => $fk])->all();
+                $items[$field1['fk_table']] = Items::find()->where(['category_id' => $fk])->all();
             }
         }
         if (!empty($_POST))
@@ -572,5 +629,32 @@ class SiteController extends MyController
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+
+
+    protected function findValue($id)
+    {
+        if (($model = Values::findOne($id)) !== null)
+        {
+            return $model;
+        }
+        else
+        {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+
+    protected function findItem($id)
+    {
+        if (($model = Items::findOne($id)) !== null)
+        {
+            return $model;
+        }
+        else
+        {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
     }
 }
