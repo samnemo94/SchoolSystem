@@ -36,7 +36,7 @@ class Menus extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parent_id', 'category_id', 'item_id'], 'integer'],
+            [['parent_id', 'category_id','is_private', 'item_id'], 'integer'],
             [[ 'menu_position', 'menu_title'], 'required'],
             [['menu_position','menu_for'], 'string'],
             [['menu_title'], 'string', 'max' => 255],
@@ -58,7 +58,8 @@ class Menus extends \yii\db\ActiveRecord
             'menu_position' => 'Menu Position',
             'item_id' => 'Item ID',
             'menu_title' => 'Menu Title',
-            'menu_for' => 'Menu For'
+            'menu_for' => 'Menu For',
+            'is_private' => 'Is Private',
         ];
     }
 

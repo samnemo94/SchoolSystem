@@ -70,7 +70,8 @@ function drawButton($menu, $depth)
             <?php
             foreach ($main_menu_top as $menu)
             {
-                drawButton($menu, 1);
+                if (!$menu['is_private'] || ($menu['is_private'] && !Yii::$app->user->isGuest))
+                    drawButton($menu, 1);
             }
             ?>
         </ul>
