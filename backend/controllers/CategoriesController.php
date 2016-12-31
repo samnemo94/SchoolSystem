@@ -306,9 +306,8 @@ class CategoriesController extends MyController
             if ($field1['field_type'] == 'foreign_key')
             {
                 $fk = $field1['fk_table'];
-                $items = Items::find()->where(['category_id' => $fk])->all();
+                $items[$fk] = Items::find()->where(['category_id' => $fk])->all();
             }
-            else $items = Null;
         }
 
         if (!empty($_POST))

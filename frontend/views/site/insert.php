@@ -13,9 +13,26 @@ use backend\models\Values;
 use backend\models\Items;
 
 ?>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
-    <a href="javascript:void(0);" class="add_button" title="Add field">add</a>
+    <script>
+        var add_languages = '';
+        x = function ()
+        {
+            selectt = document.getElementById('language_selector');
+            var language_name = selectt.options[selectt.selectedIndex].text;
+            if (language_name != 'Select language' && add_languages.indexOf('[' + language_name + ']') == -1) {
+                add_languages += '[' + language_name + ']';
+                iid = 'div_'+language_name;
+                document.getElementById(iid).style.display = 'block';
+            }
+            else
+            {
+                alert(1);
+            }
+        };
+    </script>
+
+    <button onclick="x()" class="add_button" title="Add field">add</button>
 
     <select id="language_selector">
         <option value="">Select language</option>
@@ -38,7 +55,7 @@ foreach ($fields as $field)
 foreach ($langs as $lang)
 {
     ?>
-    <div hidden id="div_<?= $lang->language_code ?>">
+    <div style="display: none" id="div_<?= $lang->language_code ?>">
         <h2> <?= $lang->language_code ?> </h2>
         <?php
         foreach ($fields as $field)
@@ -55,21 +72,6 @@ echo Html::submitButton('Save', ['id' => 'btn', 'class' => 'btn']);
 ActiveForm::end();
 ?>
 
-<script type="text/javascript">
-
-$(document).ready(function () {
-
-    var addButton = $('.add_button'); //Add button selector
-    var add_languages = '';
-    $(addButton).click(function () {
-        var language_name = $('#language_selector').find(":selected").text();
-        if (language_name != 'Select language' && add_languages.indexOf('[' + language_name + ']') == -1) {
-            add_languages += '[' + language_name + ']';
-            $('#div_'+language_name).show();
-        }
-    });
-});
-</script>
 
 
 <?php

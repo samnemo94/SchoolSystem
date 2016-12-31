@@ -13,7 +13,7 @@ use yii\widgets\ActiveForm;
 foreach ($fields as $field)
 {
     if (!$field['has_translate'])
-        printFieldInput($field,$values);
+        printFieldInput($field,$items,$values);
 }
 
 foreach ($langs as $lang)
@@ -25,7 +25,7 @@ foreach ($langs as $lang)
         foreach ($fields as $field)
         {
             if ($field['has_translate'])
-                printFieldInput($field,$values,$lang->language_code);
+                printFieldInput($field,$items,$values,$lang->language_code);
         }
         ?>
     </div>
@@ -38,7 +38,7 @@ ActiveForm::end();
 
 <?php
 
-function printFieldInput($field,$values,$lang = '')
+function printFieldInput($field,$items,$values,$lang = '')
 {
     ?>
     <div class="row">
@@ -119,7 +119,7 @@ function printFieldInput($field,$values,$lang = '')
                             name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
                         <option value="">Select Item</option>
                         <?php
-                        foreach ($items as $item)
+                        foreach ($items[$field['fk_table']] as $item)
                         {
                             echo "<option value=\"" . $item['item_id'] . "\">" . $item['item_id'] . "</option> ";
                         }
