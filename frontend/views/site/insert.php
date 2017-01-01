@@ -162,7 +162,8 @@ function printFieldInput($field,$items, $lang = '')
                             }
 
                             if ($fkTable == 'subject'){
-                                $s_info = \frontend\controllers\MyController::getItemInfo($item['item_id'], $lang);
+                                $langg = \backend\models\Languages::findOne(['language_code' => Yii::$app->language])->language_id;
+                                $s_info = \frontend\controllers\MyController::getItemInfo($item['item_id'], $langg);
                                 echo "<option value=\"" . $item['item_id'] . "\">" . $s_info['title']['value']. "</option> ";
                             }
                            // echo "<option value=\"" . $item['item_id'] . "\">" . $item['item_id'] . "</option> ";
