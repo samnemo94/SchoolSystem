@@ -25,10 +25,6 @@ use backend\models\Items;
                 iid = 'div_'+language_name;
                 document.getElementById(iid).style.display = 'block';
             }
-            else
-            {
-                alert(1);
-            }
         };
     </script>
 
