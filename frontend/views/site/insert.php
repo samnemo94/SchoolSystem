@@ -153,43 +153,21 @@ function printFieldInput($field,$items, $lang = '')
                             name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
                         <option value="">Select Item</option>
                         <?php
+                        $langg = \backend\models\Languages::findOne(['language_code' => Yii::$app->language])->language_id;
                         foreach ($items[$field->fk_table] as $item) {
                             $fkTable = Categories::find()->where(['category_id'=>$field->fk_table])->one();
                             $fkTable = $fkTable['category_title'];
+
                             if ($fkTable == 'teachers'){
-                                $t_info = \frontend\controllers\MyController::getItemInfo($item['item_id'], $lang);
+                                $t_info = \frontend\controllers\MyController::getItemInfo($item['item_id'], $langg);
                                 echo "<option value=\"" . $item['item_id'] . "\">" . $t_info['first_name']['value'].' '. $t_info['last_name']['value']. "</option> ";
                             }
 
                             if ($fkTable == 'subject'){
-                                $langg = \backend\models\Languages::findOne(['language_code' => Yii::$app->language])->language_id;
                                 $s_info = \frontend\controllers\MyController::getItemInfo($item['item_id'], $langg);
                                 echo "<option value=\"" . $item['item_id'] . "\">" . $s_info['title']['value']. "</option> ";
                             }
-                           // echo "<option value=\"" . $item['item_id'] . "\">" . $item['item_id'] . "</option> ";
-
                         }
-                     /*  foreach ($items[$field->fk_table] as $item)
-                        {
-                            $fkTable = Categories::find()->where(['category_id'=>$field->fk_table])->one();
-                            $fkTable = $fkTable['category_title'];
-                          switch ($fkTable ) {
-                               case 'subject' :
-                                   foreach ($item as $k => $value) {
-                                       echo "<option value=\"" . $k . "\">" . $value['title']['value'] . "</option> ";
-                                   }
-                                break;
-                               case 'teachers' :
-                                   foreach ($item as $k => $value) {
-                                       echo "<option value=\"" . $k . "\">" .$value['first_name']['value'].'\t'.$value['last_name']['value'] . "</option> ";
-                                   }
-                                   break;
-                               default :
-                                   foreach ($item as $k => $value) {
-                                       echo "<option value=\"" . $k . "\">" . $k . "</option> ";
-                                   }
-                           }
-                        }*/
                         ?>
                     </select>
                     <?php
