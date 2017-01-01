@@ -125,18 +125,13 @@ class CategoriesController extends MyController
         {
             $oldIDs = ArrayHelper::map($modelsFields, 'field_id', 'field_id');
 
-            $modelsFields = Model::createMultiple(Fields::classname(), $modelsFields);
-            Model::loadMultiple($modelsFields, Yii::$app->request->post());
-            $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelsFields, 'field_id', 'field_id')));
+            $modelsFieldsNew = Model::createMultiple(Fields::classname(), $modelsFields);
+            Model::loadMultiple($modelsFieldsNew, Yii::$app->request->post());
+            $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelsFieldsNew, 'field_id', 'field_id')));
 
-//            $oldVal=[];
-//            foreach ( $deletedIDs as $deletedID){
-//                $oldVal[$deletedID] = Values::find()->where(['field_id'=> $deletedID])->all();
-//            }
             // validate all models
             $valid = $model->validate();
-            $valid = Model::validateMultiple($modelsFields) && $valid;
-
+            $valid = Model::validateMultiple($modelsFieldsNew) && $valid;
 
             if ($valid)
             {
@@ -149,7 +144,7 @@ class CategoriesController extends MyController
                         {
                             Fields::deleteAll(['field_id' => $deletedIDs]);
                         }
-                        foreach ($modelsFields as $modelFields)
+                        foreach ($modelsFieldsNew as $modelFields)
                         {
                             $modelFields->category_id = $model->category_id;
 
@@ -158,6 +153,16 @@ class CategoriesController extends MyController
                                 $transaction->rollBack();
                                 break;
                             }
+                            $oldId = '';
+                            foreach ($modelsFields as $mod)
+                            {
+                                if ($mod->field_title == $modelFields->field_title)
+                                {
+                                    $oldId = $mod->field_id;
+                                    break;
+                                }
+                            }
+                            Values::updateAll(['field_id'=>$modelFields->field_id],['field_id'=>"$oldId"]);
                         }
                     }
                     if ($flag)
