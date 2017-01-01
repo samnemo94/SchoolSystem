@@ -3,6 +3,8 @@ namespace frontend\controllers;
 
 use backend\models\Languages;
 use common\models\Categories;
+use common\models\User;
+use backend\models\Role;
 use common\models\Fields;
 use common\models\Items;
 use backend\models\Menus;
@@ -91,7 +93,7 @@ class SiteController extends MyController
             {
                 return $this->redirect(['members' ,'id'=> $menu->category_id]);
             }
-            if($menu->menu_title == 'View All informations' || $menu->menu_title == 'View All Events')
+            if($menu->menu_title == 'View All informations' || $menu->menu_title == 'View All Events' )
             {
                 return $this->redirect(['category-table' ,'id'=> $menu->category_id ]);
             }
@@ -100,6 +102,12 @@ class SiteController extends MyController
             {
                 return $this->redirect(['insert' ,'id'=> $menu->category_id]);
             }
+
+            if ($menu->menu_title == 'student_subject' )
+            {
+                return $this->redirect(['marks' ,'id'=> $menu->category_id]);
+            }
+
             return $this->redirect(['category', 'id' => $menu->category_id]);
         }
 
@@ -115,16 +123,12 @@ class SiteController extends MyController
     public function actionCategory($id)
     {
         $lang = Languages::findOne(['language_code' => Yii::$app->language])->language_id;
-
         $cat = Categories::findOne(['category_id' => $id]);
-
-
         $columns = [];
         foreach ($cat->fields as $field)
         {
             $columns[]['title'] = $field->field_title;
         }
-
         $rows = [];
         $items = $cat->getItems()->where(['deleted' => '0'])->all();
         foreach ($items as $item)
@@ -140,6 +144,14 @@ class SiteController extends MyController
                 'rows' => $rows,
             ]);
         }
+
+        if ($cat->category_title == 'student_subject')
+        {
+            return $this->render('marks', [
+                'columns' => $columns,
+                'rows' => $rows,
+            ]);
+        }
         return $this->render('category', [
             'columns' => $columns,
             'rows' => $rows,
@@ -150,16 +162,12 @@ class SiteController extends MyController
     public function actionCategoryTable($id)
     {
         $lang = Languages::findOne(['language_code' => Yii::$app->language])->language_id;
-
         $cat = Categories::findOne(['category_id' => $id]);
-
-
         $columns = [];
         foreach ($cat->fields as $field)
         {
             $columns[]['title'] = $field->field_title;
         }
-
         $rows = [];
         $items = $cat->getItems()->where(['deleted' => '0'])->all();
         foreach ($items as $item)
@@ -167,7 +175,6 @@ class SiteController extends MyController
             $item_info = MyController::getItemInfo($item->item_id, $lang);
             $rows[$item->item_id] = $item_info;
         }
-
         return $this->render('category-table', [
             'columns' => $columns,
             'rows' => $rows,
@@ -223,8 +230,15 @@ class SiteController extends MyController
             $model->language_id = Null;
             $model->value = 1;
             $model->save(false);
+            $user = new User();
+            $user->username = 'teacher'.$item;
+            $user->email = 'teacher'.$item.'@gmail.com';
+            $user->setPassword('teacher');
+            $user->generateAuthKey();
+            $teacher_role = Role::findOne(['role_name' => 'teacher']);
+            $user->role_id = $teacher_role->role_id;
+            $user->save(false);
         }
-
     }
 
     public function actionPage($id)
@@ -394,11 +408,17 @@ class SiteController extends MyController
                 }
             }
         }
-
         return $this->render('signup', [
             'model' => $model,
         ]);
     }
+    public function actionSignupTeacher()
+    {
+       $id = Categories::find()->where(['category_title' => 'teachers'])->one();
+        $id = $id['category_id'];
+        $this->redirect(['insert' ,'id'=>$id]);
+    }
+
 
     public function actionUpdateUser()
     {
@@ -493,7 +513,7 @@ class SiteController extends MyController
             $item = new Items();
             $item->category_id = $id;
             $item->created_at = date('Y-m-d H:i:s');
-            $item->created_by = Yii::$app->user->id;
+            $item->created_by = 1;
             $item->save(false);
             $langs = Languages::find()->all();
             $language_code = array();
