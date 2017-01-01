@@ -154,7 +154,18 @@ function printFieldInput($field,$items, $lang = '')
                         <option value="">Select Item</option>
                         <?php
                         foreach ($items[$field->fk_table] as $item) {
-                            echo "<option value=\"" . $item['item_id'] . "\">" . $item['item_id'] . "</option> ";
+                            $fkTable = Categories::find()->where(['category_id'=>$field->fk_table])->one();
+                            $fkTable = $fkTable['category_title'];
+                            if ($fkTable == 'teachers'){
+                                $t_info = \frontend\controllers\MyController::getItemInfo($item['item_id'], $lang);
+                                echo "<option value=\"" . $item['item_id'] . "\">" . $t_info['first_name']['value'].' '. $t_info['last_name']['value']. "</option> ";
+                            }
+
+                            if ($fkTable == 'subject'){
+                                $s_info = \frontend\controllers\MyController::getItemInfo($item['item_id'], $lang);
+                                echo "<option value=\"" . $item['item_id'] . "\">" . $s_info['title']['value']. "</option> ";
+                            }
+                           // echo "<option value=\"" . $item['item_id'] . "\">" . $item['item_id'] . "</option> ";
 
                         }
                      /*  foreach ($items[$field->fk_table] as $item)

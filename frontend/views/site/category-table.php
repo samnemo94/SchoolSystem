@@ -30,8 +30,15 @@
                 }
 
                 echo '<td>';
+                if ( yii::$app->language == 'en')
                 echo
                 Html::a('Update',
+                    ['site/update-row', 'id' => $key], [
+                        'title' => Yii::t('yii', 'Update'),
+                    ]);
+                else
+                    echo
+                Html::a('تعديل',
                     ['site/update-row', 'id' => $key], [
                         'title' => Yii::t('yii', 'Update'),
                     ]);
