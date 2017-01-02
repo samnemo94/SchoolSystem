@@ -25,16 +25,11 @@ $this->params['breadcrumbs'][] = $this->title;
         ?>
     </div>
 
-    <?php
-    if (array_key_exists('description',$item) && $item['description']['value'] != '')
-    {
-        ?>
         <div class="row">
-            <?= $item['description']['value'] ?>
+            Date: <?= $item['exam_date']['value'] ?>
+            <br>
+            Template: <a href="<?= \yii\helpers\Url::to(['/site/page','id'=>$template['item_id']]) ?>"><?= $template['title']['value'] ?></a>
         </div>
-        <?php
-    }
-    ?>
 
 
 </div>
