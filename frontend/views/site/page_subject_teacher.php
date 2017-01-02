@@ -51,9 +51,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     {
                         echo "<h2>$key : </h2>";
                         echo "<a href='".\yii\helpers\Url::to(['/site/insert','id'=>$value['id'],'fk_id'=>$item['item_id']])."'>New</a>";
+                        echo "<br>";
+                        echo "<br>";
                         foreach ($value['data'] as $key => $val)
                         {
                             echo Html::a($val['title']['value'], $url = ['/site/page', 'id' => $key]);
+                            echo "     ";
+                            echo "<a href='".\yii\helpers\Url::to(['/site/update-row','id'=>$val['item_id']])."'>Edit</a>";
                             echo '<br>';
                         }
                     }

@@ -13,29 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-sm-8">
             <h1><?= Html::encode($this->title) ?></h1>
         </div>
-        <?php
-        if (array_key_exists('image',$item) && $item['image']['value'] != '')
-        {
-            ?>
-            <div class="col-sm-4">
-                <img width="50%" src="../../backend/web/<?= $item['image']['value'] ?>">
-            </div>
-            <?php
-        }
-        ?>
     </div>
-
-    <?php
-    if (array_key_exists('description',$item) && $item['description']['value'] != '')
-    {
-        ?>
-        <div class="row">
-            <?= $item['description']['value'] ?>
-        </div>
-        <?php
-    }
-    ?>
-
 
 </div>
 
@@ -50,9 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
             foreach ($child as $key => $value)
             {
                 echo "<h2>$key : </h2>";
+                echo "<a href='".\yii\helpers\Url::to(['/site/insert','id'=>$value['id'],'fk_id'=>$item['item_id']])."'>New</a>";
+                $ii = 0;
                 foreach ($value['data'] as $key => $val)
                 {
-                    echo Html::a($val['title']['value'], $url = ['/site/page', 'id' => $key]);
+                    $ii++;
+                    echo Html::a('Q'.$ii, $url = ['/site/page', 'id' => $key]);
                     echo '<br>';
                 }
             }

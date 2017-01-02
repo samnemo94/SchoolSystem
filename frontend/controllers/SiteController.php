@@ -265,7 +265,7 @@ class SiteController extends MyController
 
         $cat = $item->category;
         $parent = $cat->category_id;
-        $childs = Categories::find()->where(['parent_id' => $parent])->all();
+        $childs = Categories::find()->where(['parent_id' => $parent,'showing_parent'=>'1'])->all();
         $childArray = [];
         foreach ($childs as $child)
         {
@@ -367,7 +367,36 @@ class SiteController extends MyController
                 ]);
             }
         }
-
+        if ($cat->category_title == 'exam')
+        {
+            $template = MyController::getItemInfo($row['template_id']['value'],$lang);
+            return $this->render('page_exam', [
+                'item' => $row,
+                'template'=>$template,
+                'childs' => $childArray
+            ]);
+        }
+        if ($cat->category_title == 'exam_questions')
+        {
+            return $this->render('page_question', [
+                'item' => $row,
+            ]);
+        }
+        if ($cat->category_title == 'exam_template')
+        {
+            return $this->render('page_exam_template', [
+                'item' => $row,
+                'childs' => $childArray
+            ]);
+        }
+        if ($cat->category_title == 'questions_template')
+        {
+            $question = MyController::getItemInfo($row['question_id']['value'],$lang);
+            return $this->render('page_questions_template', [
+                'item' => $row,
+                'question' => $question
+            ]);
+        }
         return $this->render('page', [
             'item' => $row, 'childs' => $childArray]);
     }
