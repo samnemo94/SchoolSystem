@@ -23,15 +23,35 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <div>
         <?php
-        if (!empty($childs ) ){
-            foreach($childs as $child) {
-                foreach ($child as $key => $value) {
-                    echo $key.' : '.'<br>';
-                    foreach ($value['data']  as $key => $val ) {
-                        echo  Html::a(  $val['title']['value'], $url = ['/site/page','id'=>$key] );
-                        echo '<br>';
-                    }
+        if (!empty($childs))
+        {
+            foreach ($childs as $child)
+            {
+                foreach ($child as $key => $value)
+                {
+                    ?>
+                    <h3 class="ui horizontal divider header">
+                        <i class=""></i>
+                        <?= $key ?>
+                    </h3>
+                    <div class="ui cards">
+                        <?php
+                        foreach ($value['data'] as $key => $val)
+                        {
+                            ?>
+                            <div class="card">
+                                <a href="<?= \yii\helpers\Url::to(['/site/page', 'id' => $key]) ?>" class="content">
+                                    <div style="margin-top: 15px" align="center" class="header"><?= $val['title']['value'] ?></div>
+                                </a>
+                            </div>
+
+                            <?php
+                        }
+                        ?>
+                    </div>
+                    <?php
                 }
+                echo "<br>";
             }
         }
         ?>

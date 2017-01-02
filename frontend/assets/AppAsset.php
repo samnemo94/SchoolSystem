@@ -37,6 +37,7 @@ class AppAsset extends AssetBundle
         'js/bootstrap.min.js',
         'js/adminplus.js',
         'js/main.min.js',
+        'semantic/dist/semantic.min.js',
     ];
 
     public $depends;
@@ -57,6 +58,7 @@ class AppAsset extends AssetBundle
                 'css/page.style.rtl.css',
                 'css/roboto_font.css',
                 'css/navbar.rtl.css',
+                'semantic/dist/semantic.min.css',
                 //'css/dropzone.min.css',
                 // 'css/jquery-jvectormap.css',
                 // 'css/nouislider.min.css',
@@ -75,6 +77,7 @@ class AppAsset extends AssetBundle
                 'css/page.style.css',
                 'css/roboto_font.css',
                 'css/navbar.css',
+                'semantic/dist/semantic.min.css',
                 //'css/dropzone.min.css',
                 // 'css/jquery-jvectormap.css',
                 // 'css/nouislider.min.css',

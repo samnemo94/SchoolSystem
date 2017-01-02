@@ -1,17 +1,18 @@
-<div class="card-columns">
+
+<div class="ui link cards">
     <?php
     foreach ($rows as $row)
     {
         ?>
-        <div class="card">
-            <div class="card-header bg-white text-xs-center">
-                <h4 class="card-title"><a href="<?= \yii\helpers\Url::to(['/site/page', 'id' => $row['item_id']]) ?>"><?= $row['title']['value'] ?></a></h4>
-            </div>
-            <a href="<?= \yii\helpers\Url::to(['/site/page', 'id' => $row['item_id']]) ?>">
-                <img src="<?= $row['image']['value'] ?>" alt="image" style="width:100%;">
+        <div class="card" style="height: 300px;">
+            <a class="image" href="<?= \yii\helpers\Url::to(['/site/page', 'id' => $row['item_id']]) ?>">
+                <img style="height: 200px" src="<?= $row['image']['value'] ?>">
             </a>
-            <div class="card-block">
-                <?= substr($row['description']['value'],0,100) ?> ...<br>
+            <div class="content">
+                <a class="header" href="<?= \yii\helpers\Url::to(['/site/page', 'id' => $row['item_id']]) ?>"><?= $row['title']['value'] ?></a>
+                <div class="meta">
+                    <a>Last Seen 2 days ago</a>
+                </div>
             </div>
         </div>
         <?php

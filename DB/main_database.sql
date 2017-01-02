@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 02, 2017 at 04:15 PM
+-- Generation Time: Jan 02, 2017 at 07:53 PM
 -- Server version: 5.7.9
 -- PHP Version: 5.6.16
 
@@ -371,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `menus` (
   KEY `parent_id` (`parent_id`),
   KEY `category_id` (`category_id`),
   KEY `item_id` (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `menus`
@@ -418,7 +418,10 @@ INSERT INTO `menus` (`menu_id`, `parent_id`, `category_id`, `menu_position`, `me
   (38, NULL, NULL, 'left', 'Admin', 1, NULL, 'Events'),
   (39, 38, 18, 'left', 'Admin', 1, NULL, 'View All Events'),
   (40, 38, 18, 'left', 'Admin', 1, NULL, 'Add event'),
-  (42, 33, 10, 'left', 'Admin', 1, NULL, 'Students Marks');
+  (42, 33, 10, 'left', 'Admin', 1, NULL, 'Students Marks'),
+  (43, NULL, 10, 'left', 'Student', 1, NULL, 'My Subjects'),
+  (44, NULL, 10, 'left', 'Student', 1, NULL, 'My Marks'),
+  (45, NULL, 9, 'left', 'Teacher', 1, NULL, 'my subjects');
 
 -- --------------------------------------------------------
 
@@ -435,7 +438,7 @@ CREATE TABLE IF NOT EXISTS `menu_language` (
   PRIMARY KEY (`menu_language_id`),
   KEY `menu_id` (`menu_id`),
   KEY `language_id` (`language_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `menu_language`
@@ -504,7 +507,10 @@ INSERT INTO `menu_language` (`menu_language_id`, `menu_id`, `language_id`, `titl
   (60, 38, 8, 'الأحداث'),
   (61, 39, 8, 'رؤية الأحداث'),
   (62, 40, 8, 'اضافة حدث جديد'),
-  (63, 42, 8, 'علامات الطلاب');
+  (63, 42, 8, 'علامات الطلاب'),
+  (64, 43, 8, 'موادي'),
+  (65, 44, 8, 'علاماتي الامتحانية'),
+  (66, 45, 8, 'موادي');
 
 -- --------------------------------------------------------
 
@@ -1039,12 +1045,12 @@ INSERT INTO `values` (`value_id`, `item_id`, `field_id`, `language_id`, `value`)
   (427, 81, 122, NULL, '<p>dcvVSDVS</p>'),
   (428, 81, 123, NULL, '2423423'),
   (429, 81, 124, NULL, '../../common/web/uploads/1483305970a1.JPG'),
-  (430, 82, 119, NULL, 'sdd'),
+  (430, 82, 119, NULL, 'Samy'),
   (431, 82, 120, NULL, 'qwd'),
   (432, 82, 121, NULL, '23'),
   (433, 82, 122, NULL, '<p>dw</p>'),
   (434, 82, 123, NULL, '234423'),
-  (435, 82, 124, NULL, '../../common/web/uploads/1483306018'),
+  (435, 82, 124, NULL, '../../common/web/uploads/14833781581483015931sami.jpg'),
   (436, 82, 125, NULL, '1'),
   (437, 82, 126, NULL, '13'),
   (438, 83, 28, NULL, '82'),
