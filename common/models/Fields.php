@@ -36,7 +36,7 @@ class Fields extends \yii\db\ActiveRecord
             [['field_title', 'category_id', 'field_type', 'fk_table', 'has_translate'], 'required'],
             [['category_id', 'has_translate'], 'integer'],
             [['field_type'], 'string'],
-            [['field_title', 'fk_table'], 'string', 'max' => 255],
+            [['field_title', 'fk_table','field_title_ar'], 'string', 'max' => 255],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::className(), 'targetAttribute' => ['category_id' => 'category_id']],
         ];
     }
@@ -49,6 +49,7 @@ class Fields extends \yii\db\ActiveRecord
         return [
             'field_id' => 'Field ID',
             'field_title' => 'Field Title',
+            'field_title_ar'=> 'Field Title Arabic',
             'category_id' => 'Category ID',
             'field_type' => 'Field Type',
             'fk_table' => 'Fk Table',

@@ -9,7 +9,7 @@ use backend\models\Categories;
  * Time: 12:33 AM
  */
 $lang = \backend\models\Languages::findOne(['language_code' => Yii::$app->language])->language_id;
-
+echo '<br>';
 ?>
 
 
@@ -22,13 +22,25 @@ $lang = \backend\models\Languages::findOne(['language_code' => Yii::$app->langua
                 <?php
                 foreach ($columns as $col)
                 {
-                    if ( $col['title'] == 'student_id')
-                    echo '<th>'.'Full Name'.'</th>';
-                    if ( $col['title'] == 'subject_id')
-                        echo '<th>'.'Subject Name'.'</th>';
-                    if ( $col['title'] == 'exam_mark')
-                        echo '<th>'.'Mark'.'</th>';
-                }
+                        if ($col['title'] == 'student_id' || $col['title'] == 'الطالب') {
+                            if (yii::$app->language == 'en')
+                                echo '<th>' . ' FULL NAME' . '</th>';
+                            else
+                                echo '<th>' . 'اسم الطالب' . '</th>';
+                        }
+                        if ($col['title'] == 'subject_id' || $col['title'] == 'المادة') {
+                            if (yii::$app->language == 'en')
+                                echo '<th>' . 'Subject Name' . '</th>';
+                            else
+                                echo '<th>' . 'اسم المادة ' . '</th>';
+                        }
+                        if ($col['title'] == 'exam_mark' || $col['title'] == 'علامة الامتحان') {
+                            if (yii::$app->language == 'en')
+                                echo '<th>' . 'Mark' . '</th>';
+                            else
+                                echo '<th>' . 'العلامة' . '</th>';
+                        }
+                    }
                 ?>
             </tr>
             </thead>

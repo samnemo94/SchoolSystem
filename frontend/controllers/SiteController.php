@@ -127,7 +127,10 @@ class SiteController extends MyController
         $columns = [];
         foreach ($cat->fields as $field)
         {
-            $columns[]['title'] = $field->field_title;
+            if (yii::$app->language == 'en')
+                $columns[]['title'] = $field->field_title;
+            else
+                $columns []['title']= $field->field_title_ar;
         }
         $rows = [];
         $items = $cat->getItems()->where(['deleted' => '0'])->all();
@@ -166,7 +169,10 @@ class SiteController extends MyController
         $columns = [];
         foreach ($cat->fields as $field)
         {
+            if (yii::$app->language == 'en')
             $columns[]['title'] = $field->field_title;
+            else
+                $columns []['title']= $field->field_title_ar;
         }
         $rows = [];
         $items = $cat->getItems()->where(['deleted' => '0'])->all();
@@ -188,7 +194,10 @@ class SiteController extends MyController
         $columns = [];
         foreach ($cat->fields as $field)
         {
-            $columns[]['title'] = $field->field_title;
+            if (yii::$app->language == 'en')
+                $columns[]['title'] = $field->field_title;
+            else
+                $columns []['title']= $field->field_title_ar;
         }
         $rows = [];
         $items = $cat->getItems()->where(['deleted' => '0'])->all();
@@ -280,8 +289,10 @@ class SiteController extends MyController
         $columns = [];
         foreach ($cat->fields as $field)
         {
-            $columns[]['title'] = $field->field_title;
-        }
+            if (yii::$app->language == 'en')
+                $columns[]['title'] = $field->field_title;
+            else
+                $columns []['title']= $field->field_title_ar;        }
 
         $row = MyController::getItemInfo($id, $lang);
 

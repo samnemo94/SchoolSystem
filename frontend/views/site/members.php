@@ -14,7 +14,12 @@
                     }
                     ?>
                    <th>
-                        <?= 'Active' ?>
+                       <?php
+                       if ( yii::$app->language == 'en')
+                           echo '<th>'.'Active/Deactive'.'</th>';
+                       else
+                           echo '<th width="30">'.'تفعيل/الغاء تفعيل'.'</th>';
+                       ?>
                    </th>
                 </tr>
             </thead>
@@ -31,15 +36,24 @@
                              continue;
                          else
                      ?>
-                           <td><?= $col['value'] ?></td>
+                           <td style="align-content: center"><?= $col['value'] ?></td>
 
                          <?php
                        }
                      ?>
                       <td> <?php if ($row['is_active']['value'] == 1 ) {
+                          if (yii::$app->language == 'en')
                           echo Html::button('Deactivate',['class' =>'btn-link','id'=>'demo','onclick'=>'active('.$key.')']).'<br>';
+                          else echo Html::button('الغاء تفعيل',['class' =>'btn-link','id'=>'demo','onclick'=>'active('.$key.')']).'<br>';
+
                           }
-                          else echo Html::button('Activeate',['class' =>'btn-link','id'=>'demo','onclick'=>'active('.$key.')']).'<br>'; ?>
+                          else {
+                          if (yii::$app->language == 'en')
+                          echo Html::button('Activeate',['class' =>'btn-link','id'=>'demo','onclick'=>'active('.$key.')']).'<br>';
+                            else echo Html::button('تفعيل',['class' =>'btn-link','id'=>'demo','onclick'=>'active('.$key.')']).'<br>';
+
+                          }
+                          ?>
                       </td>
                   </tr>
            <?php

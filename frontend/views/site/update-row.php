@@ -32,7 +32,9 @@ foreach ($langs as $lang)
     <?php
 }
 
-echo Html::submitButton('Save', ['id' => 'btn', 'class' => 'btn']);
+if ( yii::$app->language == 'en')
+    echo Html::submitButton('Save', ['id' => 'btn', 'class' => 'btn']);
+else  echo Html::submitButton('حفظ', ['id' => 'btn', 'class' => 'btn']);
 ActiveForm::end();
 ?>
 
@@ -42,10 +44,15 @@ function printFieldInput($field,$items,$values,$lang = '')
 {
     ?>
     <div class="row">
-        <label class="col-sm-2" id="label_<?= $field->field_id ?>_<?= $lang ?>">
-            <?= $field['field_title'] ?>
-        </label>
-        <div class="col-sm-4">
+        <div class="col-lg-5" style="float: <?= Yii::$app->language=='ar'?'right':'left' ?>;">
+            <?php
+            $language = yii::$app->language;
+            if($language == 'en')
+                echo '<label  id="label_<?= $field->field_id ?>_<?= $lang ?>">'.$field['field_title'].'</label>';
+            else
+                echo '<label  id="label_<?= $field->field_id ?>_<?= $lang ?>">'.$field['field_title_ar'].'</label>';;
+            ?>
+
             <?php
             switch ($field['field_type'])
             {

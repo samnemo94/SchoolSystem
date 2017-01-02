@@ -43,6 +43,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                     'formId' => 'dynamic-form',
                     'formFields' => [
                         'field_title',
+                        'field_title_ar',
                         'field_type',
                         'fk_table',
                         'has_translate',
@@ -71,8 +72,11 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                 ?>
 
                                 <div class="row">
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <?= $form->field($modelFields, "[{$i}]field_title")->textInput(['maxlength' => true])->label('Name') ?>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <?= $form->field($modelFields, "[{$i}]field_title_ar")->textInput(['maxlength' => true])->label('Arabic Name') ?>
                                     </div>
                                     <div class="col-sm-2">
                                         <?= $form->field($modelFields, "[{$i}]field_type")->dropDownList([ 'varchar' => 'varchar', 'text' => 'text',

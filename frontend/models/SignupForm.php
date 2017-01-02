@@ -211,6 +211,23 @@ class SignupForm extends Model
             return null;
         }
 
+        $phone_field = Fields::findOne(['category_id' => $students_cat->category_id, 'field_title' => 'is_active']);
+        if (!$phone_field)
+        {
+            $transaction->rollBack();
+            return null;
+        }
+        $val = new Values();
+        $val->item_id = $item->item_id;
+        $val->field_id = $phone_field->field_id;
+        $val->language_id = null;
+        $val->value = '1';
+        if (!$val->save())
+        {
+            $transaction->rollBack();
+            return null;
+        }
+
         $photo_field = Fields::findOne(['category_id' => $students_cat->category_id, 'field_title' => 'photo']);
         if (!$photo_field)
         {
@@ -228,6 +245,24 @@ class SignupForm extends Model
             return null;
         }
 
+
+        $user_id_field = Fields::findOne(['category_id' => $students_cat->category_id, 'field_title' => 'user_id']);
+        if (!$user_id_field)
+        {
+            $transaction->rollBack();
+            return null;
+        }
+        $val = new Values();
+        $val->item_id = $item->item_id;
+        $val->field_id = $user_id_field->field_id;
+        $val->language_id = null;
+        $val->value = ''.$user->id;
+
+        if (!$val->save())
+        {
+            $transaction->rollBack();
+            return null;
+        }
 
         $user_id_field = Fields::findOne(['category_id' => $students_cat->category_id, 'field_title' => 'user_id']);
         if (!$user_id_field)

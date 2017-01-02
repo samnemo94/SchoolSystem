@@ -12,7 +12,9 @@
                 }
                 ?>
                 <th>
-                    <?= 'update' ?>
+                    <?php if ( yii::$app->language == 'en' )
+                        echo 'update';
+                    else echo 'تعديل'; ?>
                 </th>
             </tr>
             </thead>
