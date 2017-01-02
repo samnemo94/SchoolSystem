@@ -37,10 +37,19 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
     <?php
-    if ($is_registered)
+    if ($is_registered && $is_exam){
+        echo '<div>';
+    echo html::a('Do Exam',['/site/exam','id'=>$item['item_id']]);
+
+    echo '</div>';
+    }
+
+    ?>
+
+    <?php
+  /*  if ($is_registered)
     {
         ?>
-
         <div>
             <?php
             if (!empty($childs ) ){
@@ -57,7 +66,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ?>
         </div>
         <?php
-    }
+    }*/
     ?>
+
+
+
 
 </div>

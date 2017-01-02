@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 31, 2016 at 07:00 PM
+-- Generation Time: Jan 02, 2017 at 10:45 AM
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 5.6.24
 
@@ -86,7 +86,7 @@ INSERT INTO `categories` (`category_id`, `parent_id`, `category_title`, `showing
 (13, 4, 'exam_template', 1, '2016-12-25 10:42:11', 1, '2016-12-16 01:55:34', 1, 0, NULL, NULL, 'admin'),
 (14, 4, 'exam', 1, '2016-12-25 10:42:08', 1, '2016-12-16 01:59:53', 1, 0, NULL, NULL, 'admin'),
 (15, NULL, 'exam_questions', 1, '2016-12-25 10:42:14', 1, '2016-12-16 02:02:12', 1, 0, NULL, NULL, 'admin'),
-(16, NULL, 'questions_template', 1, '2016-12-25 10:42:17', 1, '2016-12-16 02:04:43', 1, 0, NULL, NULL, 'admin'),
+(16, NULL, 'questions_template', 1, '2017-01-01 20:12:06', 1, '2017-01-01 07:12:06', 1, 0, NULL, NULL, 'admin'),
 (17, NULL, 'general_informations', 1, '2016-12-29 12:00:40', 1, '2016-12-28 23:00:40', 1, 0, NULL, NULL, 'admin'),
 (18, NULL, 'New_Events', 1, '2016-12-30 06:23:21', 1, '2016-12-30 05:23:21', 1, 0, NULL, NULL, 'admin'),
 (19, NULL, 'user', 0, '2016-12-30 15:17:59', 1, '2016-12-30 03:17:59', 1, 0, NULL, NULL, 'admin');
@@ -147,17 +147,13 @@ INSERT INTO `fields` (`field_id`, `field_title`, `category_id`, `field_type`, `f
 (49, 'exam_id', 14, 'int', '', 0, 0, 1),
 (50, 'subject_id', 14, 'foreign_key', '4', 0, 0, 1),
 (51, 'template_id', 14, 'foreign_key', '13', 0, 0, 1),
-(52, 'exam_date', 14, 'date_time', '', 0, 0, 1),
+(52, 'exam_date', 14, 'date', '', 0, 0, 1),
 (53, 'question_id', 15, 'int', '', 0, 0, 1),
 (54, 'question_text', 15, 'text', '', 1, 0, 1),
 (55, 'choice1', 15, 'text', '', 1, 0, 1),
 (56, 'choice2', 15, 'text', '', 1, 0, 1),
 (57, 'choice3', 15, 'text', '', 1, 0, 1),
 (58, 'choice4', 15, 'text', '', 1, 0, 1),
-(59, 'question_id', 16, 'foreign_key', '15', 0, 0, 1),
-(60, 'template_id', 16, 'foreign_key', '', 0, 0, 1),
-(61, 'mark', 16, 'double', '', 0, 0, 1),
-(62, 'order', 16, 'int', '', 0, 0, 1),
 (63, 'question_id', 11, 'int', '', 0, 0, 1),
 (64, 'lesson_id', 11, 'foreign_key', '6', 0, 0, 1),
 (65, 'question_text', 11, 'text', '', 1, 0, 1),
@@ -187,7 +183,12 @@ INSERT INTO `fields` (`field_id`, `field_title`, `category_id`, `field_type`, `f
 (115, 'exam_mark', 10, 'double', '', 0, 1, 0),
 (116, 'teacher_evaluate', 10, 'varchar', '', 0, 1, 0),
 (117, 'is_active', 8, 'int', NULL, 0, 0, 0),
-(118, 'is_active', 7, 'int', NULL, 0, 0, 0);
+(118, 'is_active', 7, 'int', NULL, 0, 0, 0),
+(119, 'answer', 15, 'text', NULL, 1, 0, 1),
+(120, 'question_id', 16, 'foreign_key', '15', 0, 0, 1),
+(121, 'template_id', 16, 'foreign_key', '13', 0, 0, 1),
+(122, 'mark', 16, 'double', '', 0, 0, 1),
+(123, 'order', 16, 'int', '', 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -201,7 +202,7 @@ CREATE TABLE `items` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_by` int(11) NOT NULL,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_by` int(11) NOT NULL,
+  `updated_by` int(11) DEFAULT NULL,
   `deleted` smallint(6) NOT NULL DEFAULT '0',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `deleted_by` int(11) DEFAULT NULL,
@@ -271,11 +272,24 @@ INSERT INTO `items` (`item_id`, `category_id`, `created_at`, `created_by`, `upda
 (63, 8, '2016-12-30 08:43:20', 1, '2016-12-30 08:43:20', 1, 0, NULL, NULL, 'admin'),
 (64, 8, '2016-12-30 08:44:13', 1, '2016-12-30 08:44:13', 1, 0, NULL, NULL, 'admin'),
 (67, 7, '2016-12-30 15:19:06', 10, '2016-12-30 15:19:06', 10, 0, NULL, NULL, 'admin'),
-(68, 10, '2016-12-30 17:40:05', 1, '2016-12-30 05:40:05', 1, 0, NULL, NULL, 'admin'),
-(69, 10, '2016-12-30 19:23:21', 1, '2016-12-30 07:23:21', 1, 0, NULL, NULL, 'admin'),
+(68, 10, '2016-12-31 18:39:43', 1, '2016-12-31 05:39:43', 1, 1, '2016-12-31 17:39:43', 1, 'admin'),
+(69, 10, '2016-12-31 18:39:38', 1, '2016-12-31 05:39:38', 1, 1, '2016-12-31 17:39:38', 1, 'admin'),
 (70, 10, '2016-12-30 19:59:07', 10, '2016-12-30 21:59:07', 10, 0, NULL, NULL, 'admin'),
 (71, 8, '2016-12-31 06:46:05', 1, '2016-12-31 06:46:05', 1, 0, NULL, NULL, 'admin'),
-(72, 9, '2016-12-31 11:14:25', 4, '2016-12-31 12:14:25', 4, 0, NULL, NULL, 'admin');
+(72, 9, '2016-12-31 11:14:25', 4, '2016-12-31 12:14:25', 4, 0, NULL, NULL, 'admin'),
+(73, 8, '2016-12-31 19:34:28', 1, '2016-12-31 20:34:28', NULL, 0, NULL, NULL, 'admin'),
+(74, 10, '2017-01-01 06:16:30', 1, '2017-01-01 06:16:30', 1, 0, NULL, NULL, 'admin'),
+(75, 10, '2017-01-01 06:17:24', 1, '2017-01-01 06:17:24', 1, 0, NULL, NULL, 'admin'),
+(76, 7, '2017-01-01 17:35:23', 12, '2017-01-01 17:35:23', NULL, 0, NULL, NULL, 'admin'),
+(77, 10, '2017-01-01 18:30:28', 1, '2017-01-01 06:30:28', 1, 0, NULL, NULL, 'admin'),
+(78, 14, '2017-01-01 18:35:10', 1, '2017-01-01 06:35:10', 1, 0, NULL, NULL, 'admin'),
+(79, 15, '2017-01-01 18:56:56', 1, '2017-01-01 06:56:56', 1, 0, NULL, NULL, 'admin'),
+(80, 15, '2017-01-01 19:04:53', 1, '2017-01-01 07:04:53', 1, 0, NULL, NULL, 'admin'),
+(81, 13, '2017-01-01 19:06:47', 1, '2017-01-01 07:06:47', 1, 0, NULL, NULL, 'admin'),
+(82, 16, '2017-01-01 19:12:18', 1, '2017-01-01 07:12:18', 1, 0, NULL, NULL, 'admin'),
+(83, 16, '2017-01-01 19:12:36', 1, '2017-01-01 07:12:36', 1, 0, NULL, NULL, 'admin'),
+(84, 14, '2017-01-01 19:13:36', 1, '2017-01-01 07:13:36', 1, 0, NULL, NULL, 'admin'),
+(85, 10, '2017-01-01 19:18:08', 1, '2017-01-01 07:18:08', 1, 0, NULL, NULL, 'admin');
 
 -- --------------------------------------------------------
 
@@ -309,6 +323,7 @@ CREATE TABLE `menus` (
   `category_id` int(11) DEFAULT NULL,
   `menu_position` enum('top','right','left','bottom') NOT NULL,
   `menu_for` enum('Admin','Student','Teacher') DEFAULT NULL,
+  `is_private` smallint(6) NOT NULL DEFAULT '1',
   `item_id` int(11) DEFAULT NULL,
   `menu_title` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -317,47 +332,48 @@ CREATE TABLE `menus` (
 -- Dumping data for table `menus`
 --
 
-INSERT INTO `menus` (`menu_id`, `parent_id`, `category_id`, `menu_position`, `menu_for`, `item_id`, `menu_title`) VALUES
-(1, NULL, 2, 'top', NULL, NULL, 'faculties '),
-(2, NULL, 3, 'top', NULL, NULL, 'study_years'),
-(3, NULL, 4, 'top', NULL, NULL, 'subjects'),
-(4, 1, NULL, 'top', NULL, 1, 'ite'),
-(5, 1, NULL, 'top', NULL, 2, 'mte'),
-(6, 1, NULL, 'top', NULL, 3, 'medicin'),
-(7, 4, NULL, 'top', NULL, 6, 'ite-1y'),
-(8, 4, NULL, 'top', NULL, 7, 'ite-2y'),
-(9, 4, NULL, 'top', NULL, 8, 'ite-3y'),
-(10, 4, NULL, 'top', NULL, 9, 'ite-4y'),
-(11, 4, NULL, 'top', NULL, 10, 'ite-5y'),
-(12, 5, NULL, 'top', NULL, 11, 'mte-1y'),
-(13, 5, NULL, 'top', NULL, 12, 'mte-2y'),
-(14, 5, NULL, 'top', NULL, 13, 'mte-3y'),
-(15, 5, NULL, 'top', NULL, 14, 'mte-4y'),
-(16, 5, NULL, 'top', NULL, 15, 'mte-5y'),
-(17, 6, NULL, 'top', NULL, 16, 'medicin-1y'),
-(18, 6, NULL, 'top', NULL, 17, 'medicin-2y'),
-(19, 6, NULL, 'top', NULL, 18, 'medicin-3y'),
-(20, 6, NULL, 'top', NULL, 19, 'medicin-4y'),
-(21, 6, NULL, 'top', NULL, 20, 'medicin-5y'),
-(22, 6, NULL, 'top', NULL, 21, 'medicin-6y'),
-(23, NULL, 17, 'top', NULL, NULL, 'General Informations'),
-(24, 23, NULL, 'top', NULL, 54, 'about_university'),
-(25, 23, NULL, 'top', NULL, 53, 'rector''s_message'),
-(26, 23, NULL, 'top', NULL, 55, 'mission&vission'),
-(27, 23, NULL, 'top', NULL, 56, 'FAQS'),
-(28, 23, NULL, 'top', NULL, 57, 'Contact-Info'),
-(29, NULL, 18, 'top', NULL, NULL, 'New Events'),
-(30, NULL, NULL, 'left', 'Admin', NULL, 'Teachers'),
-(31, 30, 9, 'left', 'Admin', NULL, 'Teachers And Subjects'),
-(32, 30, 8, 'left', 'Admin', NULL, 'See All Teachers'),
-(33, NULL, NULL, 'left', 'Admin', NULL, 'Students'),
-(34, 33, 7, 'left', 'Admin', NULL, 'See All Students'),
-(35, NULL, NULL, 'left', 'Admin', NULL, 'General Info'),
-(36, 35, 17, 'left', 'Admin', NULL, 'View All informations'),
-(37, 35, 17, 'left', 'Admin', NULL, 'Add information'),
-(38, NULL, NULL, 'left', 'Admin', NULL, 'Events'),
-(39, 38, 18, 'left', 'Admin', NULL, 'View All Events'),
-(40, 38, 18, 'left', 'Admin', NULL, 'Add event');
+INSERT INTO `menus` (`menu_id`, `parent_id`, `category_id`, `menu_position`, `menu_for`, `is_private`, `item_id`, `menu_title`) VALUES
+(1, NULL, 2, 'top', NULL, 1, NULL, 'faculties '),
+(2, NULL, 3, 'top', NULL, 1, NULL, 'study_years'),
+(3, NULL, 4, 'top', NULL, 1, NULL, 'subjects'),
+(4, 1, NULL, 'top', NULL, 1, 1, 'ite'),
+(5, 1, NULL, 'top', NULL, 1, 2, 'mte'),
+(6, 1, NULL, 'top', NULL, 1, 3, 'medicin'),
+(7, 4, NULL, 'top', NULL, 1, 6, 'ite-1y'),
+(8, 4, NULL, 'top', NULL, 1, 7, 'ite-2y'),
+(9, 4, NULL, 'top', NULL, 1, 8, 'ite-3y'),
+(10, 4, NULL, 'top', NULL, 1, 9, 'ite-4y'),
+(11, 4, NULL, 'top', NULL, 1, 10, 'ite-5y'),
+(12, 5, NULL, 'top', NULL, 1, 11, 'mte-1y'),
+(13, 5, NULL, 'top', NULL, 1, 12, 'mte-2y'),
+(14, 5, NULL, 'top', NULL, 1, 13, 'mte-3y'),
+(15, 5, NULL, 'top', NULL, 1, 14, 'mte-4y'),
+(16, 5, NULL, 'top', NULL, 1, 15, 'mte-5y'),
+(17, 6, NULL, 'top', NULL, 1, 16, 'medicin-1y'),
+(18, 6, NULL, 'top', NULL, 1, 17, 'medicin-2y'),
+(19, 6, NULL, 'top', NULL, 1, 18, 'medicin-3y'),
+(20, 6, NULL, 'top', NULL, 1, 19, 'medicin-4y'),
+(21, 6, NULL, 'top', NULL, 1, 20, 'medicin-5y'),
+(22, 6, NULL, 'top', NULL, 1, 21, 'medicin-6y'),
+(23, NULL, 17, 'top', NULL, 0, NULL, 'General Informations'),
+(24, 23, NULL, 'top', NULL, 0, 54, 'about_university'),
+(25, 23, NULL, 'top', NULL, 0, 53, 'rector''s_message'),
+(26, 23, NULL, 'top', NULL, 0, 55, 'mission&vission'),
+(27, 23, NULL, 'top', NULL, 0, 56, 'FAQS'),
+(28, 23, NULL, 'top', NULL, 0, 57, 'Contact-Info'),
+(29, NULL, 18, 'top', NULL, 0, NULL, 'New Events'),
+(30, NULL, NULL, 'left', 'Admin', 1, NULL, 'Teachers'),
+(31, 30, 9, 'left', 'Admin', 1, NULL, 'Teachers And Subjects'),
+(32, 30, 8, 'left', 'Admin', 1, NULL, 'See All Teachers'),
+(33, NULL, NULL, 'left', 'Admin', 1, NULL, 'Students'),
+(34, 33, 7, 'left', 'Admin', 1, NULL, 'See All Students'),
+(35, NULL, NULL, 'left', 'Admin', 1, NULL, 'General Info'),
+(36, 35, 17, 'left', 'Admin', 1, NULL, 'View All informations'),
+(37, 35, 17, 'left', 'Admin', 1, NULL, 'Add information'),
+(38, NULL, NULL, 'left', 'Admin', 1, NULL, 'Events'),
+(39, 38, 18, 'left', 'Admin', 1, NULL, 'View All Events'),
+(40, 38, 18, 'left', 'Admin', 1, NULL, 'Add event'),
+(42, 33, 10, 'left', 'Admin', 1, NULL, 'Students Marks');
 
 -- --------------------------------------------------------
 
@@ -438,7 +454,8 @@ INSERT INTO `menu_language` (`menu_language_id`, `menu_id`, `language_id`, `titl
 (59, 37, 8, 'اضافة معلومة عامة'),
 (60, 38, 8, 'الأحداث'),
 (61, 39, 8, 'رؤية الأحداث'),
-(62, 40, 8, 'اضافة حدث جديد');
+(62, 40, 8, 'اضافة حدث جديد'),
+(63, 42, 8, 'علامات الطلاب');
 
 -- --------------------------------------------------------
 
@@ -502,7 +519,8 @@ CREATE TABLE `role` (
 INSERT INTO `role` (`role_id`, `role_name`, `created_by`, `created_at`, `updated_by`, `updated_at`, `deleted_by`, `deleted_at`) VALUES
 (1, 'admin', 0, '2016-11-05 12:23:07', 0, '1974-12-31 22:00:00', NULL, NULL),
 (2, 'student', 1, '2016-12-30 17:09:32', 1, '1974-12-31 22:00:00', NULL, NULL),
-(3, 'User', 1, '2016-11-14 17:57:21', 1, '1974-12-31 22:00:00', NULL, NULL);
+(3, 'User', 1, '2016-11-14 17:57:21', 1, '1974-12-31 22:00:00', NULL, NULL),
+(4, 'teacher', 1, '2016-12-31 20:44:16', 1, '1974-12-31 22:00:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -549,7 +567,9 @@ INSERT INTO `user` (`id`, `role_id`, `username`, `auth_key`, `password_hash`, `p
 (2, 1, 'sam', 'VKFTcXrSZcPnUNZjj2QugIZLBORJ04Dq', '$2y$13$43vfd24zJ10DqS30e1JE.eevodPO8Ge/fPoX4SEdEd9GKl6A6xfju', NULL, 'sam@sam.sam', 10, 1476382691, 1476382691),
 (3, 2, 'student', 'yM3ap3v3anPvUQP0PgbBH6GNjWEQVPR0', '$2y$13$gH0TiGDWmTe6J4hYWoZCjO4v7NftCK6wGUdW3Ktn8JoppWxziIFsC', NULL, 'nsadada@asda.com', 10, 1482966657, 1482966657),
 (4, 1, 'admin', 'd7zDRRjBYSwgOyH1ivA4Z2RRY9VdeYS2', '$2y$13$dvufe8cuRaUQDPXAKUHHve.xkWGH35IRHtBxZty.SPfeb0wZCXMAq', NULL, 'admin@gmail.com', 10, 0, 0),
-(10, 2, 'student1', 'NrV1z0bMURyw5q2eygj7wIXwK7y2HEUv', '$2y$13$Lj7yFy4wN3V9NjOP/m1qjeveK5gMbMmn8JOp3fIeRZIjJrqQx3mKS', NULL, 'sadsads@dss.com', 10, 1483118346, 1483118346);
+(10, 2, 'student1', 'NrV1z0bMURyw5q2eygj7wIXwK7y2HEUv', '$2y$13$Lj7yFy4wN3V9NjOP/m1qjeveK5gMbMmn8JOp3fIeRZIjJrqQx3mKS', NULL, 'sadsads@dss.com', 10, 1483118346, 1483118346),
+(11, 4, 'teacher73', 'J5MfTzojOaBYgrw4aF8lNQ0g76egnfsN', '$2y$13$Gjt2nUUza/Tphd7cONcHXureGun7K.OXiNLv76M96c/EHKjgen0kK', NULL, 'teacher73@gmail.com', 10, 1483217640, 1483217640),
+(12, 2, 'haya_hamoud', 'gUY24wozIVtsM7gZeFmkTOpP5uYTMlWy', '$2y$13$CNdcxNYVW8jtSkYHb.oM2.fjcmrR1pEq5g5rhqUbauQ960NIfIwD6', NULL, 'haya@gmail.com', 10, 1483295723, 1483295723);
 
 -- --------------------------------------------------------
 
@@ -888,7 +908,82 @@ INSERT INTO `values` (`value_id`, `item_id`, `field_id`, `language_id`, `value`)
 (375, 72, 28, NULL, '62'),
 (376, 72, 29, NULL, '22'),
 (377, 72, 30, NULL, '2016-12-31'),
-(379, 67, 118, NULL, '1');
+(379, 67, 118, NULL, '0'),
+(380, 73, 21, NULL, 'basel'),
+(381, 73, 22, NULL, 'hamoud'),
+(382, 73, 23, NULL, '30'),
+(383, 73, 24, NULL, '<p>damascus</p>'),
+(384, 73, 25, NULL, '098765432'),
+(385, 73, 26, NULL, '../../common/web/uploads/1483216468t1.png'),
+(386, 73, 117, NULL, '1'),
+(387, 74, 111, NULL, '67'),
+(388, 74, 112, NULL, '23'),
+(389, 74, 113, NULL, '2017-01-01T11:11'),
+(390, 74, 114, NULL, '10'),
+(391, 74, 115, NULL, '70'),
+(392, 74, 116, NULL, 'good'),
+(393, 75, 111, NULL, '67'),
+(394, 75, 112, NULL, '25'),
+(395, 75, 113, NULL, '2017-02-01T00:00'),
+(396, 75, 114, NULL, '10'),
+(397, 75, 115, NULL, '60'),
+(398, 75, 116, NULL, 'good'),
+(399, 76, 88, NULL, 'haya'),
+(400, 76, 89, NULL, 'hamoud'),
+(401, 76, 90, NULL, '22'),
+(402, 76, 91, NULL, 'damascus'),
+(403, 76, 92, NULL, 'fifth year'),
+(404, 76, 93, NULL, '09876543'),
+(405, 76, 94, NULL, '09876543'),
+(406, 76, 95, NULL, '12'),
+(407, 77, 111, NULL, '76'),
+(408, 77, 112, NULL, '34'),
+(409, 77, 113, NULL, '2017-11-11T11:11'),
+(410, 77, 114, NULL, '10'),
+(411, 77, 116, NULL, 'good'),
+(412, 78, 52, NULL, '2017-01-01'),
+(413, 79, 54, 8, '<p style="text-align: right;"><em><strong>منذ متى استخدم مصطلح الوسائط الفائقة&nbsp;</strong></em></p>'),
+(414, 79, 55, 8, '<p style="text-align: right;">1820</p>'),
+(415, 79, 56, 8, '<p style="text-align: right;">1865</p>'),
+(416, 79, 57, 8, '<p style="text-align: right;">1965</p>'),
+(417, 79, 58, 8, '<p style="text-align: right;">2000</p>'),
+(418, 79, 119, 8, '<p style="text-align: right;">1965</p>'),
+(419, 79, 53, NULL, '1'),
+(420, 79, 54, 9, '<p><em><strong>when was "the hypermedia" term first used</strong></em></p>'),
+(421, 79, 55, 9, '<p>1820</p>'),
+(422, 79, 56, 9, '<p>1865</p>'),
+(423, 79, 57, 9, '<p>1965</p>'),
+(424, 79, 58, 9, '<p>2000</p>'),
+(425, 79, 119, 9, '<p>1965</p>'),
+(426, 80, 54, 8, '<p style="text-align: right;"><em><strong>يعتبر الويب الدلالي</strong></em></p>'),
+(427, 80, 55, 8, '<p style="text-align: right;">web1.0</p>'),
+(428, 80, 56, 8, '<p style="text-align: right;">web2.0</p>'),
+(429, 80, 57, 8, '<p style="text-align: right;">web3.0</p>'),
+(430, 80, 58, 8, '<p style="text-align: right;">web4.0</p>'),
+(431, 80, 119, 8, '<p style="text-align: right;">web3.0</p>'),
+(432, 80, 54, 9, '<p><em><strong>the symantic web is</strong></em></p>'),
+(433, 80, 55, 9, '<p>web1.0</p>'),
+(434, 80, 56, 9, '<p>web2.0</p>'),
+(435, 80, 57, 9, '<p>web3.0</p>'),
+(436, 80, 58, 9, '<p>web4.0</p>'),
+(437, 80, 119, 9, '<p>web3.0</p>'),
+(438, 80, 53, NULL, '2'),
+(439, 81, 47, NULL, '1'),
+(440, 81, 48, NULL, '32'),
+(441, 82, 120, NULL, '79'),
+(442, 82, 121, NULL, '81'),
+(443, 82, 122, NULL, '1'),
+(444, 83, 120, NULL, '80'),
+(445, 83, 121, NULL, '81'),
+(446, 83, 122, NULL, '1'),
+(447, 84, 49, NULL, '1'),
+(448, 84, 50, NULL, '32'),
+(449, 84, 51, NULL, '81'),
+(450, 84, 52, NULL, '2017-02-01'),
+(451, 85, 111, NULL, '76'),
+(452, 85, 112, NULL, '32'),
+(453, 85, 113, NULL, '2016-01-01T00:00'),
+(454, 85, 114, NULL, '10');
 
 --
 -- Indexes for dumped tables
@@ -1027,12 +1122,12 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `fields`
 --
 ALTER TABLE `fields`
-  MODIFY `field_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
+  MODIFY `field_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
 --
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 --
 -- AUTO_INCREMENT for table `languages`
 --
@@ -1042,12 +1137,12 @@ ALTER TABLE `languages`
 -- AUTO_INCREMENT for table `menus`
 --
 ALTER TABLE `menus`
-  MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 --
 -- AUTO_INCREMENT for table `menu_language`
 --
 ALTER TABLE `menu_language`
-  MODIFY `menu_language_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `menu_language_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 --
 -- AUTO_INCREMENT for table `permissions`
 --
@@ -1057,7 +1152,7 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
-  MODIFY `role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `role_perm`
 --
@@ -1067,12 +1162,12 @@ ALTER TABLE `role_perm`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `values`
 --
 ALTER TABLE `values`
-  MODIFY `value_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=380;
+  MODIFY `value_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=455;
 --
 -- Constraints for dumped tables
 --

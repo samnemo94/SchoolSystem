@@ -315,6 +315,7 @@ class CategoriesController extends MyController
         $item = $this->findItem($id);
 
         $fields = Fields::find()->where(['category_id' => $item['category_id']])->all();
+        $items =[];
         foreach ($fields as $field1)
         {
             if ($field1['field_type'] == 'foreign_key')
