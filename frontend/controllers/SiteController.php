@@ -272,7 +272,7 @@ class SiteController extends MyController
             $fields = \backend\models\Fields::find()->where(['category_id' => $child['category_id']])->all();
             foreach ($fields as $field)
             {
-                if ($field['field_type'] == 'foreign_key')
+                if ($field['field_type'] == 'foreign_key' && $field['fk_table'] == $parent)
                     $f = $field['field_id'];
             }
 
@@ -292,7 +292,6 @@ class SiteController extends MyController
             }
             array_push($childArray, array($child['category_title'] => [ 'id'=>$child['category_id'],'data'=>$secondArray]));
         }
-
 
         $columns = [];
         foreach ($cat->fields as $field)
@@ -702,6 +701,8 @@ class SiteController extends MyController
     public function actionInsert($id, $fk_id = '')
     {
         $fields = Fields::find()->where(['category_id' => $id])->all();
+        $category = Categories::findOne(['category_id' => $id]);
+
         $items = [];
         foreach ($fields as $field1)
         {
@@ -709,6 +710,36 @@ class SiteController extends MyController
             {
                 $fk = $field1['fk_table'];
                 $items[$field1['fk_table']] = Items::find()->where(['category_id' => $fk])->all();
+
+                $fk_category = Categories::findOne(['category_id' => $fk]);
+                if ($fk_category->parent->category_id == $category->parent->category_id)
+                {
+                    $fk_fields = Fields::find()->where(['category_id' => $fk])->all();
+                    $remote_field_name = '';
+                    foreach ($fk_fields as $field_fk)
+                    {
+                        if ($field_fk['field_type'] == 'foreign_key' && $field_fk['fk_table'] == $fk_category->parent->category_id)
+                        {
+                            $remote_field_name = $field_fk['field_title'];
+                        }
+                    }
+                    if ($remote_field_name != '')
+                    {
+                        $filterd_items_info = MyController::getFilteredItems($fk,[$remote_field_name=>$fk_id],null);
+                        $ids = [];
+                        foreach ($filterd_items_info as $f_i_i)
+                        {
+                            $ids[]=$f_i_i['item_id'];
+                        }
+                        $filt = [];
+                        foreach ($items[$field1['fk_table']] as $it)
+                        {
+                            if (in_array($it->item_id,$ids))
+                                $filt [] = $it;
+                        }
+                        $items[$field1['fk_table']] = $filt;
+                    }
+                }
             }
         }
 
@@ -773,7 +804,6 @@ class SiteController extends MyController
 
             if ($fk_id)
             {
-                $category = Categories::findOne(['category_id' => $id]);
                 if ($category->parent_id)
                 {
                     $parent = $category->parent;

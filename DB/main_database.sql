@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 02, 2017 at 11:33 AM
+-- Generation Time: Jan 02, 2017 at 01:53 PM
 -- Server version: 5.7.9
 -- PHP Version: 5.6.16
 
@@ -98,7 +98,7 @@ INSERT INTO `categories` (`category_id`, `parent_id`, `category_title`, `showing
   (12, 6, 'lesson_files', 1, '2016-12-25 10:42:05', 1, '2016-12-16 01:27:16', 1, 0, NULL, NULL, 'admin'),
   (13, 4, 'exam_template', 1, '2017-01-01 22:23:28', 1, '2017-01-01 08:23:28', 1, 0, NULL, NULL, 'admin'),
   (14, 4, 'exam', 1, '2017-01-02 05:01:27', 1, '2017-01-02 03:01:27', 1, 0, NULL, NULL, 'admin'),
-  (15, 4, 'exam_questions', 1, '2017-01-02 11:32:38', 1, '2017-01-02 09:32:38', 1, 0, NULL, NULL, 'admin'),
+  (15, 4, 'exam_questions', 1, '2017-01-02 13:46:48', 1, '2017-01-01 23:46:48', 1, 0, NULL, NULL, 'admin'),
   (16, NULL, 'questions_template', 1, '2016-12-25 10:42:17', 1, '2016-12-16 02:04:43', 1, 0, NULL, NULL, 'admin'),
   (17, NULL, 'general_informations', 1, '2016-12-29 12:00:40', 1, '2016-12-28 23:00:40', 1, 0, NULL, NULL, 'admin'),
   (18, NULL, 'New_Events', 1, '2016-12-30 06:23:21', 1, '2016-12-30 05:23:21', 1, 0, NULL, NULL, 'admin'),
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `fields` (
   `is_show` smallint(6) NOT NULL,
   PRIMARY KEY (`field_id`),
   KEY `category_id` (`category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=162 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=177 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `fields`
@@ -198,14 +198,14 @@ INSERT INTO `fields` (`field_id`, `field_title`, `category_id`, `field_type`, `f
   (144, 'template_id', 14, 'foreign_key', '13', 0, 0, 1),
   (145, 'exam_date', 14, 'date_time', '', 0, 0, 1),
   (146, 'title', 14, 'varchar', '4', 1, 0, 1),
-  (154, 'question_id', 15, 'int', '', 0, 0, 1),
-  (155, 'question_text', 15, 'text', '', 1, 0, 1),
-  (156, 'choice1', 15, 'text', '', 1, 0, 1),
-  (157, 'choice2', 15, 'text', '', 1, 0, 1),
-  (158, 'choice3', 15, 'text', '', 1, 0, 1),
-  (159, 'choice4', 15, 'text', '', 1, 0, 1),
-  (160, 'subject_id', 15, 'foreign_key', '4', 0, 0, 0),
-  (161, 'answer', 15, 'text', '', 1, 0, 1);
+  (169, 'question_text', 15, 'text', '', 1, 0, 1),
+  (170, 'choice1', 15, 'text', '', 1, 0, 1),
+  (171, 'choice2', 15, 'text', '', 1, 0, 1),
+  (172, 'choice3', 15, 'text', '', 1, 0, 1),
+  (173, 'choice4', 15, 'text', '', 1, 0, 1),
+  (174, 'subject_id', 15, 'foreign_key', '4', 0, 0, 0),
+  (175, 'answer', 15, 'text', '', 1, 0, 1),
+  (176, 'title', 15, 'text', '', 1, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -230,7 +230,7 @@ CREATE TABLE IF NOT EXISTS `items` (
   KEY `created_by` (`created_by`),
   KEY `updated_by` (`updated_by`),
   KEY `deleted_by` (`deleted_by`)
-) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `items`
@@ -320,7 +320,11 @@ INSERT INTO `items` (`item_id`, `category_id`, `created_at`, `created_by`, `upda
   (90, 14, '2017-01-02 09:17:57', 1, '2017-01-02 11:17:57', 13, 0, NULL, NULL, 'admin'),
   (91, 9, '2017-01-02 09:28:00', 1, '2017-01-02 09:28:00', 1, 0, NULL, NULL, 'admin'),
   (92, 13, '2017-01-02 09:28:17', 1, '2017-01-02 11:28:17', 13, 0, NULL, NULL, 'admin'),
-  (93, 13, '2017-01-02 09:29:47', 1, '2017-01-02 11:29:47', 13, 0, NULL, NULL, 'admin');
+  (93, 13, '2017-01-02 09:29:47', 1, '2017-01-02 11:29:47', 13, 0, NULL, NULL, 'admin'),
+  (94, 6, '2017-01-02 11:44:06', 1, '2017-01-02 13:44:06', 13, 0, NULL, NULL, 'admin'),
+  (95, 13, '2017-01-02 11:44:22', 1, '2017-01-02 13:44:22', 13, 0, NULL, NULL, 'admin'),
+  (96, 14, '2017-01-02 11:44:47', 1, '2017-01-02 13:44:47', 13, 0, NULL, NULL, 'admin'),
+  (97, 15, '2017-01-02 11:46:13', 1, '2017-01-02 13:46:13', 13, 0, NULL, NULL, 'admin');
 
 -- --------------------------------------------------------
 
@@ -656,7 +660,7 @@ CREATE TABLE IF NOT EXISTS `values` (
   KEY `item_id` (`item_id`),
   KEY `field_id` (`field_id`),
   KEY `language_id` (`language_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=478 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=506 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `values`
@@ -1079,7 +1083,35 @@ INSERT INTO `values` (`value_id`, `item_id`, `field_id`, `language_id`, `value`)
   (474, 93, 139, 8, 'SSSSSS'),
   (475, 93, 138, NULL, '22'),
   (476, 92, 139, 9, 'sss'),
-  (477, 93, 139, 9, 'sssssss');
+  (477, 93, 139, 9, 'sssssss'),
+  (478, 94, 131, 8, 'Sasdcas'),
+  (479, 94, 132, 8, '<p>CDASCsdac</p>'),
+  (480, 94, 131, 9, 'ADDC'),
+  (481, 94, 132, 9, '<p>SDXD</p>'),
+  (482, 94, 134, NULL, '22'),
+  (483, 95, 139, 8, 'ADXADCA'),
+  (484, 95, 139, 9, 'DASDXAS'),
+  (485, 95, 138, NULL, '22'),
+  (486, 96, 146, 8, 'DASDXA'),
+  (487, 96, 146, 9, 'CASDCA'),
+  (488, 96, 144, NULL, '95'),
+  (489, 96, 145, NULL, '2017-01-01T01:00'),
+  (490, 96, 143, NULL, '22'),
+  (491, 97, 169, 8, '<p>DASdc</p>'),
+  (492, 97, 170, 8, '<p>DCA</p>'),
+  (493, 97, 171, 8, '<p>acsd</p>'),
+  (494, 97, 172, 8, '<p>adxas</p>'),
+  (495, 97, 173, 8, '<p>adaw</p>'),
+  (496, 97, 175, 8, '<p>wdqa</p>'),
+  (497, 97, 169, 9, '<p>dwdw</p>'),
+  (498, 97, 170, 9, '<p>dwqd</p>'),
+  (499, 97, 171, 9, '<p>wfde</p>'),
+  (500, 97, 172, 9, '<p>wfw</p>'),
+  (501, 97, 173, 9, '<p>wef</p>'),
+  (502, 97, 175, 9, '<p>wf</p>'),
+  (503, 97, 174, NULL, '22'),
+  (504, 97, 176, 8, '<p>DSADX</p>'),
+  (505, 97, 176, 9, '<p>SDDXASXD</p>');
 
 --
 -- Constraints for dumped tables
