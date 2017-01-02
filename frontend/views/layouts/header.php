@@ -54,17 +54,6 @@ function drawButton($menu, $depth)
     <a href="<?= \yii\helpers\Url::to(['/site/index']) ?>" class="navbar-brand"><i
                 class="material-icons">school</i> <?= Yii::$app->name ?></a>
 
-    <!-- Search -->
-    <form class="form-inline pull-xs-<?= Yii::$app->language == "ar" ? "right" : "left" ?> hidden-sm-down">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search">
-            <span class="input-group-btn"><button class="btn" type="button"><i class="material-icons">search</i>
-                </button></span>
-        </div>
-    </form>
-    <!-- // END Search -->
-
-
     <div id="primary_nav_wrap">
         <ul>
             <?php
@@ -93,16 +82,45 @@ function drawButton($menu, $depth)
             <li class="nav-item dropdown">
                 <a class="nav-link active dropdown-toggle p-a-0" data-toggle="dropdown" href="#" role="button"
                    aria-haspopup="false">
-                    <img src="assets/images/people/50/guy-6.jpg" alt="Avatar" class="img-circle" width="40">
+                    <?php
+                    if (Yii::$app->user->isStudent)
+                    {
+                        $img = $GLOBALS['std_profile']['photo']['value'];
+                        $name = $GLOBALS['std_profile']['first_name']['value'].' '.$GLOBALS['std_profile']['last_name']['value'];
+                    }
+                    else
+                    {
+                        if (Yii::$app->user->isTeacher)
+                        {
+                            $img = $GLOBALS['tea_profile']['photo']['value'];
+                            $name = $GLOBALS['tea_profile']['first_name']['value'].' '.$GLOBALS['tea_profile']['last_name']['value'];
+                        }
+                        else
+                        {
+                            $img = 'assets/images/people/50/guy-6.jpg';
+                            $name = 'ADMIN';
+                        }
+                    }
+                    ?>
+                    <img src="<?= $img ?>" alt="Avatar" class="img-circle" width="40">
                 </a>
-                <div
-                        class="dropdown-menu dropdown-menu-<?= Yii::$app->language == "ar" ? "left" : "right" ?> dropdown-menu-list"
+                <div    class="dropdown-menu dropdown-menu-<?= Yii::$app->language == "ar" ? "left" : "right" ?> dropdown-menu-list"
                         aria-labelledby="Preview">
+                    <a class="dropdown-item">
+                        <span class="icon-text"><div align="center"><b><?= $name ?></b></div></span></a>
+
+                    <?php
+                    if ($name!='ADMIN')
+                    {
+                        ?>
                     <a class="dropdown-item" href="<?= \yii\helpers\Url::to(['/site/update-user']) ?>"><i
                                 class="material-icons md-18">lock</i> <span
-                                class="icon-text">Edit Account</span></a>
-                    <a class="dropdown-item" href="profile.html"><i class="material-icons md-18">person</i> <span
-                                class="icon-text">Public Profile</span></a>
+                                class="icon-text"><?= Yii::$app->language == "ar" ? "تعديل الحساب" : "Edit Account" ?></span></a>
+
+                        <?php
+                    }
+                    ?>
+
                     <?= \yii\helpers\Html::a(
                         'Log Out',
                         ['/site/logout'],

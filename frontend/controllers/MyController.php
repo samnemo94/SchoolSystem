@@ -23,6 +23,20 @@ class MyController extends Controller
     public function beforeAction($action)
     {
         $lang_id = Languages::findOne(['language_code' => \Yii::$app->language])->language_id;
+        global $tea_profile;
+        global $std_profile;
+        if (!Yii::$app->user->isGuest)
+        {
+            if (Yii::$app->user->isStudent)
+            {
+                $std_profile = self::getItemInfo(Yii::$app->user->isStudent,null);
+            }
+
+            if (Yii::$app->user->isTeacher)
+            {
+                $tea_profile = self::getItemInfo(Yii::$app->user->isTeacher,null);
+            }
+        }
 
         $menus = Menus::find()->where(['menu_position' => 'top', 'parent_id' => NULL])->all();
 

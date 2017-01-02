@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
         {
             ?>
             <div class="col-sm-4">
-                <img width="50%" src="../../backend/web/<?= $item['image']['value'] ?>">
+                <img width="50%" src="<?= $item['image']['value'] ?>">
             </div>
             <?php
         }
