@@ -265,7 +265,7 @@ class SiteController extends MyController
             $secondArray = [];
             foreach ($myItems as $myItem)
             {
-                $values = Values::find()->where(['item_id' => $myItem['item_id'], 'field_id' => $f])->All();
+                $values = Values::find()->where(['item_id' => $myItem['item_id'], 'field_id' => $f])->all();
                 foreach ($values as $vv)
                 {
                     if ($vv['value'] == $id)
@@ -277,8 +277,6 @@ class SiteController extends MyController
             }
             array_push($childArray, array($child['category_title'] => $secondArray));
         }
-
-
         $columns = [];
         foreach ($cat->fields as $field)
         {
@@ -292,16 +290,41 @@ class SiteController extends MyController
             if (Yii::$app->user->isStudent)
             {
                 $is_registered = false;
+                $is_exam = false;
                 $student_subject = Categories::findOne(['category_title'=>'student_subject']);
                 $student_subject_item = MyController::getFilteredItems($student_subject->category_id,['subject_id'=>$id,'student_id'=>Yii::$app->user->isStudent],null);
                 foreach ($student_subject_item as $items)
                 {
                     $is_registered = true;
                 }
+                if ( $is_registered )
+                {
+                    foreach ($student_subject_item as $items)
+                    {
+                        $student_subject_item_id = $item['item_id'];
+                        break;
+                    }
+                    $cat2 = Categories::findOne(['category_title'=>'exam']);
+                    $exam = MyController::getFilteredItems($cat2->category_id,['subject_id'=>$id],Null);
+                    if($exam) {
+                        foreach ($exam as $e) {
+                            $exam_item_id = $e['item_id'];
+                            break;
+                        }
+                        $exam = MyController::getItemInfo($exam_item_id, Null);
+                        $exam_date = $exam['exam_date']['value'];
+                        $field = Fields::findOne(['field_title' => 'exam_mark']);
+                        $value = Values::findOne(['item_id'=>$student_subject_item_id ,'field_id'=>$field->field_id ]);
+                        if ($exam_date == '2017-02-01' && empty($value))
+                            $is_exam = true;
+                    }
+
+                }
                 return $this->render('page_subject_student', [
                     'item' => $row,
                     'childs' => $childArray,
                     'is_registered' => $is_registered,
+                    'is_exam' => $is_exam,
                     'student_subject_category' => $student_subject->category_id
                 ]);
             }
@@ -312,6 +335,71 @@ class SiteController extends MyController
 
         return $this->render('page', [
             'item' => $row, 'childs' => $childArray]);
+    }
+
+    public function actionExam($id)
+    {
+        $langg = \backend\models\Languages::findOne(['language_code' => Yii::$app->language])->language_id;
+        $student = Yii::$app->user->isStudent;
+        $subject = $id;
+        $subject_info = MyController::getItemInfo($subject , $langg);
+//        $subject_title = $subject_info['title']['value'];
+        $is_tody = false;
+        $cat = Categories::findOne(['category_title'=>'student_subject']);
+        $stu_sub_item_info =  MyController::getFilteredItems($cat->category_id, ['student_id'=>$student,'subject_id'=>$subject],$langg);
+        foreach ($stu_sub_item_info as $stu)
+        {
+            $stu_sub_item_id = $stu['item_id'];
+            break;
+        }
+        $cat2 = Categories::findOne(['category_title'=>'exam']);
+        $exam = MyController::getFilteredItems($cat2->category_id,['subject_id'=>$subject],$langg);
+        if($exam) {
+            foreach ($exam as $e) {
+                $exam_item_id = $e['item_id'];
+                break;
+            }
+            $exam = MyController::getItemInfo($exam_item_id,$langg);
+            $exam_date = $exam['exam_date']['value'];
+            if ( $exam_date ==  date('d-m-y'))
+                $is_tody = true;
+            $exam_template_id = $exam['template_id']['value'];
+            $cat3 = Categories::findOne(['category_title'=> 'questions_template']);
+            $template_info = MyController::getFilteredItems($cat3->category_id,['template_id'=>$exam_template_id],$langg);
+           $ques_ids = [];
+            foreach ($template_info as $t) {
+               $ques_ids[$t['item_id']] = $t['question_id']['value'];
+            }
+            $questions = [];
+            foreach ($ques_ids as $ques)
+            {
+                $ques_info = MyController::getItemInfo( $ques , $langg);
+                $questions[$ques] = $ques_info;
+            }
+            $count = 0;
+            if (!empty( $_POST)){
+                foreach ($questions as $question) {
+                 $answer =   $_POST[$question['item_id']];
+                    if( $answer == $question['answer']['value']){
+                        $count = $count +1 ;
+                    }
+                }
+                $value = new Values();
+                $value->item_id = $stu_sub_item_id;
+                $value->field_id = Fields::findOne(['field_title'=>'exam_mark'])->field_id;
+                $value->language_id = NULL;
+                $value->value = $count;
+                $value->save(false);
+                return $this->redirect(['index']);
+
+            }
+            else{
+            return $this->render('exam', [
+                'questions'=>$questions,
+                'subject_info'=> $subject_info
+                //'is_tody'=> $is_tody,
+            ]);}
+        }
     }
 
     /**
