@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 02, 2017 at 01:53 PM
+-- Generation Time: Jan 02, 2017 at 04:15 PM
 -- Server version: 5.7.9
 -- PHP Version: 5.6.16
 
@@ -94,12 +94,12 @@ INSERT INTO `categories` (`category_id`, `parent_id`, `category_title`, `showing
   (8, NULL, 'teachers', 1, '2017-01-01 19:42:44', 1, '2017-01-01 05:42:44', 1, 0, NULL, NULL, 'admin'),
   (9, NULL, 'teacher_subject', 1, '2016-12-25 10:41:57', 1, '2016-12-16 00:29:38', 1, 0, NULL, NULL, 'admin'),
   (10, 7, 'student_subject', 1, '2016-12-30 21:24:15', 1, '2016-12-30 07:24:15', 1, 0, NULL, NULL, 'admin'),
-  (11, 6, 'lesson_questions', 1, '2016-12-25 10:42:02', 1, '2016-12-16 02:05:06', 1, 0, NULL, NULL, 'admin'),
+  (11, 6, 'lesson_questions', 0, '2017-01-02 13:56:27', 1, '2017-01-01 23:56:27', 1, 0, NULL, NULL, 'admin'),
   (12, 6, 'lesson_files', 1, '2016-12-25 10:42:05', 1, '2016-12-16 01:27:16', 1, 0, NULL, NULL, 'admin'),
   (13, 4, 'exam_template', 1, '2017-01-01 22:23:28', 1, '2017-01-01 08:23:28', 1, 0, NULL, NULL, 'admin'),
   (14, 4, 'exam', 1, '2017-01-02 05:01:27', 1, '2017-01-02 03:01:27', 1, 0, NULL, NULL, 'admin'),
-  (15, 4, 'exam_questions', 1, '2017-01-02 13:46:48', 1, '2017-01-01 23:46:48', 1, 0, NULL, NULL, 'admin'),
-  (16, NULL, 'questions_template', 1, '2016-12-25 10:42:17', 1, '2016-12-16 02:04:43', 1, 0, NULL, NULL, 'admin'),
+  (15, 4, 'exam_questions', 1, '2017-01-02 14:52:45', 1, '2017-01-02 00:52:45', 1, 0, NULL, NULL, 'admin'),
+  (16, 13, 'questions_template', 1, '2017-01-02 15:14:14', 1, '2017-01-02 01:14:14', 1, 0, NULL, NULL, 'admin'),
   (17, NULL, 'general_informations', 1, '2016-12-29 12:00:40', 1, '2016-12-28 23:00:40', 1, 0, NULL, NULL, 'admin'),
   (18, NULL, 'New_Events', 1, '2016-12-30 06:23:21', 1, '2016-12-30 05:23:21', 1, 0, NULL, NULL, 'admin'),
   (19, NULL, 'user', 0, '2016-12-30 15:17:59', 1, '2016-12-30 03:17:59', 1, 0, NULL, NULL, 'admin');
@@ -114,6 +114,7 @@ DROP TABLE IF EXISTS `fields`;
 CREATE TABLE IF NOT EXISTS `fields` (
   `field_id` int(11) NOT NULL AUTO_INCREMENT,
   `field_title` varchar(255) NOT NULL,
+  `field_title_ar` varchar(255) DEFAULT NULL,
   `category_id` int(11) NOT NULL,
   `field_type` enum('varchar','text','int','double','date','time','date_time','image','file','foreign_key') NOT NULL,
   `fk_table` varchar(255) DEFAULT NULL,
@@ -122,90 +123,90 @@ CREATE TABLE IF NOT EXISTS `fields` (
   `is_show` smallint(6) NOT NULL,
   PRIMARY KEY (`field_id`),
   KEY `category_id` (`category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=177 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=200 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `fields`
 --
 
-INSERT INTO `fields` (`field_id`, `field_title`, `category_id`, `field_type`, `fk_table`, `has_translate`, `is_null`, `is_show`) VALUES
-  (1, 'title', 2, 'varchar', '', 1, 0, 1),
-  (2, 'description', 2, 'text', '', 1, 0, 1),
-  (3, 'image', 2, 'image', '', 0, 1, 1),
-  (4, 'title', 3, 'varchar', '', 1, 0, 1),
-  (5, 'description', 3, 'text', '', 1, 0, 1),
-  (6, 'description', 4, 'text', '', 1, 0, 1),
-  (7, 'title', 4, 'varchar', '', 1, 0, 1),
-  (8, 'image', 4, 'image', '', 0, 1, 1),
-  (9, 'faculty', 3, 'foreign_key', '2', 0, 0, 1),
-  (10, 'study_year', 4, 'foreign_key', '3', 0, 0, 1),
-  (11, 'subject_id', 4, 'int', '', 0, 0, 1),
-  (28, 'teacher_id', 9, 'foreign_key', '8', 0, 0, 1),
-  (29, 'subject_id', 9, 'foreign_key', '4', 0, 0, 1),
-  (30, 'form_date', 9, 'date', '', 0, 0, 1),
-  (31, 'to_date', 9, 'date', '', 0, 0, 1),
-  (44, 'file_id', 12, 'int', '', 0, 0, 1),
-  (45, 'lesson_id', 12, 'foreign_key', '6', 0, 0, 1),
-  (46, 'file_link', 12, 'file', '', 0, 0, 1),
-  (59, 'question_id', 16, 'foreign_key', '15', 0, 0, 1),
-  (60, 'template_id', 16, 'foreign_key', '', 0, 0, 1),
-  (61, 'mark', 16, 'double', '', 0, 0, 1),
-  (62, 'order', 16, 'int', '', 0, 0, 1),
-  (63, 'question_id', 11, 'int', '', 0, 0, 1),
-  (64, 'lesson_id', 11, 'foreign_key', '6', 0, 0, 1),
-  (65, 'question_text', 11, 'text', '', 1, 0, 1),
-  (66, 'choice1', 11, 'text', '', 1, 0, 1),
-  (67, 'choice2', 11, 'text', '', 1, 0, 1),
-  (68, 'choice3', 11, 'varchar', '', 1, 0, 1),
-  (69, 'choice4', 11, 'text', '', 1, 0, 1),
-  (76, 'title', 17, 'varchar', '', 1, 0, 1),
-  (77, 'image', 17, 'image', '', 0, 1, 1),
-  (78, 'description', 17, 'text', '', 1, 0, 1),
-  (83, 'title', 18, 'varchar', '', 1, 0, 1),
-  (84, 'description', 18, 'text', '', 1, 0, 1),
-  (85, 'image', 18, 'image', '', 0, 1, 1),
-  (86, 'user', 19, 'int', '', 0, 0, 0),
-  (88, 'first_name', 7, 'varchar', '', 0, 0, 1),
-  (89, 'last_name', 7, 'varchar', '', 0, 0, 1),
-  (90, 'age', 7, 'int', '', 0, 0, 1),
-  (91, 'address', 7, 'text', '', 0, 0, 1),
-  (92, 'year', 7, 'int', '', 0, 0, 1),
-  (93, 'phone', 7, 'varchar', '', 0, 1, 1),
-  (94, 'photo', 7, 'image', '', 0, 1, 1),
-  (95, 'user_id', 7, 'foreign_key', '19', 0, 0, 0),
-  (111, 'student_id', 10, 'foreign_key', '7', 0, 0, 0),
-  (112, 'subject_id', 10, 'foreign_key', '4', 0, 0, 1),
-  (113, 'registration_date', 10, 'date_time', '', 0, 0, 1),
-  (114, 'lessons_finished', 10, 'int', '', 0, 1, 0),
-  (115, 'exam_mark', 10, 'double', '', 0, 1, 0),
-  (116, 'teacher_evaluate', 10, 'varchar', '', 0, 1, 0),
-  (118, 'is_active', 7, 'int', NULL, 0, 0, 0),
-  (119, 'first_name', 8, 'varchar', '', 0, 0, 1),
-  (120, 'last_name', 8, 'varchar', '', 0, 0, 1),
-  (121, 'age', 8, 'int', '', 0, 0, 1),
-  (122, 'address', 8, 'text', '', 0, 0, 1),
-  (123, 'phone', 8, 'varchar', '', 0, 1, 1),
-  (124, 'photo', 8, 'image', '', 0, 1, 1),
-  (125, 'is_active', 8, 'int', '', 0, 0, 0),
-  (126, 'user_id', 8, 'int', '', 0, 0, 0),
-  (131, 'title', 6, 'varchar', '', 1, 0, 1),
-  (132, 'description', 6, 'text', '', 1, 0, 1),
-  (133, 'image', 6, 'image', '', 0, 0, 0),
-  (134, 'subject', 6, 'foreign_key', '4', 0, 0, 0),
-  (138, 'subject_id', 13, 'foreign_key', '4', 0, 0, 0),
-  (139, 'title', 13, 'varchar', '', 1, 0, 1),
-  (143, 'subject_id', 14, 'foreign_key', '4', 0, 0, 0),
-  (144, 'template_id', 14, 'foreign_key', '13', 0, 0, 1),
-  (145, 'exam_date', 14, 'date_time', '', 0, 0, 1),
-  (146, 'title', 14, 'varchar', '4', 1, 0, 1),
-  (169, 'question_text', 15, 'text', '', 1, 0, 1),
-  (170, 'choice1', 15, 'text', '', 1, 0, 1),
-  (171, 'choice2', 15, 'text', '', 1, 0, 1),
-  (172, 'choice3', 15, 'text', '', 1, 0, 1),
-  (173, 'choice4', 15, 'text', '', 1, 0, 1),
-  (174, 'subject_id', 15, 'foreign_key', '4', 0, 0, 0),
-  (175, 'answer', 15, 'text', '', 1, 0, 1),
-  (176, 'title', 15, 'text', '', 1, 0, 1);
+INSERT INTO `fields` (`field_id`, `field_title`, `field_title_ar`, `category_id`, `field_type`, `fk_table`, `has_translate`, `is_null`, `is_show`) VALUES
+  (1, 'title', 'اسم الكلية', 2, 'varchar', '', 1, 0, 1),
+  (2, 'description', 'الوصف', 2, 'text', '', 1, 0, 1),
+  (3, 'image', 'صورة', 2, 'image', '', 0, 1, 1),
+  (4, 'title', 'السنة الدراسية', 3, 'varchar', '', 1, 0, 1),
+  (5, 'description', 'الوصف', 3, 'text', '', 1, 0, 1),
+  (6, 'description', 'الوصف', 4, 'text', '', 1, 0, 1),
+  (7, 'title', 'اسم المادة', 4, 'varchar', '', 1, 0, 1),
+  (8, 'image', 'صورة', 4, 'image', '', 0, 1, 1),
+  (9, 'faculty', 'الكلية', 3, 'foreign_key', '2', 0, 0, 1),
+  (10, 'study_year', 'السنة الدراسية', 4, 'foreign_key', '3', 0, 0, 1),
+  (11, 'subject_id', NULL, 4, 'int', '', 0, 0, 1),
+  (28, 'teacher_id', 'المدرس', 9, 'foreign_key', '8', 0, 0, 1),
+  (29, 'subject_id', 'المادة', 9, 'foreign_key', '4', 0, 0, 1),
+  (30, 'form_date', 'من تاريخ', 9, 'date', '', 0, 0, 1),
+  (31, 'to_date', 'الى', 9, 'date', '', 0, 0, 1),
+  (44, 'file_id', NULL, 12, 'int', '', 0, 0, 1),
+  (45, 'lesson_id', 'الدرس', 12, 'foreign_key', '6', 0, 0, 1),
+  (46, 'file_link', 'الملف', 12, 'file', '', 0, 0, 1),
+  (76, 'title', 'العنوان', 17, 'varchar', '', 1, 0, 1),
+  (77, 'image', 'صورة', 17, 'image', '', 0, 1, 1),
+  (78, 'description', 'الوصف', 17, 'text', '', 1, 0, 1),
+  (83, 'title', 'العنوان', 18, 'varchar', '', 1, 0, 1),
+  (84, 'description', 'الوصف', 18, 'text', '', 1, 0, 1),
+  (85, 'image', 'صورة', 18, 'image', '', 0, 1, 1),
+  (86, 'user', NULL, 19, 'int', '', 0, 0, 0),
+  (88, 'first_name', 'الاسم', 7, 'varchar', '', 0, 0, 1),
+  (89, 'last_name', 'الكنية', 7, 'varchar', '', 0, 0, 1),
+  (90, 'age', 'العمر', 7, 'int', '', 0, 0, 1),
+  (91, 'address', 'العنوان', 7, 'text', '', 0, 0, 1),
+  (92, 'year', 'السنة الدراسية', 7, 'int', '', 0, 0, 1),
+  (93, 'phone', 'الهاتف', 7, 'varchar', '', 0, 1, 1),
+  (94, 'photo', 'الصورة الشخصية', 7, 'image', '', 0, 1, 1),
+  (95, 'user_id', 'المستخدم', 7, 'foreign_key', '19', 0, 0, 0),
+  (111, 'student_id', 'الطالب', 10, 'foreign_key', '7', 0, 0, 0),
+  (112, 'subject_id', 'المادة', 10, 'foreign_key', '4', 0, 0, 1),
+  (113, 'registration_date', 'تاريخ التسجيل', 10, 'date_time', '', 0, 0, 1),
+  (114, 'lessons_finished', 'عدد الدروس المنتهية', 10, 'int', '', 0, 1, 0),
+  (115, 'exam_mark', 'علامة الامتحان', 10, 'double', '', 0, 1, 0),
+  (116, 'teacher_evaluate', 'تقييم المدرس', 10, 'varchar', '', 0, 1, 0),
+  (118, 'is_active', 'مفعل', 7, 'int', NULL, 0, 0, 0),
+  (119, 'first_name', 'الاسم', 8, 'varchar', '', 0, 0, 1),
+  (120, 'last_name', 'الكنية', 8, 'varchar', '', 0, 0, 1),
+  (121, 'age', 'العمر', 8, 'int', '', 0, 0, 1),
+  (122, 'address', 'العنوان', 8, 'text', '', 0, 0, 1),
+  (123, 'phone', 'الهاتف', 8, 'varchar', '', 0, 1, 1),
+  (124, 'photo', 'الصورة الشخصية', 8, 'image', '', 0, 1, 1),
+  (125, 'is_active', 'مفعل', 8, 'int', '', 0, 0, 0),
+  (126, 'user_id', NULL, 8, 'int', '', 0, 0, 0),
+  (131, 'title', 'اسم الدرس', 6, 'varchar', '', 1, 0, 1),
+  (132, 'description', 'الوصف', 6, 'text', '', 1, 0, 1),
+  (133, 'image', 'صورة', 6, 'image', '', 0, 0, 0),
+  (134, 'subject', 'المادة', 6, 'foreign_key', '4', 0, 0, 0),
+  (138, 'subject_id', 'المادة', 13, 'foreign_key', '4', 0, 0, 0),
+  (139, 'title', 'العنوان', 13, 'varchar', '', 1, 0, 1),
+  (143, 'subject_id', 'المادة', 14, 'foreign_key', '4', 0, 0, 0),
+  (144, 'template_id', 'نموذج الامتحان', 14, 'foreign_key', '13', 0, 0, 1),
+  (145, 'exam_date', 'تاريخ الامتحان', 14, 'date_time', '', 0, 0, 1),
+  (146, 'title', 'العنوان', 14, 'varchar', '4', 1, 0, 1),
+  (177, 'question_id', 'السؤال', 11, 'int', '', 0, 0, 1),
+  (178, 'lesson_id', 'الامتحان', 11, 'foreign_key', '6', 0, 0, 1),
+  (179, 'question_text', 'نص السؤال', 11, 'text', '', 1, 0, 1),
+  (180, 'choice1', 'الخيار الأول', 11, 'text', '', 1, 0, 1),
+  (181, 'choice2', 'الخيار الثاني', 11, 'text', '', 1, 0, 1),
+  (182, 'choice3', 'الخيار الثالث', 11, 'varchar', '', 1, 0, 1),
+  (183, 'choice4', 'الخيار الرابع', 11, 'text', '', 1, 0, 1),
+  (184, 'question_text', 'تص السؤال', 15, 'text', '', 1, 0, 1),
+  (185, 'choice1', 'الخيار الأول', 15, 'text', '', 1, 0, 1),
+  (186, 'choice2', 'الخيار الثاني', 15, 'text', '', 1, 0, 1),
+  (187, 'choice3', 'الخيار الثالث', 15, 'text', '', 1, 0, 1),
+  (188, 'choice4', 'الخيار الرابع', 15, 'text', '', 1, 0, 1),
+  (189, 'subject_id', NULL, 15, 'foreign_key', '4', 0, 0, 0),
+  (190, 'answer', 'الجواب', 15, 'text', '', 1, 0, 1),
+  (191, 'title', 'العنوان', 15, 'varchar', '', 1, 0, 1),
+  (196, 'question_id', 'السؤال', 16, 'foreign_key', '15', 0, 0, 1),
+  (197, 'template_id', 'نموذج الامتحان', 16, 'foreign_key', '13', 0, 0, 0),
+  (198, 'mark', 'علامة السؤال', 16, 'double', '', 0, 0, 1),
+  (199, 'order', 'الترتيب', 16, 'int', '', 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -230,7 +231,7 @@ CREATE TABLE IF NOT EXISTS `items` (
   KEY `created_by` (`created_by`),
   KEY `updated_by` (`updated_by`),
   KEY `deleted_by` (`deleted_by`)
-) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `items`
@@ -324,7 +325,9 @@ INSERT INTO `items` (`item_id`, `category_id`, `created_at`, `created_by`, `upda
   (94, 6, '2017-01-02 11:44:06', 1, '2017-01-02 13:44:06', 13, 0, NULL, NULL, 'admin'),
   (95, 13, '2017-01-02 11:44:22', 1, '2017-01-02 13:44:22', 13, 0, NULL, NULL, 'admin'),
   (96, 14, '2017-01-02 11:44:47', 1, '2017-01-02 13:44:47', 13, 0, NULL, NULL, 'admin'),
-  (97, 15, '2017-01-02 11:46:13', 1, '2017-01-02 13:46:13', 13, 0, NULL, NULL, 'admin');
+  (97, 15, '2017-01-02 11:46:13', 1, '2017-01-02 13:46:13', 13, 0, NULL, NULL, 'admin'),
+  (98, 16, '2017-01-02 13:17:17', 1, '2017-01-02 15:17:17', 13, 0, NULL, NULL, 'admin'),
+  (99, 16, '2017-01-02 13:18:15', 1, '2017-01-02 15:18:15', 13, 0, NULL, NULL, 'admin');
 
 -- --------------------------------------------------------
 
@@ -660,7 +663,7 @@ CREATE TABLE IF NOT EXISTS `values` (
   KEY `item_id` (`item_id`),
   KEY `field_id` (`field_id`),
   KEY `language_id` (`language_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=506 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=514 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `values`
@@ -1097,21 +1100,29 @@ INSERT INTO `values` (`value_id`, `item_id`, `field_id`, `language_id`, `value`)
   (488, 96, 144, NULL, '95'),
   (489, 96, 145, NULL, '2017-01-01T01:00'),
   (490, 96, 143, NULL, '22'),
-  (491, 97, 169, 8, '<p>DASdc</p>'),
-  (492, 97, 170, 8, '<p>DCA</p>'),
-  (493, 97, 171, 8, '<p>acsd</p>'),
-  (494, 97, 172, 8, '<p>adxas</p>'),
-  (495, 97, 173, 8, '<p>adaw</p>'),
-  (496, 97, 175, 8, '<p>wdqa</p>'),
-  (497, 97, 169, 9, '<p>dwdw</p>'),
-  (498, 97, 170, 9, '<p>dwqd</p>'),
-  (499, 97, 171, 9, '<p>wfde</p>'),
-  (500, 97, 172, 9, '<p>wfw</p>'),
-  (501, 97, 173, 9, '<p>wef</p>'),
-  (502, 97, 175, 9, '<p>wf</p>'),
-  (503, 97, 174, NULL, '22'),
-  (504, 97, 176, 8, '<p>DSADX</p>'),
-  (505, 97, 176, 9, '<p>SDDXASXD</p>');
+  (491, 97, 184, 8, '<p>DASdc</p>'),
+  (492, 97, 185, 8, '<p>DCA</p>'),
+  (493, 97, 186, 8, '<p>acsd</p>'),
+  (494, 97, 187, 8, '<p>adxas</p>'),
+  (495, 97, 188, 8, '<p>adaw</p>'),
+  (496, 97, 190, 8, '<p>wdqa</p>'),
+  (497, 97, 184, 9, '<p>dwdw</p>'),
+  (498, 97, 185, 9, '<p>dwqd</p>'),
+  (499, 97, 186, 9, '<p>wfde</p>'),
+  (500, 97, 187, 9, '<p>wfw</p>'),
+  (501, 97, 188, 9, '<p>wef</p>'),
+  (502, 97, 190, 9, '<p>wf</p>'),
+  (503, 97, 189, NULL, '22'),
+  (504, 97, 191, 8, '<p>DSADX</p>'),
+  (505, 97, 191, 9, 'DSDSDAS'),
+  (506, 98, 196, NULL, '97'),
+  (507, 98, 198, NULL, '12'),
+  (508, 98, 199, NULL, '1'),
+  (509, 98, 197, NULL, '85'),
+  (510, 99, 196, NULL, '97'),
+  (511, 99, 198, NULL, '21'),
+  (512, 99, 199, NULL, '12'),
+  (513, 99, 197, NULL, '85');
 
 --
 -- Constraints for dumped tables
