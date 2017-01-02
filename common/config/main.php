@@ -1,6 +1,6 @@
 <?php
 return [
-    'name'=>'DB2 Project',
+    'name'=>'ARU',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
         'cache' => [
