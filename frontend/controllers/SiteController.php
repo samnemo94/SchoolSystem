@@ -153,13 +153,12 @@ class SiteController extends MyController
                 $mySubjects = [];
                 foreach ($rows as $key => $row) {
                     if ($row['teacher_id']['value'] == $teacher)
-                        $mySubjects[$row['teacher_id']['value']] = MyController::getItemInfo($row['subject_id']['value'], $lang);
+                        $mySubjects[$row['subject_id']['value']] = MyController::getItemInfo($row['subject_id']['value'], $lang);
                 }
                 return $this->render('category_list_images', [
                     'columns' => $columns,
                     'rows' => $mySubjects,
                 ]);
-
             }
         }
 
