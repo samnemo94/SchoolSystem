@@ -29,7 +29,7 @@ function drawButton($menu, $depth)
                 <?= $menu['title'] ?>
             </a>
 
-            <ul>
+            <ul style="background-color: #d4d4d4">
                 <?php
                 foreach ($menu['children'] as $subMenu)
                 {

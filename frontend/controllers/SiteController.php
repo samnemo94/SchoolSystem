@@ -811,7 +811,7 @@ class SiteController extends MyController
                 $items[$field1['fk_table']] = Items::find()->where(['category_id' => $fk])->all();
 
                 $fk_category = Categories::findOne(['category_id' => $fk]);
-                if ($fk_category->parent->category_id == $category->parent->category_id)
+                if ($fk_category->parent && $category->parent && $fk_category->parent->category_id == $category->parent->category_id)
                 {
                     $fk_fields = Fields::find()->where(['category_id' => $fk])->all();
                     $remote_field_name = '';

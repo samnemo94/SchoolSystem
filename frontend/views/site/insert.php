@@ -27,12 +27,9 @@ use backend\models\Items;
             }
         };
     </script>
-    <?php if( yii::$app->language == 'en')
-        echo '<button onclick="x()" class="add_button" title="Add field">add language</button>';
-    else
-      echo '<button onclick="x()" class="add_button" title="Add field">اضافة لغة</button>'; ?>
 
-    <select id="language_selector">
+<div class="field">
+    <select id="language_selector" class="ui fluid dropdown" style="width: 25%">
         <option value="">Select language</option>
         <?php
         foreach ($langs as $lang)
@@ -41,9 +38,17 @@ use backend\models\Items;
         }
         ?>
     </select>
-
+<br>
+<?php if( yii::$app->language == 'en')
+    echo '<button onclick="x()" class="ui blue basic button" title="Add field">add language</button>';
+else
+    echo '<button onclick="x()" class="ui blue basic button" title="Add field">اضافة لغة</button>'; ?>
+    <br>
+    <br>
+    <br>
+</div>
 <?php
-ActiveForm::begin(['action' => 'index.php?r=site/insert&id=' . $id. '&fk_id='.$fk_id, 'method' => 'post', 'options' => ['enctype' => 'multipart/form-data']]);
+ActiveForm::begin(['action' => 'index.php?r=site/insert&id=' . $id. '&fk_id='.$fk_id, 'method' => 'post', 'options' => ['enctype' => 'multipart/form-data','class'=>'ui form']]);
 
 
 foreach ($fields as $field)
@@ -55,8 +60,11 @@ foreach ($fields as $field)
 foreach ($langs as $lang)
 {
     ?>
-    <div style="display: none" id="div_<?= $lang->language_code ?>">
-        <h2> <?= $lang->language_code ?> </h2>
+    <div style="display: none;margin-bottom: 25px" id="div_<?= $lang->language_code ?>">
+        <h3 class="ui horizontal divider header">
+            <i class=""></i>
+            <?= $lang->language_code ?>
+        </h3>
         <?php
         foreach ($fields as $field)
         {
@@ -80,8 +88,7 @@ ActiveForm::end();
 function printFieldInput($field,$items, $lang = '')
 {
     ?>
-    <div class="row">
-        <div class="col-lg-5" style="float: <?= Yii::$app->language=='ar'?'right':'left' ?>;">
+<div class="field">
         <?php
         $language = yii::$app->language;
         if($language == 'en')
@@ -159,7 +166,7 @@ function printFieldInput($field,$items, $lang = '')
                     break;
                 case 'foreign_key' :
                     ?>
-                    <select id="input_<?= $field->field_id ?>_<?= $lang ?>"
+                    <select class="ui fluid dropdown" id="input_<?= $field->field_id ?>_<?= $lang ?>"
                             name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
                         <option value="">Select Item</option>
                         <?php
@@ -173,10 +180,14 @@ function printFieldInput($field,$items, $lang = '')
                                 echo "<option value=\"" . $item['item_id'] . "\">" . $t_info['first_name']['value'].' '. $t_info['last_name']['value']. "</option> ";
                             }
 
-                            //if ($fkTable == 'subject'){
+                            else
+                            {
                                 $s_info = \frontend\controllers\MyController::getItemInfo($item['item_id'], $langg);
-                                echo "<option value=\"" . $item['item_id'] . "\">" . $s_info['title']['value']. "</option> ";
-                            //}
+                                if (array_key_exists('title', $s_info))
+                                    echo "<option value=\"" . $item['item_id'] . "\">" . $s_info['title']['value'] . "</option> ";
+                                else
+                                    echo "<option value=\"" . $item['item_id'] . "\">" . $s_info['item_id'] . "</option> ";
+                            }
                         }
                         ?>
                     </select>
@@ -184,7 +195,6 @@ function printFieldInput($field,$items, $lang = '')
                     break;
             }
             ?>
-        </div>
     </div>
 <?php
 }
