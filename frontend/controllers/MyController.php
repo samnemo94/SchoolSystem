@@ -68,7 +68,7 @@ class MyController extends Controller
                     $main_menu_left [] = $this->generateMenuItem($menu->menu_id);
                 }
                 break;
-            case 3:
+            case 4:
                 $left_menus = Menus::find()->where(['menu_position' => 'left', 'parent_id' => NULL,'menu_for'=>'Teacher'])->all();
                 global $main_menu_left;
                 $main_menu_left = [];

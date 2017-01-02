@@ -381,6 +381,7 @@ class User extends Component
         return null;
     }
 
+
     public function getIsTeacher()
     {
         $lang = Languages::findOne(['language_code' => Yii::$app->language])->language_id;

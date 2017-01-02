@@ -105,7 +105,7 @@ class SiteController extends MyController
                 return $this->redirect(['insert', 'id' => $menu->category_id]);
             }
 
-            if ($menu->menu_title == 'student_subject')
+            if ($menu->menu_title == 'My Marks' || $menu->menu_title== 'Students Marks')
             {
                 return $this->redirect(['marks', 'id' => $menu->category_id]);
             }
@@ -128,41 +128,88 @@ class SiteController extends MyController
         $lang = Languages::findOne(['language_code' => Yii::$app->language])->language_id;
         $cat = Categories::findOne(['category_id' => $id]);
         $columns = [];
-        foreach ($cat->fields as $field)
-        {
+        foreach ($cat->fields as $field) {
             if (yii::$app->language == 'en')
                 $columns[]['title'] = $field->field_title;
             else
-                $columns []['title']= $field->field_title_ar;
+                $columns []['title'] = $field->field_title_ar;
         }
         $rows = [];
         $items = $cat->getItems()->where(['deleted' => '0'])->all();
-        foreach ($items as $item)
-        {
+        foreach ($items as $item) {
             $item_info = MyController::getItemInfo($item->item_id, $lang);
             $rows[$item->item_id] = $item_info;
         }
-
-        if ($cat->category_title == 'faculty' || $cat->category_title == 'subject')
-        {
+        if ($cat->category_title == 'faculty' || $cat->category_title == 'subject') {
             return $this->render('category_list_images', [
                 'columns' => $columns,
                 'rows' => $rows,
             ]);
         }
+        if ($cat->category_title == 'teacher_subject') {
 
-        if ($cat->category_title == 'student_subject')
-        {
-            return $this->render('marks', [
-                'columns' => $columns,
-                'rows' => $rows,
-            ]);
+            if ( yii::$app->user->isTeacher) {
+               $teacher = yii::$app->user->getIsTeacher();
+                $mySubjects = [];
+                foreach ($rows as $key => $row) {
+                    if ($row['teacher_id']['value'] == $teacher)
+                        $mySubjects[$row['teacher_id']['value']] = MyController::getItemInfo($row['subject_id']['value'], $lang);
+                }
+                return $this->render('category_list_images', [
+                    'columns' => $columns,
+                    'rows' => $mySubjects,
+                ]);
+
+            }
         }
-        return $this->render('category', [
-            'columns' => $columns,
-            'rows' => $rows,
-        ]);
+
+//        return $this->render('category', [
+//            'columns' => $columns,
+//            'rows' => $rows,
+//        ]);
+        }
+
+    public function actionMarks($id)
+    {
+        $lang = Languages::findOne(['language_code' => Yii::$app->language])->language_id;
+        $cat = Categories::findOne(['category_id' => $id]);
+        $columns = [];
+        foreach ($cat->fields as $field) {
+            if (yii::$app->language == 'en')
+                $columns[]['title'] = $field->field_title;
+            else
+                $columns []['title'] = $field->field_title_ar;
+        }
+        $rows = [];
+        $items = $cat->getItems()->where(['deleted' => '0'])->all();
+        foreach ($items as $item) {
+            $item_info = MyController::getItemInfo($item->item_id, $lang);
+            $rows[$item->item_id] = $item_info;
+        }
+
+        if ($cat->category_title == 'student_subject') {
+            if (yii::$app->user->isStudent) {
+                $stu = yii::$app->user->getIsStudent();
+                $myMarks = [];
+                foreach ($rows as $row) {
+                    if ($row['student_id']['value'] == $stu) {
+                        $sub_info = MyController::getItemInfo($row['subject_id']['value'], $lang);
+                        $myMarks[$sub_info['title']['value']] = $row['exam_mark']['value'];
+                    }
+                }
+                return $this->render('mymarks', [
+                    'myMarks' => $myMarks
+                ]);
+            }
+            else
+                return $this->render('marks', [
+                    'columns' => $columns,
+                    'rows' => $rows,
+                ]);
+        }
     }
+
+
 
 
     public function actionCategoryTable($id)
