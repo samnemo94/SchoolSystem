@@ -120,33 +120,33 @@ function drawButton($menu, $depth)
             ?>
             <li class="nav-item dropdown">
                 <a style="color: #FFF; padding-<?= Yii::$app->language == "ar" ? "left" : "right" ?>: 20px"
-                   href="<?= \yii\helpers\Url::to(['/site/login']) ?>">
+                   href=" \yii\helpers\Url::to(['/site/login'])">
                     <?= Yii::$app->language == "ar" ? "تسجيل الدخول" : "Log In" ?>
                 </a>
             </li>
 
             <li class="nav-item dropdown">
                 <a class="nav-link active dropdown-toggle p-a-0" data-toggle="dropdown"
-                   href="<?= \yii\helpers\Url::to(['/site/signup']) ?>">
+                   href=" \yii\helpers\Url::to(['/site/signup'])">
                     <?= Yii::$app->language == "ar" ? "إنشاء حساب" : "Sign Up" ?>
                 </a>
                 <div
                     class="dropdown-menu dropdown-menu-<?= Yii::$app->language == "ar" ? "left" : "right" ?> dropdown-menu-list"
                     aria-labelledby="Preview">
                     <?php if (yii::$app->language == 'en') {
-                        echo '<a class="dropdown-item" href="<?= \yii\helpers\Url::to([\'/site/signup\']) ?>"><i class="material-icons md-18">person</i> <span
+                        echo '<a class="dropdown-item" href="'.yii\helpers\Url::to(['/site/signup']).'"><i class="material-icons md-18">person</i> <span
                             class="icon-text">Student</span>
                     </a>';
-                        echo '<a class="dropdown-item" href="<?= \yii\helpers\Url::to([\'/site/signup-teacher\']  ) ?>"><i class="material-icons md-18">person</i> <span
+                        echo '<a class="dropdown-item" href="'.yii\helpers\Url::to(['/site/signup-teacher']).'"><i class="material-icons md-18">person</i> <span
                             class="icon-text">Teacher</span>
                     </a>';
                     }
                     else {
-                        echo '<a class="dropdown-item" href="<?= \yii\helpers\Url::to([\'/site/signup\']) ?>"><i class="material-icons md-18">person</i> <span
+                        echo '<a class="dropdown-item" href="'.yii\helpers\Url::to(['/site/signup']).'"><i class="material-icons md-18">person</i> <span
                             class="icon-text">طالب</span>
                     </a>';
 
-                        echo '<a class="dropdown-item" href="<?= \yii\helpers\Url::to([\'/site/signup-teacher\']  ) ?>"><i class="material-icons md-18">person</i> <span
+                        echo '<a class="dropdown-item" href="'.yii\helpers\Url::to(['/site/signup-teacher']).'"><i class="material-icons md-18">person</i> <span
                             class="icon-text">استاذ</span>
                     </a>';
                     }
