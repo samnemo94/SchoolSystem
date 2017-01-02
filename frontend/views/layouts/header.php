@@ -120,14 +120,14 @@ function drawButton($menu, $depth)
             ?>
             <li class="nav-item dropdown">
                 <a style="color: #FFF; padding-<?= Yii::$app->language == "ar" ? "left" : "right" ?>: 20px"
-                   href=" \yii\helpers\Url::to(['/site/login'])">
+                   href=" index.php?r=site/login">
                     <?= Yii::$app->language == "ar" ? "تسجيل الدخول" : "Log In" ?>
                 </a>
             </li>
 
             <li class="nav-item dropdown">
                 <a class="nav-link active dropdown-toggle p-a-0" data-toggle="dropdown"
-                   href=" \yii\helpers\Url::to(['/site/signup'])">
+                   href="#">
                     <?= Yii::$app->language == "ar" ? "إنشاء حساب" : "Sign Up" ?>
                 </a>
                 <div
