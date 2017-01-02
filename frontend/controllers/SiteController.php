@@ -644,18 +644,24 @@ class SiteController extends MyController
                             switch ($field['field_type'])
                             {
                                 case 'image' :
-                                    $imagename = $_FILES[$post]["name"];
-                                    $folder = "../../common/web/uploads/";
-                                    $new_name = time() . $imagename;
-                                    move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
-                                    $val->value = $folder . $new_name;
+                                    if ($_FILES[$post]["name"] != '')
+                                    {
+                                        $imagename = $_FILES[$post]["name"];
+                                        $folder = "../../common/web/uploads/";
+                                        $new_name = time() . $imagename;
+                                        move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
+                                        $val->value = $folder . $new_name;
+                                    }
                                     break;
                                 case 'file':
-                                    $filename = $_FILES[$post]["name"];
-                                    $folder = "../../common/web/uploads/";
-                                    $new_name = time() . $filename;
-                                    move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
-                                    $val->value = $folder . $new_name;
+                                    if ($_FILES[$post]["name"] != '')
+                                    {
+                                        $filename = $_FILES[$post]["name"];
+                                        $folder = "../../common/web/uploads/";
+                                        $new_name = time() . $filename;
+                                        move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
+                                        $val->value = $folder . $new_name;
+                                    }
                                     break;
                                 default :
                                     $val->value = $_POST[$post];
@@ -680,18 +686,24 @@ class SiteController extends MyController
                         switch ($field['field_type'])
                         {
                             case 'image' :
-                                $imagename = $_FILES[$post]["name"];
-                                $folder = "../../common/web/uploads/";
-                                $new_name = time() . $imagename;
-                                move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
-                                $val->value = $folder . $new_name;
+                                if ($_FILES[$post]["name"] != '')
+                                {
+                                    $imagename = $_FILES[$post]["name"];
+                                    $folder = "../../common/web/uploads/";
+                                    $new_name = time() . $imagename;
+                                    move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
+                                    $val->value = $folder . $new_name;
+                                }
                                 break;
                             case 'file':
-                                $filename = $_FILES[$post]["name"];
-                                $folder = "../../common/web/uploads/";
-                                $new_name = time() . $filename;
-                                move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
-                                $val->value = $folder . $new_name;
+                                if ($_FILES[$post]["name"] != '')
+                                {
+                                    $filename = $_FILES[$post]["name"];
+                                    $folder = "../../common/web/uploads/";
+                                    $new_name = time() . $filename;
+                                    move_uploaded_file($_FILES[$post]["tmp_name"], $folder . $new_name);
+                                    $val->value = $folder . $new_name;
+                                }
                                 break;
                             default :
                                 $val->value = $_POST[$post];
