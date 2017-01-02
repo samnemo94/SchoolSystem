@@ -173,10 +173,10 @@ function printFieldInput($field,$items, $lang = '')
                                 echo "<option value=\"" . $item['item_id'] . "\">" . $t_info['first_name']['value'].' '. $t_info['last_name']['value']. "</option> ";
                             }
 
-                            if ($fkTable == 'subject'){
+                            //if ($fkTable == 'subject'){
                                 $s_info = \frontend\controllers\MyController::getItemInfo($item['item_id'], $langg);
                                 echo "<option value=\"" . $item['item_id'] . "\">" . $s_info['title']['value']. "</option> ";
-                            }
+                            //}
                         }
                         ?>
                     </select>

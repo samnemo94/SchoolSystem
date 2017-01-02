@@ -55,6 +55,7 @@ use yii\rbac\CheckAccessInterface;
  * user. `null` is returned if the user is not logged in (not authenticated).
  * @property boolean $isGuest Whether the current user is a guest. This property is read-only.
  * @property boolean $isStudent Whether the current user is a teacher. This property is read-only.
+ * @property boolean $isTeacher Whether the current user is a teacher. This property is read-only.
  * @property string $returnUrl The URL that the user should be redirected to after login. Note that the type
  * of this property differs in getter and setter. See [[getReturnUrl()]] and [[setReturnUrl()]] for details.
  *
@@ -374,6 +375,20 @@ class User extends Component
             return null;
         $student = MyController::getFilteredItems($student_cat->category_id, ['user_id' => Yii::$app->user->id], $lang);
         foreach ($student as $std)
+        {
+            return $std['item_id'];
+        }
+        return null;
+    }
+
+    public function getIsTeacher()
+    {
+        $lang = Languages::findOne(['language_code' => Yii::$app->language])->language_id;
+        $teacher_cat = Categories::findOne(['category_title' => 'teachers']);
+        if (!$teacher_cat)
+            return null;
+        $teacher = MyController::getFilteredItems($teacher_cat->category_id, ['user_id' => Yii::$app->user->id], $lang);
+        foreach ($teacher as $std)
         {
             return $std['item_id'];
         }

@@ -19,6 +19,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -27,6 +28,7 @@ use yii\web\NotFoundHttpException;
 class SiteController extends MyController
 {
     public $enableCsrfValidation = false;
+
     /**
      * @inheritdoc
      */
@@ -91,21 +93,21 @@ class SiteController extends MyController
         {
             if ($menu->menu_title == 'See All Teachers' || $menu->menu_title == 'See All Students')
             {
-                return $this->redirect(['members' ,'id'=> $menu->category_id]);
+                return $this->redirect(['members', 'id' => $menu->category_id]);
             }
-            if($menu->menu_title == 'View All informations' || $menu->menu_title == 'View All Events' )
+            if ($menu->menu_title == 'View All informations' || $menu->menu_title == 'View All Events')
             {
-                return $this->redirect(['category-table' ,'id'=> $menu->category_id ]);
-            }
-
-            if ($menu->menu_title == 'Teachers And Subjects' || $menu->menu_title == 'Add information' || $menu->menu_title == 'Add event' )
-            {
-                return $this->redirect(['insert' ,'id'=> $menu->category_id]);
+                return $this->redirect(['category-table', 'id' => $menu->category_id]);
             }
 
-            if ($menu->menu_title == 'student_subject' )
+            if ($menu->menu_title == 'Teachers And Subjects' || $menu->menu_title == 'Add information' || $menu->menu_title == 'Add event')
             {
-                return $this->redirect(['marks' ,'id'=> $menu->category_id]);
+                return $this->redirect(['insert', 'id' => $menu->category_id]);
+            }
+
+            if ($menu->menu_title == 'student_subject')
+            {
+                return $this->redirect(['marks', 'id' => $menu->category_id]);
             }
 
             return $this->redirect(['category', 'id' => $menu->category_id]);
@@ -115,7 +117,8 @@ class SiteController extends MyController
             return $this->redirect(['index']);
 
 
-        if ($menu->item_id) {
+        if ($menu->item_id)
+        {
             $this->redirect(['page', 'id' => $menu->item_id]);
         }
     }
@@ -187,7 +190,8 @@ class SiteController extends MyController
         ]);
     }
 
-    public function actionMembers($id){
+    public function actionMembers($id)
+    {
         $lang = Languages::findOne(['language_code' => Yii::$app->language])->language_id;
 
         $cat = Categories::findOne(['category_id' => $id]);
@@ -211,28 +215,33 @@ class SiteController extends MyController
             'rows' => $rows,
         ]);
     }
+
 //this for ajax function for approve teachers
     public function actionActive()
     {
         $item = $_POST['key'];
         $item_model = $this->findItem($item);
         $cat = $item_model->category_id;
-        $field = \backend\models\Fields::find()->where(['field_title'=>'is_active','category_id'=>$cat])->one();
+        $field = \backend\models\Fields::find()->where(['field_title' => 'is_active', 'category_id' => $cat])->one();
         $field = $field['field_id'];
-        $value = Values::find()->where(['item_id' => $item ,'field_id'=>$field ])->one();
-        if ($value) {
-            if ($value['value'] == 1 ) {
+        $value = Values::find()->where(['item_id' => $item, 'field_id' => $field])->one();
+        if ($value)
+        {
+            if ($value['value'] == 1)
+            {
                 $model = $this->findValue($value['value_id']);
                 $model->value = 0;
                 $model->save(false);
             }
-            else {
+            else
+            {
                 $model = $this->findValue($value['value_id']);
-                $model->value = 1 ;
+                $model->value = 1;
                 $model->save(false);
             }
         }
-        else {
+        else
+        {
             $model = new Values();
             $model->item_id = $item;
             $model->field_id = $field;
@@ -240,13 +249,20 @@ class SiteController extends MyController
             $model->value = 1;
             $model->save(false);
             $user = new User();
-            $user->username = 'teacher'.$item;
-            $user->email = 'teacher'.$item.'@gmail.com';
+            $user->username = 'teacher' . $item;
+            $user->email = 'teacher' . $item . '@gmail.com';
             $user->setPassword('teacher');
             $user->generateAuthKey();
             $teacher_role = Role::findOne(['role_name' => 'teacher']);
             $user->role_id = $teacher_role->role_id;
             $user->save(false);
+            $model = new Values();
+            $model->item_id = $item;
+            $user_id_field = \backend\models\Fields::find()->where(['field_title' => 'user_id', 'category_id' => $cat])->one();
+            $model->field_id = $user_id_field->field_id;
+            $model->language_id = Null;
+            $model->value = $user->id;
+            $model->save(false);
         }
     }
 
@@ -262,11 +278,10 @@ class SiteController extends MyController
         $childArray = [];
         foreach ($childs as $child)
         {
-            echo $child['category_title'] . ' :';
             $fields = \backend\models\Fields::find()->where(['category_id' => $child['category_id']])->all();
             foreach ($fields as $field)
             {
-                if ($field['field_type'] == 'foreign_key')
+                if ($field['field_type'] == 'foreign_key' && $field['fk_table'] == $parent)
                     $f = $field['field_id'];
             }
 
@@ -284,8 +299,9 @@ class SiteController extends MyController
                     }
                 }
             }
-            array_push($childArray, array($child['category_title'] => $secondArray));
+            array_push($childArray, array($child['category_title'] => [ 'id'=>$child['category_id'],'data'=>$secondArray]));
         }
+
         $columns = [];
         foreach ($cat->fields as $field)
         {
@@ -298,50 +314,69 @@ class SiteController extends MyController
 
         if ($cat->category_title == 'subject')
         {
-            if (Yii::$app->user->isStudent)
+            if (!Yii::$app->user->isGuest)
             {
-                $is_registered = false;
-                $is_exam = false;
-                $student_subject = Categories::findOne(['category_title'=>'student_subject']);
-                $student_subject_item = MyController::getFilteredItems($student_subject->category_id,['subject_id'=>$id,'student_id'=>Yii::$app->user->isStudent],null);
-                foreach ($student_subject_item as $items)
+                if (Yii::$app->user->isStudent)
                 {
-                    $is_registered = true;
-                }
-                if ( $is_registered )
-                {
+                    $is_registered = false;
+                    $is_exam = false;
+                    $student_subject = Categories::findOne(['category_title'=>'student_subject']);
+                    $student_subject_item = MyController::getFilteredItems($student_subject->category_id,['subject_id'=>$id,'student_id'=>Yii::$app->user->isStudent],null);
                     foreach ($student_subject_item as $items)
                     {
-                        $student_subject_item_id = $item['item_id'];
-                        break;
+                        $is_registered = true;
                     }
-                    $cat2 = Categories::findOne(['category_title'=>'exam']);
-                    $exam = MyController::getFilteredItems($cat2->category_id,['subject_id'=>$id],Null);
-                    if($exam) {
-                        foreach ($exam as $e) {
-                            $exam_item_id = $e['item_id'];
+                    if ( $is_registered )
+                    {
+                        foreach ($student_subject_item as $items)
+                        {
+                            $student_subject_item_id = $item['item_id'];
                             break;
                         }
-                        $exam = MyController::getItemInfo($exam_item_id, Null);
-                        $exam_date = $exam['exam_date']['value'];
-                        $field = Fields::findOne(['field_title' => 'exam_mark']);
-                        $value = Values::findOne(['item_id'=>$student_subject_item_id ,'field_id'=>$field->field_id ]);
-                        if ($exam_date == '2017-02-01' && empty($value))
-                            $is_exam = true;
-                    }
+                        $cat2 = Categories::findOne(['category_title'=>'exam']);
+                        $exam = MyController::getFilteredItems($cat2->category_id,['subject_id'=>$id],Null);
+                        if($exam) {
+                            foreach ($exam as $e) {
+                                $exam_item_id = $e['item_id'];
+                                break;
+                            }
+                            $exam = MyController::getItemInfo($exam_item_id, Null);
+                            $exam_date = $exam['exam_date']['value'];
+                            $field = Fields::findOne(['field_title' => 'exam_mark']);
+                            $value = Values::findOne(['item_id'=>$student_subject_item_id ,'field_id'=>$field->field_id ]);
+                            if ($exam_date == '2017-02-01' && empty($value))
+                                $is_exam = true;
+                        }
 
+                    }
+                    return $this->render('page_subject_student', [
+                        'item' => $row,
+                        'childs' => $childArray,
+                        'is_registered' => $is_registered,
+                        'is_exam' => $is_exam,
+                        'student_subject_category' => $student_subject->category_id
+                    ]);
                 }
-                return $this->render('page_subject_student', [
-                    'item' => $row,
-                    'childs' => $childArray,
-                    'is_registered' => $is_registered,
-                    'is_exam' => $is_exam,
-                    'student_subject_category' => $student_subject->category_id
+                if (Yii::$app->user->isTeacher)
+                {
+                    $is_registered = false;
+                    $teacher_subject = Categories::findOne(['category_title' => 'teacher_subject']);
+                    $teacher_subject_item = MyController::getFilteredItems($teacher_subject->category_id, ['subject_id' => $id, 'teacher_id' => Yii::$app->user->isTeacher], null,'d');
+                    foreach ($teacher_subject_item as $items)
+                    {
+                        $is_registered = true;
+                    }
+                    return $this->render('page_subject_teacher', [
+                        'item' => $row,
+                        'childs' => $childArray,
+                        'is_registered' => $is_registered,
+                        'student_subject_category' => $teacher_subject->category_id
+                    ]);
+                }
+                return $this->render('page_subject', [
+                    'item' => $row, 'childs' => $childArray
                 ]);
             }
-            return $this->render('page_subject', [
-                'item' => $row, 'childs' => $childArray
-            ]);
         }
 
         return $this->render('page', [
@@ -511,11 +546,12 @@ class SiteController extends MyController
             'model' => $model,
         ]);
     }
+
     public function actionSignupTeacher()
     {
-       $id = Categories::find()->where(['category_title' => 'teachers'])->one();
+        $id = Categories::find()->where(['category_title' => 'teachers'])->one();
         $id = $id['category_id'];
-        $this->redirect(['insert' ,'id'=>$id]);
+        $this->redirect(['insert', 'id' => $id]);
     }
 
 
@@ -530,6 +566,14 @@ class SiteController extends MyController
         {
             return $this->redirect(['update-row', 'id' => $std['item_id']]);
         }
+        $teacher_cat = Categories::findOne(['category_title' => 'teachers']);
+        if (!$teacher_cat)
+            return null;
+        $teacher = MyController::getFilteredItems($teacher_cat->category_id, ['user_id' => Yii::$app->user->id], $lang);
+        foreach ($teacher as $std)
+        {
+            return $this->redirect(['update-row', 'id' => $std['item_id']]);
+        }
         return true;
     }
 
@@ -538,7 +582,7 @@ class SiteController extends MyController
         $item = $this->findItem($id);
 
         $fields = Fields::find()->where(['category_id' => $item['category_id']])->all();
-            $items = [];
+        $items = [];
         foreach ($fields as $field1)
         {
             if ($field1['field_type'] == 'foreign_key')
@@ -560,7 +604,7 @@ class SiteController extends MyController
                         $post = $field['field_title'] . $lang->language_code;
                         if (!empty($_POST[$post]) || !empty($_FILES[$post]))
                         {
-                            $val = Values::findOne(['field_id'=>$field->field_id,'item_id'=>$item->item_id,'language_id'=>$lang->language_id]);
+                            $val = Values::findOne(['field_id' => $field->field_id, 'item_id' => $item->item_id, 'language_id' => $lang->language_id]);
                             if (!$val)
                             {
                                 $val = new Values();
@@ -596,7 +640,7 @@ class SiteController extends MyController
                     $post = $field['field_title'];
                     if (!empty($_POST[$post]) || !empty($_FILES[$post]))
                     {
-                        $val = Values::findOne(['field_id'=>$field->field_id,'item_id'=>$item->item_id]);
+                        $val = Values::findOne(['field_id' => $field->field_id, 'item_id' => $item->item_id]);
                         if (!$val)
                         {
                             $val = new Values();
@@ -658,17 +702,18 @@ class SiteController extends MyController
                 'id' => $id,
                 'fields' => $fields,
                 'items' => $items,
-                'langs' =>$langs
+                'langs' => $langs
             ]);
         }
 
     }
 
 
-
-    public function actionInsert($id,$fk_id='')
+    public function actionInsert($id, $fk_id = '')
     {
         $fields = Fields::find()->where(['category_id' => $id])->all();
+        $category = Categories::findOne(['category_id' => $id]);
+
         $items = [];
         foreach ($fields as $field1)
         {
@@ -676,8 +721,39 @@ class SiteController extends MyController
             {
                 $fk = $field1['fk_table'];
                 $items[$field1['fk_table']] = Items::find()->where(['category_id' => $fk])->all();
+
+                $fk_category = Categories::findOne(['category_id' => $fk]);
+                if ($fk_category->parent->category_id == $category->parent->category_id)
+                {
+                    $fk_fields = Fields::find()->where(['category_id' => $fk])->all();
+                    $remote_field_name = '';
+                    foreach ($fk_fields as $field_fk)
+                    {
+                        if ($field_fk['field_type'] == 'foreign_key' && $field_fk['fk_table'] == $fk_category->parent->category_id)
+                        {
+                            $remote_field_name = $field_fk['field_title'];
+                        }
+                    }
+                    if ($remote_field_name != '')
+                    {
+                        $filterd_items_info = MyController::getFilteredItems($fk,[$remote_field_name=>$fk_id],null);
+                        $ids = [];
+                        foreach ($filterd_items_info as $f_i_i)
+                        {
+                            $ids[]=$f_i_i['item_id'];
+                        }
+                        $filt = [];
+                        foreach ($items[$field1['fk_table']] as $it)
+                        {
+                            if (in_array($it->item_id,$ids))
+                                $filt [] = $it;
+                        }
+                        $items[$field1['fk_table']] = $filt;
+                    }
+                }
             }
         }
+
         if (!empty($_POST))
         {
             $item = new Items();
@@ -739,11 +815,10 @@ class SiteController extends MyController
 
             if ($fk_id)
             {
-                $category = Categories::findOne(['category_id' => $id]);
                 if ($category->parent_id)
                 {
                     $parent = $category->parent;
-                    $fk_field = Fields::findOne(['category_id'=>$id,'fk_table'=>$parent->category_id]);
+                    $fk_field = Fields::findOne(['category_id' => $id, 'fk_table' => $parent->category_id]);
                     $val = new Values();
                     $val->item_id = $item->item_id;
                     $val->field_id = $fk_field['field_id'];
@@ -820,7 +895,6 @@ class SiteController extends MyController
             'model' => $model,
         ]);
     }
-
 
 
     protected function findValue($id)
