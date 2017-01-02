@@ -71,11 +71,6 @@ foreach (Yii::$app->session->getAllFlashes() as $key => $message)
         <?= $this->render('header.php'); ?>
 
         <div class="content">
-            <div align="right">
-                <?= Breadcrumbs::widget([
-                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-                ]) ?>
-            </div>
             <div style="padding-left: 15px">
                 <?= $content ?>
             </div>

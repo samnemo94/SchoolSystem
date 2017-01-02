@@ -70,7 +70,7 @@ function drawButton($menu, $depth)
     <ul class="nav navbar-nav pull-xs-<?= Yii::$app->language == "ar" ? "left" : "right" ?>">
         <?=
         \lajax\languagepicker\widgets\LanguagePicker::widget([
-            'skin' => \lajax\languagepicker\widgets\LanguagePicker::SKIN_DROPDOWN,
+            'skin' => \lajax\languagepicker\widgets\LanguagePicker::SKIN_BUTTON,
             'size' => \lajax\languagepicker\widgets\LanguagePicker::SIZE_LARGE
         ]);
         ?>

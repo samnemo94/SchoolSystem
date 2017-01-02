@@ -163,10 +163,10 @@ class SiteController extends MyController
             }
         }
 
-//        return $this->render('category', [
-//            'columns' => $columns,
-//            'rows' => $rows,
-//        ]);
+        return $this->render('category', [
+            'columns' => $columns,
+            'rows' => $rows,
+        ]);
         }
 
     public function actionMarks($id)
