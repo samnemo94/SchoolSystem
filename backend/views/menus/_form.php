@@ -50,6 +50,8 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
 
+    <?= $form->field($model, 'icon')->textInput()->label("
+    <a href=\"http://semantic-ui.com/elements/icon.html\" target=\"_blank\">Icon</a>") ?>
 
     <?= $form->field($model, 'is_private')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'item_id')->widget(\kartik\select2\Select2::classname(), [

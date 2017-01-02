@@ -53,6 +53,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'menu_position',
+            'is_private',
+            'icon',
+            'menu_for',
             [
                 'attribute' => 'item_id',
                 'label' => 'Item',

@@ -102,6 +102,7 @@ class MyController extends Controller
         $item['id'] = $menu->menu_id;
         $item['hasChild'] = $menu->haveChilds();
         $item['title'] = $menu->menu_title;
+        $item['icon'] = $menu->icon;
         $item['is_private'] = $menu->is_private;
         $menu_translate = $menu->getMenuLanguages()->where(['language_id' => $lang_id])->one();
         if ($menu_translate)

@@ -15,7 +15,7 @@ function drawButtonLeft($menu, $depth)
         <li class="sidebar-menu-item">
             <a class="sidebar-menu-button" <?= $depth > 1 ? 'style="padding-left: 35px;"' : '' ?>
                 href="<?= \yii\helpers\Url::to(['/site/menu', 'id' => $menu['id']]) ?>">
-                <i class="sidebar-menu-icon material-icons">account_box</i>
+                <i class="<?= $menu['icon'] ?>"></i>
                 <?= $menu['title'] ?>
             </a>
         </li>
@@ -27,7 +27,7 @@ function drawButtonLeft($menu, $depth)
 
         <li class="sidebar-menu-item">
             <a class="sidebar-menu-button" href="">
-                <i class="sidebar-menu-icon material-icons">account_box</i> <?= $menu['title'] ?>
+                <i class="<?= $menu['icon'] ?>"></i> <?= $menu['title'] ?>
             </a>
             <ul class="sidebar-submenu sm-condensed">
                 <?php
