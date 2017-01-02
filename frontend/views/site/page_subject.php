@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             foreach($childs as $child) {
                 foreach ($child as $key => $value) {
                     echo $key.' : '.'<br>';
-                    foreach ($value  as $key => $val ) {
+                    foreach ($value['data']  as $key => $val ) {
                         echo  Html::a(  $val['title']['value'], $url = ['/site/page','id'=>$key] );
                         echo '<br>';
                     }

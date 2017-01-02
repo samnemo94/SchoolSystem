@@ -711,6 +711,7 @@ class SiteController extends MyController
                 $items[$field1['fk_table']] = Items::find()->where(['category_id' => $fk])->all();
             }
         }
+
         if (!empty($_POST))
         {
             $item = new Items();
