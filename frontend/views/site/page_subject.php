@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 {
                     ?>
                     <h3 class="ui horizontal divider header">
-                        <i class=""></i>
+                        <i class="<?= $value['icon'] ?>"></i>
                         <?= $key ?>
                     </h3>
                     <div class="ui cards">

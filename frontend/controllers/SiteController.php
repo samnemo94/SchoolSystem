@@ -345,7 +345,22 @@ class SiteController extends MyController
                     }
                 }
             }
-            array_push($childArray, array($child['category_title'] => [ 'id'=>$child['category_id'],'data'=>$secondArray]));
+            $cat_title = $child['category_title'];
+            if (Yii::$app->language == 'ar')
+            {
+                if ($child['category_text_ar'])
+                {
+                    $cat_title = $child['category_text_'];
+                }
+            }
+            else
+            {
+                if ($child['category_text'])
+                {
+                    $cat_title = $child['category_text'];
+                }
+            }
+            array_push($childArray, array($cat_title => ['icon'=>$child['category_icon'], 'id'=>$child['category_id'],'data'=>$secondArray]));
         }
 
         $columns = [];

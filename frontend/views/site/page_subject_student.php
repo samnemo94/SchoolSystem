@@ -46,4 +46,53 @@ $this->params['breadcrumbs'][] = $this->title;
 
     ?>
 
+    <br><br>
+    <?php
+    if ($is_registered)
+    {
+        ?>
+        <div>
+            <?php
+            if (!empty($childs))
+            {
+                foreach ($childs as $child)
+                {
+                    foreach ($child as $key => $value)
+                    {
+                        if ($value['id'] != 6)
+                            break;
+                        ?>
+                        <h3 class="ui horizontal divider header">
+                            <i class="<?= $value['icon'] ?>"></i>
+                            <?= $key ?>
+                        </h3>
+                        <div class="ui cards">
+                            <?php
+                            foreach ($value['data'] as $key => $val)
+                            {
+                                ?>
+                                <div class="card">
+                                    <a href="<?= \yii\helpers\Url::to(['/site/page', 'id' => $key]) ?>" class="content">
+                                        <div align="center" class="header"><?= $val['title']['value'] ?></div>
+                                        <div class="description">
+
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <?php
+                            }
+                            ?>
+                        </div>
+                        <?php
+                    }
+                    echo "<br>";
+                }
+            }
+            ?>
+        </div>
+        <?php
+    }
+    ?>
+
 </div>

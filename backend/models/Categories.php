@@ -34,7 +34,7 @@ class Categories extends \yii\db\ActiveRecord
         return [
             [['category_title','showing_parent'], 'required'],
             [['parent_id','showing_parent'], 'integer'],
-            [['category_title'], 'string', 'max' => 255],
+            [['category_title','category_text','category_text_ar','category_icon'], 'string', 'max' => 255],
             [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::className(), 'targetAttribute' => ['parent_id' => 'category_id']],
         ];
     }
@@ -48,6 +48,9 @@ class Categories extends \yii\db\ActiveRecord
             'category_id' => 'Category ID',
             'parent_id' => 'Parent ID',
             'category_title' => 'Category Title',
+            'category_text' => 'Category Text',
+            'category_text_ar' => 'Category Text Ar',
+            'category_icon' => 'Category Icon',
             'showing_parent' =>'Showing Parent',
         ];
     }

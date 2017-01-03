@@ -15,6 +15,9 @@ use wbraganca\dynamicform\DynamicFormWidget;
     <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
 
     <?= $form->field($model, 'category_title')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'category_text')->textInput() ?>
+    <?= $form->field($model, 'category_text_ar')->textInput() ?>
+    <?= $form->field($model, 'category_icon')->textInput()->label("<a href=\"http://semantic-ui.com/elements/icon.html\" target=\"_blank\">Icon</a>") ?>
 
     <?= $form->field($model, 'parent_id')->widget(\kartik\select2\Select2::classname(), [
         'data' => \yii\helpers\ArrayHelper::map(\backend\models\Categories::find()->all(),'category_id','category_title'),

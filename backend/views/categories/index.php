@@ -40,7 +40,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         ['/categories/view','id' =>$dataProvider['category_id']],
                         ['class' => 'profile-link']);},
             ],
-
+            'category_text',
+            'category_text_ar',
+            'category_icon',
             [
                 'attribute' => 'category_id',
                 'label' => 'Parent Category',

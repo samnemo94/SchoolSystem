@@ -22,6 +22,27 @@ class MyController extends Controller
 {
     public function beforeAction($action)
     {
+        if (!Yii::$app->user->isGuest)
+        {
+            if (Yii::$app->user->isStudent)
+            {
+                $std_inf = self::getItemInfo(Yii::$app->user->isStudent,null);
+                if ($std_inf['is_active']['value'] == '0')
+                {
+                    $this->redirect(['/site/logout']);
+                }
+            }
+            else
+            if (Yii::$app->user->isTeacher)
+            {
+                $std_inf = self::getItemInfo(Yii::$app->user->isTeacher,null);
+                if ($std_inf['is_active']['value'] == '0')
+                {
+                    $this->redirect(['/site/logout']);
+                }
+            }
+        }
+
         $lang_id = Languages::findOne(['language_code' => \Yii::$app->language])->language_id;
         global $tea_profile;
         global $std_profile;
