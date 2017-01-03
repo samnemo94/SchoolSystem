@@ -161,6 +161,21 @@ class SiteController extends MyController
                 ]);
             }
         }
+        if ($cat->category_title == 'student_subject') {
+
+            if ( yii::$app->user->isStudent) {
+                $teacher = yii::$app->user->getIsStudent();
+                $mySubjects = [];
+                foreach ($rows as $key => $row) {
+                    if ($row['student_id']['value'] == $teacher)
+                        $mySubjects[$row['subject_id']['value']] = MyController::getItemInfo($row['subject_id']['value'], $lang);
+                }
+                return $this->render('category_list_images', [
+                    'columns' => $columns,
+                    'rows' => $mySubjects,
+                ]);
+            }
+        }
 
         return $this->render('category', [
             'columns' => $columns,
