@@ -8,11 +8,11 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 ?>
-<?php ActiveForm::begin(['action' => 'index.php?r=site/update-row&id='.$id, 'method' => 'post','options'=>['enctype' => 'multipart/form-data']]);
+<?php ActiveForm::begin(['action' => 'index.php?r=site/update-row&id='.$id, 'method' => 'post','options'=>['enctype' => 'multipart/form-data','class'=>'ui form']]);
 
 foreach ($fields as $field)
 {
-    if (!$field['has_translate'])
+    if (!$field['has_translate'] && $field['is_show'] == 1)
         printFieldInput($field,$items,$values);
 }
 
@@ -24,7 +24,7 @@ foreach ($langs as $lang)
         <?php
         foreach ($fields as $field)
         {
-            if ($field['has_translate'])
+            if ($field['has_translate'] && $field['is_show'] == 1)
                 printFieldInput($field,$items,$values,$lang->language_code);
         }
         ?>
@@ -122,13 +122,28 @@ function printFieldInput($field,$items,$values,$lang = '')
                     break;
                 case 'foreign_key' :
                     ?>
-                    <select value="<?= $values[$field['field_id']][$lang?$lang:'0'] ?>"
+                    <select class="ui fluid dropdown" id="input_<?= $field->field_id ?>_<?= $lang ?>"
                             name="<?= $field['field_title'] . (($lang) ? $lang : '') ?>">
                         <option value="">Select Item</option>
                         <?php
-                        foreach ($items[$field['fk_table']] as $item)
-                        {
-                            echo "<option value=\"" . $item['item_id'] . "\">" . $item['item_id'] . "</option> ";
+                        $langg = \backend\models\Languages::findOne(['language_code' => Yii::$app->language])->language_id;
+                        foreach ($items[$field->fk_table] as $item) {
+                            $fkTable = \common\models\Categories::find()->where(['category_id'=>$field->fk_table])->one();
+                            $fkTable = $fkTable['category_title'];
+
+                            if ($fkTable == 'teachers'){
+                                $t_info = \frontend\controllers\MyController::getItemInfo($item['item_id'], $langg);
+                                echo "<option value=\"" . $item['item_id'] . "\">" . $t_info['first_name']['value'].' '. $t_info['last_name']['value']. "</option> ";
+                            }
+
+                            else
+                            {
+                                $s_info = \frontend\controllers\MyController::getItemInfo($item['item_id'], $langg);
+                                if (array_key_exists('title', $s_info))
+                                    echo "<option value=\"" . $item['item_id'] . "\">" . $s_info['title']['value'] . "</option> ";
+                                else
+                                    echo "<option value=\"" . $item['item_id'] . "\">" . $s_info['item_id'] . "</option> ";
+                            }
                         }
                         ?>
                     </select>

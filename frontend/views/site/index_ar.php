@@ -6,6 +6,8 @@ $this->title = Yii::$app->name;
 ?>
 <div class="site-index">
 
+
+
     <div class="body-content">
 
         <div class="row">
@@ -19,7 +21,7 @@ $this->title = Yii::$app->name;
 
             </div>
             <div class="col-lg-4">
-                <a href="http://localhost:81/schoolsystem/frontend/web/index.php?r=site%2Fmenu&id=53"><h2>Rector's Message</h2></a>
+                <h2>Rector's Message</h2>
 
                 <p>Welcome to the fastest growing academic community in the Country – the Virtual University of Damascus.
                     In just a few years this Federal Government University has become one of the largest higher education
@@ -27,7 +29,7 @@ $this->title = Yii::$app->name;
 
             </div>
             <div class="col-lg-4">
-                <a href="http://localhost:81/schoolsystem/frontend/web/index.php?r=site%2Fmenu&id=55"><h2>Vision & Mission</h2></a>
+                <h2>Vision & Mission</h2>
 
                 <p>the Vision: University seeks to be part of a global seed prominent universities rated and be a leader of the march E-learning in the region and rehabilitation of human resources harmoniously with Sueat academic and professional Global and responsive to the needs of ...</p>
 

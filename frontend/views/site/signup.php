@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="row">
         <div class="col-lg-5" style="float: <?= Yii::$app->language=='ar'?'right':'left' ?>;">
-            <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
+            <?php $form = ActiveForm::begin(['id' => 'form-signup','options' => ['enctype' => 'multipart/form-data','class'=>'ui form']]); ?>
             <?php   if ( $lang == 'en') { ?>
             <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
 
@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <?= $form->field($model, 'phone') ?>
 
-            <?= $form->field($model, 'photo') ?>
+            <?= $form->field($model, 'photo')->fileInput() ?>
 
             <?= $form->field($model, 'email') ?>
 

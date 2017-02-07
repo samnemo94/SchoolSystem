@@ -83,7 +83,7 @@ class SiteController extends MyController
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $this->redirect(['/site/category','id'=>18]);
     }
 
     public function actionMenu($id)
@@ -105,7 +105,7 @@ class SiteController extends MyController
                 return $this->redirect(['insert', 'id' => $menu->category_id]);
             }
 
-            if ($menu->menu_title == 'My Marks' || $menu->menu_title== 'Students Marks')
+            if ($menu->menu_title == 'My Marks' || $menu->menu_title == 'Students Marks')
             {
                 return $this->redirect(['marks', 'id' => $menu->category_id]);
             }
@@ -128,7 +128,8 @@ class SiteController extends MyController
         $lang = Languages::findOne(['language_code' => Yii::$app->language])->language_id;
         $cat = Categories::findOne(['category_id' => $id]);
         $columns = [];
-        foreach ($cat->fields as $field) {
+        foreach ($cat->fields as $field)
+        {
             if (yii::$app->language == 'en')
                 $columns[]['title'] = $field->field_title;
             else
@@ -136,22 +137,27 @@ class SiteController extends MyController
         }
         $rows = [];
         $items = $cat->getItems()->where(['deleted' => '0'])->all();
-        foreach ($items as $item) {
+        foreach ($items as $item)
+        {
             $item_info = MyController::getItemInfo($item->item_id, $lang);
             $rows[$item->item_id] = $item_info;
         }
-        if ($cat->category_title == 'faculty' || $cat->category_title == 'subject') {
+        if ($cat->category_title == 'faculty' || $cat->category_title == 'subject')
+        {
             return $this->render('category_list_images', [
                 'columns' => $columns,
                 'rows' => $rows,
             ]);
         }
-        if ($cat->category_title == 'teacher_subject') {
+        if ($cat->category_title == 'teacher_subject')
+        {
 
-            if ( yii::$app->user->isTeacher) {
-               $teacher = yii::$app->user->getIsTeacher();
+            if (yii::$app->user->isTeacher)
+            {
+                $teacher = yii::$app->user->getIsTeacher();
                 $mySubjects = [];
-                foreach ($rows as $key => $row) {
+                foreach ($rows as $key => $row)
+                {
                     if ($row['teacher_id']['value'] == $teacher)
                         $mySubjects[$row['subject_id']['value']] = MyController::getItemInfo($row['subject_id']['value'], $lang);
                 }
@@ -161,12 +167,15 @@ class SiteController extends MyController
                 ]);
             }
         }
-        if ($cat->category_title == 'student_subject') {
+        if ($cat->category_title == 'student_subject')
+        {
 
-            if ( yii::$app->user->isStudent) {
+            if (yii::$app->user->isStudent)
+            {
                 $teacher = yii::$app->user->getIsStudent();
                 $mySubjects = [];
-                foreach ($rows as $key => $row) {
+                foreach ($rows as $key => $row)
+                {
                     if ($row['student_id']['value'] == $teacher)
                         $mySubjects[$row['subject_id']['value']] = MyController::getItemInfo($row['subject_id']['value'], $lang);
                 }
@@ -181,14 +190,15 @@ class SiteController extends MyController
             'columns' => $columns,
             'rows' => $rows,
         ]);
-        }
+    }
 
     public function actionMarks($id)
     {
         $lang = Languages::findOne(['language_code' => Yii::$app->language])->language_id;
         $cat = Categories::findOne(['category_id' => $id]);
         $columns = [];
-        foreach ($cat->fields as $field) {
+        foreach ($cat->fields as $field)
+        {
             if (yii::$app->language == 'en')
                 $columns[]['title'] = $field->field_title;
             else
@@ -196,17 +206,22 @@ class SiteController extends MyController
         }
         $rows = [];
         $items = $cat->getItems()->where(['deleted' => '0'])->all();
-        foreach ($items as $item) {
+        foreach ($items as $item)
+        {
             $item_info = MyController::getItemInfo($item->item_id, $lang);
             $rows[$item->item_id] = $item_info;
         }
 
-        if ($cat->category_title == 'student_subject') {
-            if (yii::$app->user->isStudent) {
+        if ($cat->category_title == 'student_subject')
+        {
+            if (yii::$app->user->isStudent)
+            {
                 $stu = yii::$app->user->getIsStudent();
                 $myMarks = [];
-                foreach ($rows as $row) {
-                    if ($row['student_id']['value'] == $stu) {
+                foreach ($rows as $row)
+                {
+                    if ($row['student_id']['value'] == $stu)
+                    {
                         $sub_info = MyController::getItemInfo($row['subject_id']['value'], $lang);
                         $myMarks[$sub_info['title']['value']] = $row['exam_mark']['value'];
                     }
@@ -224,8 +239,6 @@ class SiteController extends MyController
     }
 
 
-
-
     public function actionCategoryTable($id)
     {
         $lang = Languages::findOne(['language_code' => Yii::$app->language])->language_id;
@@ -234,9 +247,9 @@ class SiteController extends MyController
         foreach ($cat->fields as $field)
         {
             if (yii::$app->language == 'en')
-            $columns[]['title'] = $field->field_title;
+                $columns[]['title'] = $field->field_title;
             else
-                $columns []['title']= $field->field_title_ar;
+                $columns []['title'] = $field->field_title_ar;
         }
         $rows = [];
         $items = $cat->getItems()->where(['deleted' => '0'])->all();
@@ -262,7 +275,7 @@ class SiteController extends MyController
             if (yii::$app->language == 'en')
                 $columns[]['title'] = $field->field_title;
             else
-                $columns []['title']= $field->field_title_ar;
+                $columns []['title'] = $field->field_title_ar;
         }
         $rows = [];
         $items = $cat->getItems()->where(['deleted' => '0'])->all();
@@ -335,7 +348,7 @@ class SiteController extends MyController
 
         $cat = $item->category;
         $parent = $cat->category_id;
-        $childs = Categories::find()->where(['parent_id' => $parent,'showing_parent'=>'1'])->all();
+        $childs = Categories::find()->where(['parent_id' => $parent, 'showing_parent' => '1'])->all();
         $childArray = [];
         foreach ($childs as $child)
         {
@@ -365,7 +378,7 @@ class SiteController extends MyController
             {
                 if ($child['category_text_ar'])
                 {
-                    $cat_title = $child['category_text_'];
+                    $cat_title = $child['category_text_ar'];
                 }
             }
             else
@@ -375,7 +388,7 @@ class SiteController extends MyController
                     $cat_title = $child['category_text'];
                 }
             }
-            array_push($childArray, array($cat_title => ['icon'=>$child['category_icon'], 'id'=>$child['category_id'],'data'=>$secondArray]));
+            array_push($childArray, array($cat_title => ['icon' => $child['category_icon'], 'id' => $child['category_id'], 'data' => $secondArray]));
         }
 
         $columns = [];
@@ -384,7 +397,8 @@ class SiteController extends MyController
             if (yii::$app->language == 'en')
                 $columns[]['title'] = $field->field_title;
             else
-                $columns []['title']= $field->field_title_ar;        }
+                $columns []['title'] = $field->field_title_ar;
+        }
 
         $row = MyController::getItemInfo($id, $lang);
 
@@ -396,31 +410,33 @@ class SiteController extends MyController
                 {
                     $is_registered = false;
                     $is_exam = false;
-                    $student_subject = Categories::findOne(['category_title'=>'student_subject']);
-                    $student_subject_item = MyController::getFilteredItems($student_subject->category_id,['subject_id'=>$id,'student_id'=>Yii::$app->user->isStudent],null);
+                    $student_subject = Categories::findOne(['category_title' => 'student_subject']);
+                    $student_subject_item = MyController::getFilteredItems($student_subject->category_id, ['subject_id' => $id, 'student_id' => Yii::$app->user->isStudent], null);
                     foreach ($student_subject_item as $items)
                     {
                         $is_registered = true;
                     }
-                    if ( $is_registered )
+                    if ($is_registered)
                     {
                         foreach ($student_subject_item as $items)
                         {
                             $student_subject_item_id = $item['item_id'];
                             break;
                         }
-                        $cat2 = Categories::findOne(['category_title'=>'exam']);
-                        $exam = MyController::getFilteredItems($cat2->category_id,['subject_id'=>$id],Null);
-                        if($exam) {
-                            foreach ($exam as $e) {
+                        $cat2 = Categories::findOne(['category_title' => 'exam']);
+                        $exam = MyController::getFilteredItems($cat2->category_id, ['subject_id' => $id], Null);
+                        if ($exam)
+                        {
+                            foreach ($exam as $e)
+                            {
                                 $exam_item_id = $e['item_id'];
                                 break;
                             }
                             $exam = MyController::getItemInfo($exam_item_id, Null);
                             $exam_date = $exam['exam_date']['value'];
                             $field = Fields::findOne(['field_title' => 'exam_mark']);
-                            $value = Values::findOne(['item_id'=>$student_subject_item_id ,'field_id'=>$field->field_id ]);
-                            if ($exam_date == '2017-02-01' && empty($value))
+                            $value = Values::findOne(['item_id' => $student_subject_item_id, 'field_id' => $field->field_id]);
+                            if ($exam_date == '2017-01-03T10:00' && empty($value))
                                 $is_exam = true;
                         }
 
@@ -437,7 +453,7 @@ class SiteController extends MyController
                 {
                     $is_registered = false;
                     $teacher_subject = Categories::findOne(['category_title' => 'teacher_subject']);
-                    $teacher_subject_item = MyController::getFilteredItems($teacher_subject->category_id, ['subject_id' => $id, 'teacher_id' => Yii::$app->user->isTeacher], null,'d');
+                    $teacher_subject_item = MyController::getFilteredItems($teacher_subject->category_id, ['subject_id' => $id, 'teacher_id' => Yii::$app->user->isTeacher], null, 'd');
                     foreach ($teacher_subject_item as $items)
                     {
                         $is_registered = true;
@@ -456,10 +472,10 @@ class SiteController extends MyController
         }
         if ($cat->category_title == 'exam')
         {
-            $template = MyController::getItemInfo($row['template_id']['value'],$lang);
+            $template = MyController::getItemInfo($row['template_id']['value'], $lang);
             return $this->render('page_exam', [
                 'item' => $row,
-                'template'=>$template,
+                'template' => $template,
                 'childs' => $childArray
             ]);
         }
@@ -478,7 +494,7 @@ class SiteController extends MyController
         }
         if ($cat->category_title == 'questions_template')
         {
-            $question = MyController::getItemInfo($row['question_id']['value'],$lang);
+            $question = MyController::getItemInfo($row['question_id']['value'], $lang);
             return $this->render('page_questions_template', [
                 'item' => $row,
                 'question' => $question
@@ -493,63 +509,71 @@ class SiteController extends MyController
         $langg = \backend\models\Languages::findOne(['language_code' => Yii::$app->language])->language_id;
         $student = Yii::$app->user->isStudent;
         $subject = $id;
-        $subject_info = MyController::getItemInfo($subject , $langg);
+        $subject_info = MyController::getItemInfo($subject, $langg);
 //        $subject_title = $subject_info['title']['value'];
         $is_tody = false;
-        $cat = Categories::findOne(['category_title'=>'student_subject']);
-        $stu_sub_item_info =  MyController::getFilteredItems($cat->category_id, ['student_id'=>$student,'subject_id'=>$subject],$langg);
+        $cat = Categories::findOne(['category_title' => 'student_subject']);
+        $stu_sub_item_info = MyController::getFilteredItems($cat->category_id, ['student_id' => $student, 'subject_id' => $subject], $langg);
         foreach ($stu_sub_item_info as $stu)
         {
             $stu_sub_item_id = $stu['item_id'];
             break;
         }
-        $cat2 = Categories::findOne(['category_title'=>'exam']);
-        $exam = MyController::getFilteredItems($cat2->category_id,['subject_id'=>$subject],$langg);
-        if($exam) {
-            foreach ($exam as $e) {
+        $cat2 = Categories::findOne(['category_title' => 'exam']);
+        $exam = MyController::getFilteredItems($cat2->category_id, ['subject_id' => $subject], $langg);
+        if ($exam)
+        {
+            foreach ($exam as $e)
+            {
                 $exam_item_id = $e['item_id'];
                 break;
             }
-            $exam = MyController::getItemInfo($exam_item_id,$langg);
+            $exam = MyController::getItemInfo($exam_item_id, $langg);
             $exam_date = $exam['exam_date']['value'];
-            if ( $exam_date ==  date('d-m-y'))
+            if ($exam_date == date('d-m-y'))
                 $is_tody = true;
             $exam_template_id = $exam['template_id']['value'];
-            $cat3 = Categories::findOne(['category_title'=> 'questions_template']);
-            $template_info = MyController::getFilteredItems($cat3->category_id,['template_id'=>$exam_template_id],$langg);
-           $ques_ids = [];
-            foreach ($template_info as $t) {
-               $ques_ids[$t['item_id']] = $t['question_id']['value'];
+            $cat3 = Categories::findOne(['category_title' => 'questions_template']);
+            $template_info = MyController::getFilteredItems($cat3->category_id, ['template_id' => $exam_template_id], $langg);
+            $ques_ids = [];
+            foreach ($template_info as $t)
+            {
+                $ques_ids[$t['item_id']] = $t['question_id']['value'];
             }
             $questions = [];
             foreach ($ques_ids as $ques)
             {
-                $ques_info = MyController::getItemInfo( $ques , $langg);
+                $ques_info = MyController::getItemInfo($ques, $langg);
                 $questions[$ques] = $ques_info;
             }
             $count = 0;
-            if (!empty( $_POST)){
-                foreach ($questions as $question) {
-                 $answer =   $_POST[$question['item_id']];
-                    if( $answer == $question['answer']['value']){
-                        $count = $count +1 ;
+            if (!empty($_POST))
+            {
+                foreach ($questions as $question)
+                {
+                    $answer = $_POST[$question['item_id']];
+                    if ($answer == $question['answer']['value'])
+                    {
+                        $count = $count + 1;
                     }
                 }
                 $value = new Values();
                 $value->item_id = $stu_sub_item_id;
-                $value->field_id = Fields::findOne(['field_title'=>'exam_mark'])->field_id;
+                $value->field_id = Fields::findOne(['field_title' => 'exam_mark'])->field_id;
                 $value->language_id = NULL;
                 $value->value = $count;
                 $value->save(false);
                 return $this->redirect(['index']);
 
             }
-            else{
-            return $this->render('exam', [
-                'questions'=>$questions,
-                'subject_info'=> $subject_info
-                //'is_tody'=> $is_tody,
-            ]);}
+            else
+            {
+                return $this->render('exam', [
+                    'questions' => $questions,
+                    'subject_info' => $subject_info
+                    //'is_tody'=> $is_tody,
+                ]);
+            }
         }
     }
 
@@ -686,14 +710,55 @@ class SiteController extends MyController
     {
         $item = $this->findItem($id);
 
+        $category = $item->category;
         $fields = Fields::find()->where(['category_id' => $item['category_id']])->all();
+
+        foreach ($fields as $field1)
+        {
+            if ($field1['field_type'] == 'foreign_key' && $field1['fk_table'] == $category->parent->category_id)
+            {
+                $item_info = self::getItemInfo($id, null);
+                $fk_id = $item_info[$field1['field_title']]['value'];
+            }
+        }
         $items = [];
         foreach ($fields as $field1)
         {
             if ($field1['field_type'] == 'foreign_key')
             {
                 $fk = $field1['fk_table'];
-                $items[$fk] = Items::find()->where(['category_id' => $fk])->all();
+                $items[$field1['fk_table']] = Items::find()->where(['category_id' => $fk])->all();
+
+                $fk_category = Categories::findOne(['category_id' => $fk]);
+                if ($fk_category->parent && $category->parent && $fk_category->parent->category_id == $category->parent->category_id)
+                {
+                    $fk_fields = Fields::find()->where(['category_id' => $fk])->all();
+                    $remote_field_name = '';
+                    foreach ($fk_fields as $field_fk)
+                    {
+                        if ($field_fk['field_type'] == 'foreign_key' && $field_fk['fk_table'] == $fk_category->parent->category_id)
+                        {
+                            $remote_field_name = $field_fk['field_title'];
+                        }
+                    }
+                    if ($remote_field_name != '')
+                    {
+                        $fk_id =
+                        $filterd_items_info = MyController::getFilteredItems($fk, [$remote_field_name => $fk_id], null);
+                        $ids = [];
+                        foreach ($filterd_items_info as $f_i_i)
+                        {
+                            $ids[] = $f_i_i['item_id'];
+                        }
+                        $filt = [];
+                        foreach ($items[$field1['fk_table']] as $it)
+                        {
+                            if (in_array($it->item_id, $ids))
+                                $filt [] = $it;
+                        }
+                        $items[$field1['fk_table']] = $filt;
+                    }
+                }
             }
         }
 
@@ -853,16 +918,16 @@ class SiteController extends MyController
                     }
                     if ($remote_field_name != '')
                     {
-                        $filterd_items_info = MyController::getFilteredItems($fk,[$remote_field_name=>$fk_id],null);
+                        $filterd_items_info = MyController::getFilteredItems($fk, [$remote_field_name => $fk_id], null);
                         $ids = [];
                         foreach ($filterd_items_info as $f_i_i)
                         {
-                            $ids[]=$f_i_i['item_id'];
+                            $ids[] = $f_i_i['item_id'];
                         }
                         $filt = [];
                         foreach ($items[$field1['fk_table']] as $it)
                         {
-                            if (in_array($it->item_id,$ids))
+                            if (in_array($it->item_id, $ids))
                                 $filt [] = $it;
                         }
                         $items[$field1['fk_table']] = $filt;

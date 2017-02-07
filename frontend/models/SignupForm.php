@@ -238,7 +238,15 @@ class SignupForm extends Model
         $val->item_id = $item->item_id;
         $val->field_id = $photo_field->field_id;
         $val->language_id = null;
-        $val->value = ''.$this->phone;
+        //$val->value = ''.$this->photo;
+
+        $imagename = $_FILES["SignupForm"]["name"];
+        $folder = "../../common/web/uploads/";
+        $new_name = time() . $imagename['photo'];
+        move_uploaded_file($_FILES["SignupForm"]["tmp_name"]['photo'], $folder . $new_name);
+        $val->value = $folder . $new_name;
+
+
         if (!$val->save())
         {
             $transaction->rollBack();

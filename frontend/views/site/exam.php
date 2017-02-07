@@ -20,11 +20,11 @@ use yii\helpers\Html;
             foreach ($questions as $key => $question)
             {
                 echo '<div>';
-                echo $question['question_text']['value'].'<br>';
+                echo $question['question_text']['value'];
                 echo '<input type="radio" value="'.$question['choice1']['value'].'"  name="'.$key.'"><label> '.$question['choice1']['value'].'</label></br>';
                 echo '<input type="radio" value="'.$question['choice2']['value'].'"  name="'.$key.'"><label>'.$question['choice2']['value'].' </label> </br>';
                 echo '<input type="radio" value="'.$question['choice3']['value'].'"  name="'.$key.'"> <label>'.$question['choice3']['value'].' </label></br>';
-                echo '<input type="radio" value="'.$question['choice4']['value'].'"  name="'.$key.'"> <label>'.$question['choice4']['value'].'</label></br>';
+                echo '<input type="radio" value="'.$question['choice4']['value'].'"  name="'.$key.'"> <label>'.$question['choice4']['value'].'</label></br>'.'<br>';
                 echo '</div>';
             }
         ?>
